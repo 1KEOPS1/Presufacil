@@ -1,14 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>PresuFácil v0.9</title>
 
+<!-- =====================================================
+     PWA
+===================================================== -->
+
+<link
+    rel="manifest"
+    href="./manifest.json"
+>
+
+<meta
+    name="theme-color"
+    content="#111827"
+>
+
+<meta
+    name="mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+>
+
+<meta
+    name="apple-mobile-web-app-title"
+    content="PresuFácil"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="./icons/icon-192.png"
+>
+
+
+<!-- =====================================================
+     LIBRERÍAS
+===================================================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 
 <style>
 
@@ -1771,10 +1823,6 @@ function actualizarPreview() {
         }
 
 
-        <!-- =================================================
-             BOTONES DE LA VISTA PREVIA
-        ================================================== -->
-
         <div class="previewActions">
 
             <button
@@ -2403,11 +2451,6 @@ async function generarPDF() {
         elemento.querySelector(".previewActions");
 
 
-    /*
-       Ocultamos los botones antes de
-       generar el PDF para que no aparezcan
-       dentro del presupuesto.
-    */
     if (acciones) {
 
         acciones.style.display =
@@ -2525,10 +2568,6 @@ async function generarPDF() {
 
     } finally {
 
-        /*
-           Volvemos a mostrar los botones
-           en la vista previa.
-        */
         if (acciones) {
 
             acciones.style.display =
@@ -2539,9 +2578,6 @@ async function generarPDF() {
     }
 
 
-    /*
-       Mostramos el modal como antes.
-    */
     document.getElementById("pdfModal").style.display =
         "flex";
 
@@ -2594,9 +2630,6 @@ function normalizarTelefonoWhatsApp(telefono) {
     }
 
 
-    /*
-       Dejamos únicamente números.
-    */
     let numero =
         String(telefono).replace(/\D/g, "");
 
@@ -2606,11 +2639,6 @@ function normalizarTelefonoWhatsApp(telefono) {
     }
 
 
-    /*
-       Si viene con +54 o 54,
-       quitamos el código internacional
-       para reconstruirlo correctamente.
-    */
     if (numero.startsWith("54")) {
 
         numero =
@@ -2619,13 +2647,6 @@ function normalizarTelefonoWhatsApp(telefono) {
     }
 
 
-    /*
-       Quitamos el 0 de larga distancia.
-       
-       Ejemplo:
-       02945 15 123456
-       -> 2945 15 123456
-    */
     if (numero.startsWith("0")) {
 
         numero =
@@ -2634,17 +2655,6 @@ function normalizarTelefonoWhatsApp(telefono) {
     }
 
 
-    /*
-       Formato argentino habitual:
-       
-       2945 15 123456
-       02945 15 123456
-       
-       Después de quitar el 0 quedan 12 dígitos.
-       
-       Buscamos el "15" del celular
-       después del código de área.
-    */
     if (numero.length === 12) {
 
         if (
@@ -2676,15 +2686,6 @@ function normalizarTelefonoWhatsApp(telefono) {
     }
 
 
-    /*
-       Un celular argentino nacionalizado
-       queda normalmente en 10 dígitos:
-       
-       código de área + número.
-       
-       WhatsApp:
-       54 + 9 + número.
-    */
     if (numero.length === 10) {
 
         return "549" + numero;
@@ -2692,12 +2693,6 @@ function normalizarTelefonoWhatsApp(telefono) {
     }
 
 
-    /*
-       Si el usuario ya ingresó un formato
-       internacional válido que no encaja
-       exactamente en los casos anteriores,
-       usamos 54 + número.
-    */
     return "54" + numero;
 
 }
@@ -2771,10 +2766,6 @@ async function enviarWhatsApp() {
     }
 
 
-    /*
-       Guardamos el número para utilizarlo
-       cuando se abra el modal del PDF.
-    */
     presupuestoSeleccionadoWhatsApp = {
 
         telefono: telefono
@@ -2782,10 +2773,6 @@ async function enviarWhatsApp() {
     };
 
 
-    /*
-       IMPORTANTE:
-       Primero generamos el PDF.
-    */
     await generarPDF();
 
 }
@@ -2834,21 +2821,12 @@ async function enviarPresupuestoGuardadoSupabase(
     }
 
 
-    /*
-       Cargamos el presupuesto en pantalla
-       para que el PDF sea exactamente
-       el presupuesto guardado.
-    */
     cargarPresupuestoSupabase(
         presupuesto,
         false
     );
 
 
-    /*
-       Guardamos el teléfono para
-       compartir posteriormente.
-    */
     presupuestoSeleccionadoWhatsApp = {
 
         telefono: telefono
@@ -2856,9 +2834,6 @@ async function enviarPresupuestoGuardadoSupabase(
     };
 
 
-    /*
-       Generamos el PDF.
-    */
     await generarPDF();
 
 }
@@ -2919,10 +2894,6 @@ async function compartirPDFWhatsApp() {
         obtenerMensajeWhatsApp();
 
 
-    /*
-       Convertimos el PDF generado
-       en un archivo real.
-    */
     const blob =
         presupuestoPDF.output("blob");
 
@@ -2937,15 +2908,6 @@ async function compartirPDFWhatsApp() {
         );
 
 
-    /*
-       Si el navegador/dispositivo soporta
-       compartir archivos, intentamos usar
-       el menú nativo de compartir.
-       
-       En Android normalmente permitirá
-       seleccionar WhatsApp y adjuntar
-       el PDF.
-    */
     if (
         navigator.share &&
         navigator.canShare &&
@@ -2973,10 +2935,6 @@ async function compartirPDFWhatsApp() {
 
         } catch (error) {
 
-            /*
-               Si el usuario canceló el menú
-               de compartir, no hacemos nada.
-            */
             if (
                 error &&
                 error.name === "AbortError"
@@ -2997,13 +2955,6 @@ async function compartirPDFWhatsApp() {
     }
 
 
-    /*
-       Si el navegador no soporta compartir
-       archivos directamente:
-       
-       1. Descargamos el PDF.
-       2. Abrimos el chat exacto del cliente.
-    */
     presupuestoPDF.save(
         "presupuesto.pdf"
     );
@@ -3023,6 +2974,45 @@ async function compartirPDFWhatsApp() {
 
 
     cerrarPDFModal();
+
+}
+
+
+/* =========================================================
+   PWA — SERVICE WORKER
+========================================================= */
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener(
+        "load",
+        function() {
+
+            navigator.serviceWorker
+                .register("./service-worker.js")
+                .then(
+                    function(registration) {
+
+                        console.log(
+                            "PresuFácil: Service Worker registrado.",
+                            registration.scope
+                        );
+
+                    }
+                )
+                .catch(
+                    function(error) {
+
+                        console.error(
+                            "PresuFácil: error registrando Service Worker:",
+                            error
+                        );
+
+                    }
+                );
+
+        }
+    );
 
 }
 
