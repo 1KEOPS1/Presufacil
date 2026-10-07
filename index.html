@@ -1010,6 +1010,7 @@ async function iniciarSesion() {
             await supabaseClient.auth.signInWithPassword({
 
                 email,
+
                 password
 
             });
@@ -1090,10 +1091,6 @@ function mostrarApp() {
     cargarDatosNegocio();
 
 
-    /*
-       Si la fecha está vacía, colocamos
-       automáticamente la fecha actual.
-    */
     establecerFechaActual();
 
 
@@ -1179,11 +1176,6 @@ function establecerFechaActual() {
     }
 
 
-    /*
-       No reemplazamos una fecha existente.
-       Esto permite conservar la fecha de un
-       presupuesto cargado desde el historial.
-    */
     if (campoFecha.value) {
         return;
     }
@@ -1840,11 +1832,6 @@ async function guardarPresupuesto() {
     }
 
 
-    /*
-       Si por algún motivo la fecha está vacía,
-       colocamos la fecha actual antes de guardar.
-    */
-
     establecerFechaActual();
 
 
@@ -2270,10 +2257,6 @@ function cargarPresupuestoSupabase(
         "";
 
 
-    /*
-       Recuperamos la fecha original del presupuesto.
-    */
-
     document.getElementById("fecha").value =
         datos.fecha ||
         "";
@@ -2503,6 +2486,100 @@ function cerrarPDFModal() {
 
 
 /* =========================================================
+   NORMALIZAR TELÉFONO ARGENTINO
+========================================================= */
+
+function normalizarTelefonoWhatsApp(telefono) {
+
+    if (!telefono) {
+        return "";
+    }
+
+
+    /*
+       Dejamos únicamente números.
+    */
+    let numero =
+        String(telefono).replace(/\D/g, "");
+
+
+    if (!numero) {
+        return "";
+    }
+
+
+    /*
+       Si ya viene con código de Argentina,
+       lo dejamos preparado.
+    */
+    if (numero.startsWith("54")) {
+
+        numero =
+            numero.substring(2);
+
+    }
+
+
+    /*
+       Quitamos el 0 de larga distancia.
+       Ejemplo:
+       02945 15 123456
+       -> 2945 15 123456
+    */
+    if (numero.startsWith("0")) {
+
+        numero =
+            numero.substring(1);
+
+    }
+
+
+    /*
+       En Argentina los celulares pueden escribirse
+       localmente con 15.
+       
+       Ejemplo:
+       2945 15 123456
+       -> 2945 123456
+    */
+    if (numero.startsWith("15")) {
+
+        numero =
+            numero.substring(2);
+
+    }
+
+
+    /*
+       WhatsApp utiliza 54 + 9 + código de área
+       + número para celulares argentinos.
+       
+       Para números argentinos de 10 dígitos
+       asumimos que se trata de un celular.
+    */
+    if (numero.length === 10) {
+
+        numero =
+            "549" + numero;
+
+    } else {
+
+        /*
+           Para otros formatos, agregamos
+           únicamente el código internacional.
+        */
+        numero =
+            "54" + numero;
+
+    }
+
+
+    return numero;
+
+}
+
+
+/* =========================================================
    WHATSAPP
 ========================================================= */
 
@@ -2522,14 +2599,48 @@ async function enviarWhatsApp() {
     }
 
 
-    presupuestoSeleccionadoWhatsApp = {
+    const numeroWhatsApp =
+        normalizarTelefonoWhatsApp(
+            telefono
+        );
 
-        telefono
 
-    };
+    if (!numeroWhatsApp) {
+
+        alert(
+            "El número de teléfono no es válido."
+        );
+
+        return;
+    }
 
 
-    await generarPDF();
+    const cliente =
+        document.getElementById("cliente").value.trim();
+
+
+    const mensaje =
+        cliente
+        ?
+        `Hola ${cliente}, te envío el presupuesto.`
+        :
+        "Hola, te envío el presupuesto.";
+
+
+    const urlWhatsApp =
+        "https://wa.me/" +
+        numeroWhatsApp +
+        "?text=" +
+        encodeURIComponent(mensaje);
+
+
+    /*
+       Abrimos directamente el chat del cliente.
+    */
+    window.open(
+        urlWhatsApp,
+        "_blank"
+    );
 
 }
 
@@ -2542,14 +2653,13 @@ async function enviarPresupuestoGuardadoSupabase(
     presupuesto
 ) {
 
-    cargarPresupuestoSupabase(
-        presupuesto,
-        false
-    );
+    const datos =
+        presupuesto.datos || {};
 
 
     const telefono =
-        document.getElementById("telefono").value.trim();
+        datos.telefono ||
+        "";
 
 
     if (!telefono) {
@@ -2562,11 +2672,47 @@ async function enviarPresupuestoGuardadoSupabase(
     }
 
 
-    presupuestoSeleccionadoWhatsApp =
-        presupuesto;
+    const numeroWhatsApp =
+        normalizarTelefonoWhatsApp(
+            telefono
+        );
 
 
-    await generarPDF();
+    if (!numeroWhatsApp) {
+
+        alert(
+            "El número de teléfono no es válido."
+        );
+
+        return;
+    }
+
+
+    const cliente =
+        datos.cliente ||
+        presupuesto.cliente ||
+        "";
+
+
+    const mensaje =
+        cliente
+        ?
+        `Hola ${cliente}, te envío el presupuesto.`
+        :
+        "Hola, te envío el presupuesto.";
+
+
+    const urlWhatsApp =
+        "https://wa.me/" +
+        numeroWhatsApp +
+        "?text=" +
+        encodeURIComponent(mensaje);
+
+
+    window.open(
+        urlWhatsApp,
+        "_blank"
+    );
 
 }
 
@@ -2587,63 +2733,6 @@ async function compartirPDFWhatsApp() {
     }
 
 
-    const blob =
-        presupuestoPDF.output("blob");
-
-
-    const archivo =
-        new File(
-            [blob],
-            "presupuesto.pdf",
-            {
-                type:
-                    "application/pdf"
-            }
-        );
-
-
-    if (
-        navigator.share &&
-        navigator.canShare &&
-        navigator.canShare({
-            files: [archivo]
-        })
-    ) {
-
-        try {
-
-            await navigator.share({
-
-                files: [archivo],
-
-                title:
-                    "Presupuesto",
-
-                text:
-                    "Presupuesto PresuFácil"
-
-            });
-
-
-            return;
-
-        } catch (error) {
-
-            console.log(
-                "Compartir cancelado:",
-                error
-            );
-
-        }
-
-    }
-
-
-    presupuestoPDF.save(
-        "presupuesto.pdf"
-    );
-
-
     const telefono =
         presupuestoSeleccionadoWhatsApp &&
         presupuestoSeleccionadoWhatsApp.telefono
@@ -2653,46 +2742,53 @@ async function compartirPDFWhatsApp() {
         document.getElementById("telefono").value.trim();
 
 
-    const telefonoLimpio =
-        telefono.replace(/\D/g, "");
+    if (!telefono) {
+
+        alert(
+            "Ingresá el teléfono del cliente."
+        );
+
+        return;
+    }
 
 
-    const mensaje =
-        encodeURIComponent(
-            "Hola, te envío el presupuesto en PDF. Adjunto el archivo."
+    const numeroWhatsApp =
+        normalizarTelefonoWhatsApp(
+            telefono
         );
 
 
-    let numeroWhatsApp =
-        telefonoLimpio;
+    if (!numeroWhatsApp) {
 
+        alert(
+            "El número de teléfono no es válido."
+        );
 
-    if (
-        numeroWhatsApp.startsWith("0")
-    ) {
-
-        numeroWhatsApp =
-            numeroWhatsApp.substring(1);
-
+        return;
     }
 
 
-    if (
-        numeroWhatsApp.length === 10
-    ) {
-
-        numeroWhatsApp =
-            "54" +
-            numeroWhatsApp;
-
-    }
+    const cliente =
+        document.getElementById("cliente").value.trim();
 
 
-    window.open(
+    const mensaje =
+        cliente
+        ?
+        `Hola ${cliente}, te envío el presupuesto.`
+        :
+        "Hola, te envío el presupuesto.";
+
+
+    const urlWhatsApp =
         "https://wa.me/" +
         numeroWhatsApp +
         "?text=" +
-        mensaje,
+        encodeURIComponent(mensaje);
+
+
+    window.open(
+        urlWhatsApp,
         "_blank"
     );
 
