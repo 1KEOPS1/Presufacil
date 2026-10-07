@@ -556,11 +556,6 @@ header h1 {
 
 <div class="container">
 
-
-<!-- =====================================================
-     DATOS DEL NEGOCIO
-===================================================== -->
-
 <div class="card">
 
     <h2>Datos del negocio</h2>
@@ -596,10 +591,6 @@ header h1 {
 
 </div>
 
-
-<!-- =====================================================
-     CLIENTE
-===================================================== -->
 
 <div class="card">
 
@@ -638,10 +629,6 @@ header h1 {
 </div>
 
 
-<!-- =====================================================
-     MATERIALES
-===================================================== -->
-
 <div class="card">
 
     <h2>Materiales</h2>
@@ -660,10 +647,6 @@ header h1 {
 
 </div>
 
-
-<!-- =====================================================
-     MANO DE OBRA
-===================================================== -->
 
 <div class="card">
 
@@ -687,10 +670,6 @@ header h1 {
 </div>
 
 
-<!-- =====================================================
-     CONDICIONES
-===================================================== -->
-
 <div class="card">
 
     <h2>Condiciones</h2>
@@ -707,10 +686,6 @@ header h1 {
 
 </div>
 
-
-<!-- =====================================================
-     ACCIONES
-===================================================== -->
 
 <div class="card">
 
@@ -742,10 +717,6 @@ header h1 {
 </div>
 
 
-<!-- =====================================================
-     PREVIEW
-===================================================== -->
-
 <div class="card">
 
     <h2>Vista previa</h2>
@@ -754,10 +725,6 @@ header h1 {
 
 </div>
 
-
-<!-- =====================================================
-     HISTORIAL
-===================================================== -->
 
 <div class="card">
 
@@ -775,10 +742,6 @@ header h1 {
 </div>
 </div>
 
-
-<!-- =====================================================
-     MODAL PDF
-===================================================== -->
 
 <div id="pdfModal">
 
@@ -889,58 +852,40 @@ function conectarSupabase() {
 
 function mostrarRegistro() {
 
-    document.getElementById(
-        "loginForm"
-    ).style.display = "none";
+    document.getElementById("loginForm").style.display = "none";
 
-    document.getElementById(
-        "registerForm"
-    ).style.display = "block";
+    document.getElementById("registerForm").style.display = "block";
 
-    document.getElementById(
-        "authMessage"
-    ).textContent = "";
+    document.getElementById("authMessage").textContent = "";
 
 }
 
 
 function mostrarLogin() {
 
-    document.getElementById(
-        "registerForm"
-    ).style.display = "none";
+    document.getElementById("registerForm").style.display = "none";
 
-    document.getElementById(
-        "loginForm"
-    ).style.display = "block";
+    document.getElementById("loginForm").style.display = "block";
 
-    document.getElementById(
-        "authMessage"
-    ).textContent = "";
+    document.getElementById("authMessage").textContent = "";
 
 }
 
 
 /* =========================================================
-   REGISTRAR USUARIO
+   REGISTRAR
 ========================================================= */
 
 async function registrarUsuario() {
 
     const email =
-        document.getElementById(
-            "registerEmail"
-        ).value.trim();
+        document.getElementById("registerEmail").value.trim();
 
     const password =
-        document.getElementById(
-            "registerPassword"
-        ).value;
+        document.getElementById("registerPassword").value;
 
     const mensaje =
-        document.getElementById(
-            "authMessage"
-        );
+        document.getElementById("authMessage");
 
 
     if (!email || !password) {
@@ -970,12 +915,6 @@ async function registrarUsuario() {
         window.location.pathname;
 
 
-    console.log(
-        "REDIRECT DE CONFIRMACIÓN:",
-        redirectURL
-    );
-
-
     try {
 
         const {
@@ -984,11 +923,8 @@ async function registrarUsuario() {
         } =
             await supabaseClient.auth.signUp({
 
-                email:
-                    email,
-
-                password:
-                    password,
+                email,
+                password,
 
                 options: {
 
@@ -1046,19 +982,13 @@ async function registrarUsuario() {
 async function iniciarSesion() {
 
     const email =
-        document.getElementById(
-            "loginEmail"
-        ).value.trim();
+        document.getElementById("loginEmail").value.trim();
 
     const password =
-        document.getElementById(
-            "loginPassword"
-        ).value;
+        document.getElementById("loginPassword").value;
 
     const mensaje =
-        document.getElementById(
-            "authMessage"
-        );
+        document.getElementById("authMessage");
 
 
     if (!email || !password) {
@@ -1082,20 +1012,15 @@ async function iniciarSesion() {
         } =
             await supabaseClient.auth.signInWithPassword({
 
-                email:
-                    email,
-
-                password:
-                    password
+                email,
+                password
 
             });
 
 
         if (error) {
 
-            console.error(
-                error
-            );
+            console.error(error);
 
             mensaje.textContent =
                 error.message;
@@ -1112,9 +1037,7 @@ async function iniciarSesion() {
 
     } catch (error) {
 
-        console.error(
-            error
-        );
+        console.error(error);
 
         mensaje.textContent =
             "Ocurrió un error al iniciar sesión.";
@@ -1130,17 +1053,19 @@ async function iniciarSesion() {
 
 async function cerrarSesion() {
 
-    await supabaseClient.auth.signOut();
+    if (supabaseClient) {
+
+        await supabaseClient.auth.signOut();
+
+    }
 
     usuarioActual = null;
 
-    document.getElementById(
-        "app"
-    ).style.display = "none";
+    presupuestosActuales = [];
 
-    document.getElementById(
-        "authOverlay"
-    ).style.display = "flex";
+    document.getElementById("app").style.display = "none";
+
+    document.getElementById("authOverlay").style.display = "flex";
 
 }
 
@@ -1151,23 +1076,18 @@ async function cerrarSesion() {
 
 function mostrarApp() {
 
-    document.getElementById(
-        "authOverlay"
-    ).style.display = "none";
-
-    document.getElementById(
-        "app"
-    ).style.display = "block";
-
-
-    if (usuarioActual) {
-
-        document.getElementById(
-            "usuarioEmail"
-        ).textContent =
-            usuarioActual.email || "";
-
+    if (!usuarioActual) {
+        return;
     }
+
+
+    document.getElementById("authOverlay").style.display = "none";
+
+    document.getElementById("app").style.display = "block";
+
+
+    document.getElementById("usuarioEmail").textContent =
+        usuarioActual.email || "";
 
 
     cargarDatosNegocio();
@@ -1199,9 +1119,21 @@ async function comprobarSesion() {
 
 
     const {
-        data
+        data,
+        error
     } =
         await supabaseClient.auth.getSession();
+
+
+    if (error) {
+
+        console.error(
+            "Error obteniendo sesión:",
+            error
+        );
+
+        return;
+    }
 
 
     if (
@@ -1217,13 +1149,11 @@ async function comprobarSesion() {
 
     } else {
 
-        document.getElementById(
-            "authOverlay"
-        ).style.display = "flex";
+        usuarioActual = null;
 
-        document.getElementById(
-            "app"
-        ).style.display = "none";
+        document.getElementById("authOverlay").style.display = "flex";
+
+        document.getElementById("app").style.display = "none";
 
     }
 
@@ -1249,9 +1179,7 @@ function cargarDatosNegocio() {
         campo => {
 
             const elemento =
-                document.getElementById(
-                    campo
-                );
+                document.getElementById(campo);
 
 
             const valor =
@@ -1274,7 +1202,8 @@ function cargarDatosNegocio() {
                     guardarDatosNegocio
                 );
 
-                elemento.dataset.listenerAgregado = "true";
+                elemento.dataset.listenerAgregado =
+                    "true";
 
             }
 
@@ -1300,9 +1229,7 @@ function guardarDatosNegocio() {
 
             localStorage.setItem(
                 "presufacil_" + campo,
-                document.getElementById(
-                    campo
-                ).value
+                document.getElementById(campo).value
             );
 
         }
@@ -1372,7 +1299,9 @@ function actualizarMaterial(
         );
 
 
-    if (!material) return;
+    if (!material) {
+        return;
+    }
 
 
     if (
@@ -1399,9 +1328,7 @@ function actualizarMaterial(
 function renderMateriales() {
 
     const contenedor =
-        document.getElementById(
-            "materiales"
-        );
+        document.getElementById("materiales");
 
 
     contenedor.innerHTML = "";
@@ -1411,9 +1338,7 @@ function renderMateriales() {
         material => {
 
             const div =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             div.className =
@@ -1476,9 +1401,7 @@ function renderMateriales() {
             `;
 
 
-            contenedor.appendChild(
-                div
-            );
+            contenedor.appendChild(div);
 
         }
     );
@@ -1516,14 +1439,10 @@ function calcularTotal() {
 
             totalMateriales +=
                 (
-                    parseFloat(
-                        material.cantidad
-                    ) || 0
+                    parseFloat(material.cantidad) || 0
                 ) *
                 (
-                    parseFloat(
-                        material.precio
-                    ) || 0
+                    parseFloat(material.precio) || 0
                 );
 
         }
@@ -1532,14 +1451,11 @@ function calcularTotal() {
 
     const manoObra =
         parseFloat(
-            document.getElementById(
-                "manoObra"
-            ).value
+            document.getElementById("manoObra").value
         ) || 0;
 
 
-    return totalMateriales +
-        manoObra;
+    return totalMateriales + manoObra;
 
 }
 
@@ -1551,55 +1467,34 @@ function calcularTotal() {
 function actualizarPreview() {
 
     const negocio =
-        document.getElementById(
-            "negocio"
-        ).value;
+        document.getElementById("negocio").value;
 
     const telefonoNegocio =
-        document.getElementById(
-            "negocioTelefono"
-        ).value;
+        document.getElementById("negocioTelefono").value;
 
     const emailNegocio =
-        document.getElementById(
-            "negocioEmail"
-        ).value;
+        document.getElementById("negocioEmail").value;
 
     const direccion =
-        document.getElementById(
-            "negocioDireccion"
-        ).value;
+        document.getElementById("negocioDireccion").value;
 
     const cuit =
-        document.getElementById(
-            "negocioCuit"
-        ).value;
-
+        document.getElementById("negocioCuit").value;
 
     const cliente =
-        document.getElementById(
-            "cliente"
-        ).value;
+        document.getElementById("cliente").value;
 
     const telefono =
-        document.getElementById(
-            "telefono"
-        ).value;
+        document.getElementById("telefono").value;
 
     const trabajo =
-        document.getElementById(
-            "trabajo"
-        ).value;
+        document.getElementById("trabajo").value;
 
     const fecha =
-        document.getElementById(
-            "fecha"
-        ).value;
+        document.getElementById("fecha").value;
 
     const condiciones =
-        document.getElementById(
-            "condiciones"
-        ).value;
+        document.getElementById("condiciones").value;
 
 
     let filas = "";
@@ -1610,14 +1505,10 @@ function actualizarPreview() {
 
             const subtotal =
                 (
-                    parseFloat(
-                        material.cantidad
-                    ) || 0
+                    parseFloat(material.cantidad) || 0
                 ) *
                 (
-                    parseFloat(
-                        material.precio
-                    ) || 0
+                    parseFloat(material.precio) || 0
                 );
 
 
@@ -1651,9 +1542,7 @@ function actualizarPreview() {
 
     const manoObra =
         parseFloat(
-            document.getElementById(
-                "manoObra"
-            ).value
+            document.getElementById("manoObra").value
         ) || 0;
 
 
@@ -1690,9 +1579,7 @@ function actualizarPreview() {
         calcularTotal();
 
 
-    document.getElementById(
-        "preview"
-    ).innerHTML = `
+    document.getElementById("preview").innerHTML = `
 
         <div class="previewHeader">
 
@@ -1700,8 +1587,7 @@ function actualizarPreview() {
 
                 <h2>
                     ${escapeHTML(
-                        negocio ||
-                        "PresuFácil"
+                        negocio || "PresuFácil"
                     )}
                 </h2>
 
@@ -1772,21 +1658,13 @@ function actualizarPreview() {
 
                 <tr>
 
-                    <th>
-                        Descripción
-                    </th>
+                    <th>Descripción</th>
 
-                    <th>
-                        Cant.
-                    </th>
+                    <th>Cant.</th>
 
-                    <th>
-                        Precio
-                    </th>
+                    <th>Precio</th>
 
-                    <th>
-                        Subtotal
-                    </th>
+                    <th>Subtotal</th>
 
                 </tr>
 
@@ -1849,9 +1727,7 @@ function actualizarPreview() {
 
 function formatearNumero(numero) {
 
-    return Number(
-        numero || 0
-    ).toLocaleString(
+    return Number(numero || 0).toLocaleString(
         "es-AR",
         {
             minimumFractionDigits: 2,
@@ -1879,28 +1755,28 @@ async function guardarPresupuesto() {
 
 
     const negocio =
-        document.getElementById(
-            "negocio"
-        ).value.trim();
+        document.getElementById("negocio").value.trim();
 
     const trabajo =
-        document.getElementById(
-            "trabajo"
-        ).value.trim();
+        document.getElementById("trabajo").value.trim();
 
     const cliente =
-        document.getElementById(
-            "cliente"
-        ).value.trim();
-
+        document.getElementById("cliente").value.trim();
 
     const total =
         calcularTotal();
 
 
+    /*
+       IMPORTANTE:
+
+       El número PF-... es TEXTO.
+       La columna "numero" en Supabase
+       debe ser de tipo text/varchar.
+    */
+
     const numero =
-        "PF-" +
-        Date.now();
+        "PF-" + Date.now();
 
 
     const datos = {
@@ -1908,88 +1784,64 @@ async function guardarPresupuesto() {
         negocio,
 
         negocioTelefono:
-            document.getElementById(
-                "negocioTelefono"
-            ).value,
+            document.getElementById("negocioTelefono").value,
 
         negocioEmail:
-            document.getElementById(
-                "negocioEmail"
-            ).value,
+            document.getElementById("negocioEmail").value,
 
         negocioDireccion:
-            document.getElementById(
-                "negocioDireccion"
-            ).value,
+            document.getElementById("negocioDireccion").value,
 
         negocioCuit:
-            document.getElementById(
-                "negocioCuit"
-            ).value,
+            document.getElementById("negocioCuit").value,
 
         cliente,
 
         telefono:
-            document.getElementById(
-                "telefono"
-            ).value,
+            document.getElementById("telefono").value,
 
         trabajo,
 
         fecha:
-            document.getElementById(
-                "fecha"
-            ).value,
+            document.getElementById("fecha").value,
 
         materiales,
 
         manoObra:
             parseFloat(
-                document.getElementById(
-                    "manoObra"
-                ).value
+                document.getElementById("manoObra").value
             ) || 0,
 
         condiciones:
-            document.getElementById(
-                "condiciones"
-            ).value
+            document.getElementById("condiciones").value
 
     };
 
-
-    /*
-       IMPORTANTE:
-
-       user_id identifica al usuario autenticado.
-
-       Las políticas RLS de Supabase comprueban:
-
-       auth.uid() = user_id
-
-       Por eso cada presupuesto queda
-       asociado exclusivamente a la cuenta
-       que lo creó.
-    */
 
     const registro = {
 
         user_id:
             usuarioActual.id,
 
-        numero,
+        numero:
+            numero,
+
         negocio,
+
         trabajo,
+
         cliente,
+
         total,
+
         datos
 
     };
 
 
     console.log(
-        "Guardando presupuesto para usuario:",
-        usuarioActual.id
+        "Guardando presupuesto:",
+        registro
     );
 
 
@@ -2022,7 +1874,7 @@ async function guardarPresupuesto() {
     );
 
 
-    mostrarPresupuestos();
+    await mostrarPresupuestos();
 
 }
 
@@ -2034,13 +1886,10 @@ async function guardarPresupuesto() {
 async function mostrarPresupuestos() {
 
     const contenedor =
-        document.getElementById(
-            "historial"
-        );
+        document.getElementById("historial");
 
 
     if (!supabaseClient) {
-
         return;
     }
 
@@ -2072,6 +1921,7 @@ async function mostrarPresupuestos() {
     if (error) {
 
         console.error(
+            "Error cargando historial:",
             error
         );
 
@@ -2102,9 +1952,7 @@ async function mostrarPresupuestos() {
         presupuesto => {
 
             const div =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             div.className =
@@ -2119,8 +1967,9 @@ async function mostrarPresupuestos() {
 
                         <strong>
                             ${escapeHTML(
-                                presupuesto.numero ||
-                                ""
+                                String(
+                                    presupuesto.numero || ""
+                                )
                             )}
                         </strong>
 
@@ -2128,16 +1977,14 @@ async function mostrarPresupuestos() {
 
                         Cliente:
                         ${escapeHTML(
-                            presupuesto.cliente ||
-                            "-"
+                            presupuesto.cliente || "-"
                         )}
 
                         <br>
 
                         Trabajo:
                         ${escapeHTML(
-                            presupuesto.trabajo ||
-                            "-"
+                            presupuesto.trabajo || "-"
                         )}
 
                     </div>
@@ -2159,7 +2006,7 @@ async function mostrarPresupuestos() {
 
                     <button
                         class="smallBtn viewBtn"
-                        onclick="cargarPresupuestoDesdeHistorial(${presupuesto.id})"
+                        onclick="cargarPresupuestoDesdeHistorial(${Number(presupuesto.id)})"
                     >
                         Ver
                     </button>
@@ -2167,7 +2014,7 @@ async function mostrarPresupuestos() {
 
                     <button
                         class="smallBtn historyWhatsapp"
-                        onclick="enviarPresupuestoDesdeHistorial(${presupuesto.id})"
+                        onclick="enviarPresupuestoDesdeHistorial(${Number(presupuesto.id)})"
                     >
                         WhatsApp
                     </button>
@@ -2175,7 +2022,7 @@ async function mostrarPresupuestos() {
 
                     <button
                         class="smallBtn deleteBtn"
-                        onclick="eliminarPresupuesto(${presupuesto.id})"
+                        onclick="eliminarPresupuesto(${Number(presupuesto.id)})"
                     >
                         Eliminar
                     </button>
@@ -2185,9 +2032,7 @@ async function mostrarPresupuestos() {
             `;
 
 
-            contenedor.appendChild(
-                div
-            );
+            contenedor.appendChild(div);
 
         }
     );
@@ -2196,7 +2041,7 @@ async function mostrarPresupuestos() {
 
 
 /* =========================================================
-   OBTENER PRESUPUESTO DEL HISTORIAL
+   OBTENER PRESUPUESTO
 ========================================================= */
 
 function obtenerPresupuestoPorId(id) {
@@ -2277,90 +2122,65 @@ function cargarPresupuestoSupabase(
         presupuesto.datos || {};
 
 
-    document.getElementById(
-        "negocio"
-    ).value =
+    document.getElementById("negocio").value =
         datos.negocio ||
         presupuesto.negocio ||
         "";
 
 
-    document.getElementById(
-        "negocioTelefono"
-    ).value =
+    document.getElementById("negocioTelefono").value =
         datos.negocioTelefono ||
         "";
 
 
-    document.getElementById(
-        "negocioEmail"
-    ).value =
+    document.getElementById("negocioEmail").value =
         datos.negocioEmail ||
         "";
 
 
-    document.getElementById(
-        "negocioDireccion"
-    ).value =
+    document.getElementById("negocioDireccion").value =
         datos.negocioDireccion ||
         "";
 
 
-    document.getElementById(
-        "negocioCuit"
-    ).value =
+    document.getElementById("negocioCuit").value =
         datos.negocioCuit ||
         "";
 
 
-    document.getElementById(
-        "cliente"
-    ).value =
+    document.getElementById("cliente").value =
         datos.cliente ||
         presupuesto.cliente ||
         "";
 
 
-    document.getElementById(
-        "telefono"
-    ).value =
+    document.getElementById("telefono").value =
         datos.telefono ||
         "";
 
 
-    document.getElementById(
-        "trabajo"
-    ).value =
+    document.getElementById("trabajo").value =
         datos.trabajo ||
         presupuesto.trabajo ||
         "";
 
 
-    document.getElementById(
-        "fecha"
-    ).value =
+    document.getElementById("fecha").value =
         datos.fecha ||
         "";
 
 
-    document.getElementById(
-        "manoObra"
-    ).value =
-        datos.manoObra ||
-        0;
+    document.getElementById("manoObra").value =
+        datos.manoObra || 0;
 
 
-    document.getElementById(
-        "condiciones"
-    ).value =
+    document.getElementById("condiciones").value =
         datos.condiciones ||
         "";
 
 
     materiales =
-        Array.isArray(
-            datos.materiales
-        )
+        Array.isArray(datos.materiales)
         ?
         datos.materiales
         :
@@ -2374,9 +2194,7 @@ function cargarPresupuestoSupabase(
 
     if (desplazar) {
 
-        document.getElementById(
-            "preview"
-        ).scrollIntoView({
+        document.getElementById("preview").scrollIntoView({
             behavior: "smooth"
         });
 
@@ -2416,6 +2234,7 @@ async function eliminarPresupuesto(id) {
     if (error) {
 
         console.error(
+            "Error eliminando:",
             error
         );
 
@@ -2433,7 +2252,7 @@ async function eliminarPresupuesto(id) {
     );
 
 
-    mostrarPresupuestos();
+    await mostrarPresupuestos();
 
 }
 
@@ -2448,9 +2267,7 @@ async function generarPDF() {
 
 
     const elemento =
-        document.getElementById(
-            "preview"
-        );
+        document.getElementById("preview");
 
 
     const canvas =
@@ -2512,21 +2329,17 @@ async function generarPDF() {
 
     const ratio =
         Math.min(
-            pageWidth /
-                canvas.width,
-            pageHeight /
-                canvas.height
+            pageWidth / canvas.width,
+            pageHeight / canvas.height
         );
 
 
     const imgWidth =
-        canvas.width *
-        ratio;
+        canvas.width * ratio;
 
 
     const imgHeight =
-        canvas.height *
-        ratio;
+        canvas.height * ratio;
 
 
     const x =
@@ -2556,31 +2369,25 @@ async function generarPDF() {
     console.log(
         "PDF generado:",
         Math.round(
-            pdf.output(
-                "blob"
-            ).size / 1024
+            pdf.output("blob").size / 1024
         ),
         "KB"
     );
 
 
-    document.getElementById(
-        "pdfModal"
-    ).style.display =
+    document.getElementById("pdfModal").style.display =
         "flex";
 
 }
 
 
 /* =========================================================
-   CERRAR MODAL PDF
+   CERRAR PDF
 ========================================================= */
 
 function cerrarPDFModal() {
 
-    document.getElementById(
-        "pdfModal"
-    ).style.display =
+    document.getElementById("pdfModal").style.display =
         "none";
 
 }
@@ -2593,9 +2400,7 @@ function cerrarPDFModal() {
 async function enviarWhatsApp() {
 
     const telefono =
-        document.getElementById(
-            "telefono"
-        ).value.trim();
+        document.getElementById("telefono").value.trim();
 
 
     if (!telefono) {
@@ -2635,9 +2440,7 @@ async function enviarPresupuestoGuardadoSupabase(
 
 
     const telefono =
-        document.getElementById(
-            "telefono"
-        ).value.trim();
+        document.getElementById("telefono").value.trim();
 
 
     if (!telefono) {
@@ -2676,16 +2479,12 @@ async function compartirPDFWhatsApp() {
 
 
     const blob =
-        presupuestoPDF.output(
-            "blob"
-        );
+        presupuestoPDF.output("blob");
 
 
     const archivo =
         new File(
-            [
-                blob
-            ],
+            [blob],
             "presupuesto.pdf",
             {
                 type:
@@ -2698,9 +2497,7 @@ async function compartirPDFWhatsApp() {
         navigator.share &&
         navigator.canShare &&
         navigator.canShare({
-            files: [
-                archivo
-            ]
+            files: [archivo]
         })
     ) {
 
@@ -2708,9 +2505,7 @@ async function compartirPDFWhatsApp() {
 
             await navigator.share({
 
-                files: [
-                    archivo
-                ],
+                files: [archivo],
 
                 title:
                     "Presupuesto",
@@ -2746,16 +2541,11 @@ async function compartirPDFWhatsApp() {
         ?
         presupuestoSeleccionadoWhatsApp.telefono
         :
-        document.getElementById(
-            "telefono"
-        ).value.trim();
+        document.getElementById("telefono").value.trim();
 
 
     const telefonoLimpio =
-        telefono.replace(
-            /\D/g,
-            ""
-        );
+        telefono.replace(/\D/g, "");
 
 
     const mensaje =
@@ -2769,15 +2559,11 @@ async function compartirPDFWhatsApp() {
 
 
     if (
-        numeroWhatsApp.startsWith(
-            "0"
-        )
+        numeroWhatsApp.startsWith("0")
     ) {
 
         numeroWhatsApp =
-            numeroWhatsApp.substring(
-                1
-            );
+            numeroWhatsApp.substring(1);
 
     }
 
@@ -2808,17 +2594,14 @@ async function compartirPDFWhatsApp() {
    INICIO
 ========================================================= */
 
-conectarSupabase();
+const supabaseConectado =
+    conectarSupabase();
 
 
-/* =========================================================
-   CAMBIOS EN TIEMPO REAL
-========================================================= */
-
-if (supabaseClient) {
+if (supabaseConectado) {
 
     supabaseClient.auth.onAuthStateChange(
-        async (
+        (
             event,
             session
         ) => {
@@ -2838,14 +2621,10 @@ if (supabaseClient) {
                 usuarioActual =
                     null;
 
-                document.getElementById(
-                    "app"
-                ).style.display =
+                document.getElementById("app").style.display =
                     "none";
 
-                document.getElementById(
-                    "authOverlay"
-                ).style.display =
+                document.getElementById("authOverlay").style.display =
                     "flex";
 
             }
