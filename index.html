@@ -740,6 +740,10 @@ header h1 {
 </div>
 
 
+<!-- =====================================================
+     MODAL PDF
+===================================================== -->
+
 <div id="pdfModal">
 
     <div class="pdfModalBox">
@@ -756,7 +760,14 @@ header h1 {
                 class="successBtn"
                 onclick="compartirPDFWhatsApp()"
             >
-                Compartir en WhatsApp
+                💬 Compartir PDF por WhatsApp
+            </button>
+
+            <button
+                class="primaryBtn"
+                onclick="descargarPDF()"
+            >
+                📄 Descargar PDF
             </button>
 
             <button
@@ -2474,6 +2485,29 @@ async function generarPDF() {
 
 
 /* =========================================================
+   DESCARGAR PDF
+========================================================= */
+
+function descargarPDF() {
+
+    if (!presupuestoPDF) {
+
+        alert(
+            "Primero generá el PDF."
+        );
+
+        return;
+    }
+
+
+    presupuestoPDF.save(
+        "presupuesto.pdf"
+    );
+
+}
+
+
+/* =========================================================
    CERRAR PDF
 ========================================================= */
 
@@ -2509,8 +2543,9 @@ function normalizarTelefonoWhatsApp(telefono) {
 
 
     /*
-       Si ya viene con código de Argentina,
-       lo dejamos preparado.
+       Si viene con +54 o 54,
+       quitamos el código internacional
+       para reconstruirlo correctamente.
     */
     if (numero.startsWith("54")) {
 
@@ -2522,6 +2557,7 @@ function normalizarTelefonoWhatsApp(telefono) {
 
     /*
        Quitamos el 0 de larga distancia.
+       
        Ejemplo:
        02945 15 123456
        -> 2945 15 123456
@@ -2535,46 +2571,102 @@ function normalizarTelefonoWhatsApp(telefono) {
 
 
     /*
-       En Argentina los celulares pueden escribirse
-       localmente con 15.
+       Formato argentino habitual:
        
-       Ejemplo:
        2945 15 123456
-       -> 2945 123456
+       02945 15 123456
+       
+       Después de quitar el 0 quedan 12 dígitos.
+       
+       Buscamos el "15" del celular
+       después del código de área.
     */
-    if (numero.startsWith("15")) {
+    if (numero.length === 12) {
 
-        numero =
-            numero.substring(2);
+        if (
+            numero.substring(2, 4) === "15"
+        ) {
+
+            numero =
+                numero.substring(0, 2) +
+                numero.substring(4);
+
+        } else if (
+            numero.substring(3, 5) === "15"
+        ) {
+
+            numero =
+                numero.substring(0, 3) +
+                numero.substring(5);
+
+        } else if (
+            numero.substring(4, 6) === "15"
+        ) {
+
+            numero =
+                numero.substring(0, 4) +
+                numero.substring(6);
+
+        }
 
     }
 
 
     /*
-       WhatsApp utiliza 54 + 9 + código de área
-       + número para celulares argentinos.
+       Un celular argentino nacionalizado
+       queda normalmente en 10 dígitos:
        
-       Para números argentinos de 10 dígitos
-       asumimos que se trata de un celular.
+       código de área + número.
+       
+       WhatsApp:
+       54 + 9 + número.
     */
     if (numero.length === 10) {
 
-        numero =
-            "549" + numero;
-
-    } else {
-
-        /*
-           Para otros formatos, agregamos
-           únicamente el código internacional.
-        */
-        numero =
-            "54" + numero;
+        return "549" + numero;
 
     }
 
 
-    return numero;
+    /*
+       Si el usuario ya ingresó un formato
+       internacional válido que no encaja
+       exactamente en los casos anteriores,
+       usamos 54 + número.
+    */
+    return "54" + numero;
+
+}
+
+
+/* =========================================================
+   OBTENER MENSAJE WHATSAPP
+========================================================= */
+
+function obtenerMensajeWhatsApp() {
+
+    const cliente =
+        document.getElementById("cliente").value.trim();
+
+
+    const total =
+        calcularTotal();
+
+
+    if (cliente) {
+
+        return (
+            `Hola ${cliente}, te envío el presupuesto. ` +
+            `Total: $ ${formatearNumero(total)}`
+        );
+
+    }
+
+
+    return (
+        `Hola, te envío el presupuesto. ` +
+        `Total: $ ${formatearNumero(total)}`
+    );
 
 }
 
@@ -2615,32 +2707,22 @@ async function enviarWhatsApp() {
     }
 
 
-    const cliente =
-        document.getElementById("cliente").value.trim();
+    /*
+       Guardamos el número para utilizarlo
+       cuando se abra el modal del PDF.
+    */
+    presupuestoSeleccionadoWhatsApp = {
 
+        telefono: telefono
 
-    const mensaje =
-        cliente
-        ?
-        `Hola ${cliente}, te envío el presupuesto.`
-        :
-        "Hola, te envío el presupuesto.";
-
-
-    const urlWhatsApp =
-        "https://wa.me/" +
-        numeroWhatsApp +
-        "?text=" +
-        encodeURIComponent(mensaje);
+    };
 
 
     /*
-       Abrimos directamente el chat del cliente.
+       IMPORTANTE:
+       Primero generamos el PDF.
     */
-    window.open(
-        urlWhatsApp,
-        "_blank"
-    );
+    await generarPDF();
 
 }
 
@@ -2688,31 +2770,32 @@ async function enviarPresupuestoGuardadoSupabase(
     }
 
 
-    const cliente =
-        datos.cliente ||
-        presupuesto.cliente ||
-        "";
-
-
-    const mensaje =
-        cliente
-        ?
-        `Hola ${cliente}, te envío el presupuesto.`
-        :
-        "Hola, te envío el presupuesto.";
-
-
-    const urlWhatsApp =
-        "https://wa.me/" +
-        numeroWhatsApp +
-        "?text=" +
-        encodeURIComponent(mensaje);
-
-
-    window.open(
-        urlWhatsApp,
-        "_blank"
+    /*
+       Cargamos el presupuesto en pantalla
+       para que el PDF sea exactamente
+       el presupuesto guardado.
+    */
+    cargarPresupuestoSupabase(
+        presupuesto,
+        false
     );
+
+
+    /*
+       Guardamos el teléfono para
+       compartir posteriormente.
+    */
+    presupuestoSeleccionadoWhatsApp = {
+
+        telefono: telefono
+
+    };
+
+
+    /*
+       Generamos el PDF.
+    */
+    await generarPDF();
 
 }
 
@@ -2768,16 +2851,98 @@ async function compartirPDFWhatsApp() {
     }
 
 
-    const cliente =
-        document.getElementById("cliente").value.trim();
-
-
     const mensaje =
-        cliente
-        ?
-        `Hola ${cliente}, te envío el presupuesto.`
-        :
-        "Hola, te envío el presupuesto.";
+        obtenerMensajeWhatsApp();
+
+
+    /*
+       Convertimos el PDF generado
+       en un archivo real.
+    */
+    const blob =
+        presupuestoPDF.output("blob");
+
+
+    const archivo =
+        new File(
+            [blob],
+            "presupuesto.pdf",
+            {
+                type: "application/pdf"
+            }
+        );
+
+
+    /*
+       Si el navegador/dispositivo soporta
+       compartir archivos, intentamos usar
+       el menú nativo de compartir.
+       
+       En Android normalmente permitirá
+       seleccionar WhatsApp y adjuntar
+       el PDF.
+    */
+    if (
+        navigator.share &&
+        navigator.canShare &&
+        navigator.canShare({
+            files: [archivo]
+        })
+    ) {
+
+        try {
+
+            await navigator.share({
+
+                files: [archivo],
+
+                title: "Presupuesto",
+
+                text: mensaje
+
+            });
+
+
+            cerrarPDFModal();
+
+            return;
+
+        } catch (error) {
+
+            /*
+               Si el usuario canceló el menú
+               de compartir, no hacemos nada.
+            */
+            if (
+                error &&
+                error.name === "AbortError"
+            ) {
+
+                return;
+
+            }
+
+
+            console.log(
+                "No se pudo compartir el archivo:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+       Si el navegador no soporta compartir
+       archivos directamente:
+       
+       1. Descargamos el PDF.
+       2. Abrimos el chat exacto del cliente.
+    */
+    presupuestoPDF.save(
+        "presupuesto.pdf"
+    );
 
 
     const urlWhatsApp =
@@ -2791,6 +2956,9 @@ async function compartirPDFWhatsApp() {
         urlWhatsApp,
         "_blank"
     );
+
+
+    cerrarPDFModal();
 
 }
 
