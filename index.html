@@ -7,7 +7,6 @@
 
 <title>PresuFácil v0.9</title>
 
-<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -356,11 +355,7 @@ button:hover {
 
 </header>
 
-
 <div class="container">
-
-
-<!-- DATOS NEGOCIO -->
 
 <div class="card form-section">
 
@@ -403,11 +398,7 @@ placeholder="Opcional"
 
 </div>
 
-
 <div class="grid">
-
-
-<!-- FORMULARIO -->
 
 <div class="form-section">
 
@@ -443,7 +434,6 @@ id="fecha"
 type="date"
 >
 
-
 <h3 style="margin-top:25px;">
 📦 Materiales
 </h3>
@@ -457,7 +447,6 @@ onclick="agregarMaterial()"
 ➕ Agregar material
 </button>
 
-
 <label>Mano de obra</label>
 
 <input
@@ -467,14 +456,12 @@ value="0"
 min="0"
 >
 
-
 <label>Condiciones / notas</label>
 
 <textarea
 id="condiciones"
 placeholder="Ej: Presupuesto válido por 15 días."
 ></textarea>
-
 
 <div class="total-box">
 
@@ -486,14 +473,12 @@ $<span id="total">0.00</span>
 
 </div>
 
-
 <button
 class="btn-primary"
 onclick="actualizarPreview()"
 >
 🧾 Actualizar presupuesto
 </button>
-
 
 <button
 class="btn-success"
@@ -502,7 +487,6 @@ onclick="guardarPresupuesto()"
 💾 Guardar presupuesto
 </button>
 
-
 <button
 class="btn-dark"
 onclick="generarPDF()"
@@ -510,14 +494,12 @@ onclick="generarPDF()"
 📄 Generar PDF
 </button>
 
-
 <button
 class="btn-whatsapp"
 onclick="enviarWhatsApp()"
 >
 📱 WhatsApp
 </button>
-
 
 <div
 id="supabaseStatus"
@@ -530,9 +512,6 @@ class="status loading"
 
 </div>
 
-
-<!-- PREVIEW -->
-
 <div>
 
 <div class="card preview-card">
@@ -541,9 +520,7 @@ class="status loading"
 👁️ Vista previa
 </h2>
 
-
 <div class="preview" id="preview">
-
 
 <div class="preview-business">
 
@@ -556,7 +533,6 @@ id="previewNegocio"
 Mi negocio
 </div>
 
-
 <div
 class="business-info"
 id="previewNegocioInfo"
@@ -568,7 +544,6 @@ CUIT: -
 </div>
 
 </div>
-
 
 <div class="quote-title">
 
@@ -587,25 +562,21 @@ Fecha:
 
 </div>
 
-
 <div class="client-box">
 
 <strong>
 DATOS DEL CLIENTE
 </strong>
 
-
 <p>
 <strong>Nombre:</strong>
 <span id="previewCliente">-</span>
 </p>
 
-
 <p>
 <strong>WhatsApp:</strong>
 <span id="previewTelefono">-</span>
 </p>
-
 
 <p>
 <strong>Trabajo:</strong>
@@ -614,11 +585,9 @@ DATOS DEL CLIENTE
 
 </div>
 
-
 <h3>
 Detalle del presupuesto
 </h3>
-
 
 <table>
 
@@ -635,11 +604,9 @@ Detalle del presupuesto
 
 </thead>
 
-
 <tbody id="previewMateriales"></tbody>
 
 </table>
-
 
 <p style="text-align:right;margin-top:15px;">
 
@@ -651,14 +618,12 @@ $<span id="previewManoObra">0.00</span>
 
 </p>
 
-
 <div class="final-total">
 
 TOTAL:
 $<span id="previewTotal">0.00</span>
 
 </div>
-
 
 <div class="conditions">
 
@@ -672,7 +637,6 @@ Condiciones / notas
 
 </div>
 
-
 <div class="signature">
 
 <div class="signature-box">
@@ -685,7 +649,6 @@ Firma / sello
 
 </div>
 
-
 </div>
 
 </div>
@@ -693,9 +656,6 @@ Firma / sello
 </div>
 
 </div>
-
-
-<!-- HISTORIAL -->
 
 <div class="card saved-section">
 
@@ -709,9 +669,7 @@ Firma / sello
 
 </div>
 
-
 </div>
-
 
 <script>
 
@@ -722,20 +680,8 @@ Firma / sello
 const SUPABASE_URL =
 "https://tgqjjvmekfsliuagvsub.supabase.co";
 
-/*
-   PEGÁ ACÁ TU PUBLISHABLE KEY.
-
-   Ejemplo:
-
-   const SUPABASE_KEY =
-   "sb_publishable_xxxxxxxxxxxxxxxxx";
-
-   NO uses una sb_secret_...
-*/
-
 const SUPABASE_KEY =
 "sb_publishable_Ad4PSfBf0d1fcRHIrdDN5g_FlKG6PQU";
-
 
 let supabaseClient = null;
 
@@ -764,26 +710,20 @@ function conectarSupabase() {
         return false;
     }
 
-
-    if (
-        !SUPABASE_KEY ||
-        SUPABASE_KEY ===
-        "PEGAR_AQUI_TU_PUBLISHABLE_KEY"
-    ) {
+    if (!SUPABASE_KEY) {
 
         console.error(
-            "❌ Falta la Publishable Key de Supabase."
+            "❌ Falta la Publishable Key."
         );
 
         supabaseStatus.textContent =
-            "⚠️ Pegá tu Publishable Key de Supabase.";
+            "⚠️ Falta la Publishable Key.";
 
         supabaseStatus.className =
             "status error";
 
         return false;
     }
-
 
     try {
 
@@ -793,7 +733,6 @@ function conectarSupabase() {
                 SUPABASE_KEY
             );
 
-
         console.log(
             "✅ Supabase JS cargado correctamente."
         );
@@ -802,16 +741,13 @@ function conectarSupabase() {
             "✅ Cliente Supabase creado correctamente."
         );
 
-
         supabaseStatus.textContent =
             "☁️ Supabase conectado.";
 
         supabaseStatus.className =
             "status ok";
 
-
         return true;
-
 
     } catch (error) {
 
@@ -820,19 +756,16 @@ function conectarSupabase() {
             error
         );
 
-
         supabaseStatus.textContent =
             "❌ Error configurando Supabase.";
 
         supabaseStatus.className =
             "status error";
 
-
         return false;
     }
 
 }
-
 
 conectarSupabase();
 
@@ -859,7 +792,7 @@ new Date()
 
 
 /* =====================================================
-   DATOS DEL NEGOCIO
+   DATOS NEGOCIO
    ===================================================== */
 
 function cargarDatosNegocio() {
@@ -938,7 +871,6 @@ function mostrarMateriales() {
 
     contenedor.innerHTML = "";
 
-
     materiales.forEach(
         (material, index) => {
 
@@ -946,7 +878,6 @@ function mostrarMateriales() {
                 document.createElement("div");
 
             div.className = "material";
-
 
             div.innerHTML = `
 
@@ -1000,12 +931,10 @@ function mostrarMateriales() {
 
             `;
 
-
             contenedor.appendChild(div);
 
         }
     );
-
 
     calcularTotal();
 
@@ -1048,7 +977,6 @@ function actualizarMaterial(
 
     }
 
-
     materiales[index][campo] = valor;
 
     calcularTotal();
@@ -1077,7 +1005,6 @@ function calcularTotal() {
 
     let materialesTotal = 0;
 
-
     materiales.forEach(
         material => {
 
@@ -1092,21 +1019,17 @@ function calcularTotal() {
         }
     );
 
-
     let manoObra =
         parseFloat(
             document.getElementById("manoObra").value
         ) || 0;
 
-
     let total =
         materialesTotal +
         manoObra;
 
-
     document.getElementById("total").textContent =
         total.toFixed(2);
-
 
     return total;
 
@@ -1121,11 +1044,9 @@ function actualizarPreview() {
 
     guardarDatosNegocio();
 
-
     document.getElementById("previewNegocio").textContent =
         document.getElementById("negocio").value ||
         "Mi negocio";
-
 
     document.getElementById("previewNegocioInfo").innerHTML =
 
@@ -1152,52 +1073,40 @@ function actualizarPreview() {
             document.getElementById("negocioCuit").value || "-"
         );
 
-
     const numeroMostrar =
         numeroPreview !== null
             ? numeroPreview
             : numeroPresupuesto;
 
-
     document.getElementById("previewNumero").textContent =
         String(numeroMostrar).padStart(4, "0");
-
 
     document.getElementById("previewFecha").textContent =
         document.getElementById("fecha").value || "-";
 
-
     document.getElementById("previewCliente").textContent =
         document.getElementById("cliente").value || "-";
-
 
     document.getElementById("previewTelefono").textContent =
         document.getElementById("telefono").value || "-";
 
-
     document.getElementById("previewTrabajo").textContent =
         document.getElementById("trabajo").value || "-";
-
 
     document.getElementById("previewCondiciones").textContent =
         document.getElementById("condiciones").value || "-";
 
-
     actualizarMaterialesPreview();
-
 
     let manoObra =
         parseFloat(
             document.getElementById("manoObra").value
         ) || 0;
 
-
     document.getElementById("previewManoObra").textContent =
         manoObra.toFixed(2);
 
-
     let total = calcularTotal();
-
 
     document.getElementById("previewTotal").textContent =
         total.toFixed(2);
@@ -1210,31 +1119,24 @@ function actualizarMaterialesPreview() {
     const tbody =
         document.getElementById("previewMateriales");
 
-
     tbody.innerHTML = "";
-
 
     materiales.forEach(
         material => {
 
             if (!material.nombre) return;
 
-
             let cantidad =
                 Number(material.cantidad) || 0;
-
 
             let precio =
                 Number(material.precio) || 0;
 
-
             let subtotal =
                 cantidad * precio;
 
-
             let tr =
                 document.createElement("tr");
-
 
             tr.innerHTML = `
 
@@ -1256,7 +1158,6 @@ function actualizarMaterialesPreview() {
 
             `;
 
-
             tbody.appendChild(tr);
 
         }
@@ -1272,7 +1173,6 @@ function actualizarMaterialesPreview() {
 function obtenerPresupuesto() {
 
     actualizarPreview();
-
 
     return {
 
@@ -1340,7 +1240,6 @@ async function guardarEnSupabase(presupuesto) {
 
     }
 
-
     const datos = {
 
         negocioTelefono:
@@ -1372,7 +1271,6 @@ async function guardarEnSupabase(presupuesto) {
 
     };
 
-
     const registro = {
 
         numero:
@@ -1395,17 +1293,23 @@ async function guardarEnSupabase(presupuesto) {
 
     };
 
+    console.log(
+        "📤 Enviando presupuesto a Supabase:",
+        registro
+    );
+
+    /*
+       IMPORTANTE:
+       No usamos .select().single() después del INSERT.
+       Primero insertamos solamente.
+    */
 
     const {
-        data,
         error
     } =
         await supabaseClient
             .from("presupuestos")
-            .insert([registro])
-            .select()
-            .single();
-
+            .insert([registro]);
 
     if (error) {
 
@@ -1418,8 +1322,11 @@ async function guardarEnSupabase(presupuesto) {
 
     }
 
+    console.log(
+        "✅ Presupuesto insertado correctamente."
+    );
 
-    return data;
+    return true;
 
 }
 
@@ -1438,7 +1345,6 @@ async function obtenerPresupuestosSupabase() {
 
     }
 
-
     const {
         data,
         error
@@ -1453,7 +1359,6 @@ async function obtenerPresupuestosSupabase() {
                 }
             );
 
-
     if (error) {
 
         console.error(
@@ -1464,7 +1369,6 @@ async function obtenerPresupuestosSupabase() {
         throw error;
 
     }
-
 
     return data || [];
 
@@ -1482,7 +1386,6 @@ async function actualizarNumeroPresupuesto() {
         const presupuestos =
             await obtenerPresupuestosSupabase();
 
-
         if (presupuestos.length === 0) {
 
             numeroPresupuesto = 1;
@@ -1491,16 +1394,13 @@ async function actualizarNumeroPresupuesto() {
 
         }
 
-
         let mayor = 0;
-
 
         presupuestos.forEach(
             p => {
 
                 const numero =
                     Number(p.numero) || 0;
-
 
                 if (numero > mayor) {
 
@@ -1511,10 +1411,8 @@ async function actualizarNumeroPresupuesto() {
             }
         );
 
-
         numeroPresupuesto =
             mayor + 1;
-
 
     } catch (error) {
 
@@ -1541,7 +1439,6 @@ async function mostrarPresupuestos() {
             "presupuestosGuardados"
         );
 
-
     if (!supabaseClient) {
 
         contenedor.innerHTML = `
@@ -1554,22 +1451,18 @@ async function mostrarPresupuestos() {
 
     }
 
-
     contenedor.innerHTML = `
         <p>
             ☁️ Cargando presupuestos desde Supabase...
         </p>
     `;
 
-
     try {
 
         const presupuestos =
             await obtenerPresupuestosSupabase();
 
-
         contenedor.innerHTML = "";
-
 
         if (presupuestos.length === 0) {
 
@@ -1580,32 +1473,22 @@ async function mostrarPresupuestos() {
 
         }
 
-
         presupuestos.forEach(
             presupuesto => {
 
                 const datos =
                     presupuesto.datos || {};
 
-
-                const telefono =
-                    datos.telefono || "";
-
-
                 const fecha =
                     datos.fecha || "";
-
 
                 const div =
                     document.createElement("div");
 
-
                 div.className = "saved";
-
 
                 const numero =
                     Number(presupuesto.numero) || 0;
-
 
                 div.innerHTML = `
 
@@ -1647,7 +1530,6 @@ async function mostrarPresupuestos() {
 
                 `;
 
-
                 const btnVer =
                     document.createElement("button");
 
@@ -1665,7 +1547,6 @@ async function mostrarPresupuestos() {
                         );
 
                     };
-
 
                 const btnWhatsApp =
                     document.createElement("button");
@@ -1685,7 +1566,6 @@ async function mostrarPresupuestos() {
 
                     };
 
-
                 const btnEliminar =
                     document.createElement("button");
 
@@ -1704,24 +1584,20 @@ async function mostrarPresupuestos() {
 
                     };
 
-
                 div.appendChild(btnVer);
 
                 div.appendChild(btnWhatsApp);
 
                 div.appendChild(btnEliminar);
 
-
                 contenedor.appendChild(div);
 
             }
         );
 
-
     } catch (error) {
 
         console.error(error);
-
 
         contenedor.innerHTML = `
 
@@ -1748,21 +1624,18 @@ async function guardarPresupuesto() {
 
     numeroPreview = null;
 
-
     const presupuesto =
         obtenerPresupuesto();
-
 
     if (!supabaseClient) {
 
         alert(
-            "⚠️ Supabase no está conectado. Revisá tu Publishable Key."
+            "⚠️ Supabase no está conectado."
         );
 
         return;
 
     }
-
 
     try {
 
@@ -1772,18 +1645,14 @@ async function guardarPresupuesto() {
         supabaseStatus.className =
             "status loading";
 
-
         await guardarEnSupabase(
             presupuesto
         );
 
-
         numeroPresupuesto =
             presupuesto.numero + 1;
 
-
         numeroPreview = null;
-
 
         supabaseStatus.textContent =
             "☁️ Presupuesto guardado correctamente en Supabase.";
@@ -1791,17 +1660,30 @@ async function guardarPresupuesto() {
         supabaseStatus.className =
             "status ok";
 
+        /*
+           El historial se intenta cargar después.
+           Si falta la política SELECT, el guardado
+           igualmente ya se realizó.
+        */
 
-        await mostrarPresupuestos();
+        try {
 
+            await mostrarPresupuestos();
+
+        } catch (historialError) {
+
+            console.error(
+                "⚠️ Guardado correcto, pero no se pudo cargar el historial:",
+                historialError
+            );
+
+        }
 
         actualizarPreview();
-
 
         alert(
             "✅ Presupuesto guardado correctamente en Supabase."
         );
-
 
     } catch (error) {
 
@@ -1810,13 +1692,11 @@ async function guardarPresupuesto() {
             error
         );
 
-
         supabaseStatus.textContent =
             "❌ Error al guardar en Supabase.";
 
         supabaseStatus.className =
             "status error";
-
 
         alert(
             "❌ No se pudo guardar en Supabase.\n\n" +
@@ -1836,69 +1716,53 @@ function cargarPresupuestoSupabase(presupuesto) {
 
     if (!presupuesto) return;
 
-
     const datos =
         presupuesto.datos || {};
-
 
     document.getElementById("negocio").value =
         presupuesto.negocio || "";
 
-
     document.getElementById("negocioTelefono").value =
         datos.negocioTelefono || "";
-
 
     document.getElementById("negocioEmail").value =
         datos.negocioEmail || "";
 
-
     document.getElementById("negocioDireccion").value =
         datos.negocioDireccion || "";
-
 
     document.getElementById("negocioCuit").value =
         datos.negocioCuit || "";
 
-
     document.getElementById("cliente").value =
         presupuesto.cliente || "";
-
 
     document.getElementById("telefono").value =
         datos.telefono || "";
 
-
     document.getElementById("trabajo").value =
         presupuesto.trabajo || "";
-
 
     document.getElementById("fecha").value =
         datos.fecha || "";
 
-
     document.getElementById("manoObra").value =
         datos.manoObra || 0;
 
-
     document.getElementById("condiciones").value =
         datos.condiciones || "";
-
 
     materiales =
         Array.isArray(datos.materiales)
             ? datos.materiales
             : [];
 
-
     numeroPreview =
         Number(presupuesto.numero) || 1;
-
 
     mostrarMateriales();
 
     actualizarPreview();
-
 
     window.scrollTo({
 
@@ -1918,7 +1782,6 @@ function cargarPresupuestoSupabase(presupuesto) {
 function generarPDF() {
 
     actualizarPreview();
-
 
     setTimeout(
         function() {
@@ -1940,11 +1803,9 @@ function enviarWhatsApp() {
 
     actualizarPreview();
 
-
     let telefono =
         document.getElementById("telefono").value
             .replace(/\D/g, "");
-
 
     if (!telefono) {
 
@@ -1956,25 +1817,20 @@ function enviarWhatsApp() {
 
     }
 
-
     let cliente =
         document.getElementById("cliente").value ||
         "cliente";
-
 
     let negocio =
         document.getElementById("negocio").value ||
         "nuestro negocio";
 
-
     let trabajo =
         document.getElementById("trabajo").value ||
         "-";
 
-
     let total =
         document.getElementById("total").textContent;
-
 
     let numero =
         String(
@@ -1982,7 +1838,6 @@ function enviarWhatsApp() {
                 ? numeroPreview
                 : numeroPresupuesto
         ).padStart(4, "0");
-
 
     let mensaje =
 
@@ -2000,13 +1855,11 @@ $${total}
 
 Muchas gracias por confiar en nosotros.`;
 
-
     let url =
         "https://wa.me/" +
         telefono +
         "?text=" +
         encodeURIComponent(mensaje);
-
 
     window.open(
         url,
@@ -2026,16 +1879,13 @@ function enviarPresupuestoGuardadoSupabase(
 
     if (!presupuesto) return;
 
-
     const datos =
         presupuesto.datos || {};
-
 
     let telefono =
         (
             datos.telefono || ""
         ).replace(/\D/g, "");
-
 
     if (!telefono) {
 
@@ -2046,7 +1896,6 @@ function enviarPresupuestoGuardadoSupabase(
         return;
 
     }
-
 
     let mensaje =
 
@@ -2076,13 +1925,11 @@ $${Number(
 
 Muchas gracias por confiar en nosotros.`;
 
-
     let url =
         "https://wa.me/" +
         telefono +
         "?text=" +
         encodeURIComponent(mensaje);
-
 
     window.open(
         url,
@@ -2108,7 +1955,6 @@ async function eliminarPresupuestoSupabase(numero) {
 
     }
 
-
     if (!supabaseClient) {
 
         alert(
@@ -2118,7 +1964,6 @@ async function eliminarPresupuestoSupabase(numero) {
         return;
 
     }
-
 
     try {
 
@@ -2130,18 +1975,15 @@ async function eliminarPresupuestoSupabase(numero) {
                 .delete()
                 .eq("numero", numero);
 
-
         if (error) {
 
             throw error;
 
         }
 
-
         await actualizarNumeroPresupuesto();
 
         await mostrarPresupuestos();
-
 
         supabaseStatus.textContent =
             "☁️ Presupuesto eliminado de Supabase.";
@@ -2149,14 +1991,12 @@ async function eliminarPresupuestoSupabase(numero) {
         supabaseStatus.className =
             "status ok";
 
-
     } catch (error) {
 
         console.error(
             "❌ Error eliminando:",
             error
         );
-
 
         alert(
             "❌ No se pudo eliminar.\n\n" +
@@ -2196,18 +2036,13 @@ async function iniciarPresuFacil() {
         "🚀 PresuFácil iniciando..."
     );
 
-
     cargarDatosNegocio();
-
 
     agregarMaterial();
 
-
     calcularTotal();
 
-
     actualizarPreview();
-
 
     if (!supabaseClient) {
 
@@ -2219,12 +2054,9 @@ async function iniciarPresuFacil() {
 
     }
 
-
     await actualizarNumeroPresupuesto();
 
-
     await mostrarPresupuestos();
-
 
     actualizarPreview();
 
@@ -2237,4 +2069,3 @@ iniciarPresuFacil();
 
 </body>
 </html>
-```
