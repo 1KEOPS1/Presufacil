@@ -2037,7 +2037,7 @@ function cargarPresupuestoSupabase(
 
 
 /* =====================================================
-   GENERAR PDF
+   GENERAR PDF - OPTIMIZADO
    ===================================================== */
 
 async function generarPDF() {
@@ -2072,33 +2072,47 @@ async function generarPDF() {
 
         }
 
-        const {
-            jsPDF
-        } = window.jspdf;
+        const { jsPDF } =
+            window.jspdf;
 
+
+        /* =============================================
+           CAPTURAR PRESUPUESTO
+           ============================================= */
 
         const canvas =
             await html2canvas(
                 elemento,
                 {
-                    scale: 2,
+                    scale: 1.2,
                     useCORS: true,
-                    backgroundColor: "#ffffff"
+                    backgroundColor: "#ffffff",
+                    logging: false
                 }
             );
 
 
+        /* =============================================
+           COMPRIMIR COMO JPEG
+           ============================================= */
+
         const imgData =
             canvas.toDataURL(
-                "image/png"
+                "image/jpeg",
+                0.65
             );
 
+
+        /* =============================================
+           CREAR PDF
+           ============================================= */
 
         const pdf =
             new jsPDF({
                 orientation: "portrait",
                 unit: "mm",
-                format: "a4"
+                format: "a4",
+                compress: true
             });
 
 
@@ -2107,16 +2121,17 @@ async function generarPDF() {
         const margen = 10;
 
         const anchoImagen =
-            anchoPDF - (margen * 2);
+            anchoPDF -
+            (margen * 2);
 
         const altoImagen =
             canvas.height *
             anchoImagen /
             canvas.width;
 
-
         const altoUtil =
-            altoPDF - (margen * 2);
+            altoPDF -
+            (margen * 2);
 
 
         let posicion =
@@ -2126,38 +2141,59 @@ async function generarPDF() {
             altoImagen;
 
 
+        /* =============================================
+           PRIMERA PÁGINA
+           ============================================= */
+
         pdf.addImage(
             imgData,
-            "PNG",
+            "JPEG",
             margen,
             posicion,
             anchoImagen,
-            altoImagen
+            altoImagen,
+            undefined,
+            "FAST"
         );
 
 
-        alturaRestante -= altoUtil;
+        alturaRestante -=
+            altoUtil;
 
 
-        while (alturaRestante > 0) {
+        /* =============================================
+           PÁGINAS ADICIONALES
+           ============================================= */
 
-            posicion -= altoUtil;
+        while (
+            alturaRestante > 0
+        ) {
+
+            posicion -=
+                altoUtil;
 
             pdf.addPage();
 
             pdf.addImage(
                 imgData,
-                "PNG",
+                "JPEG",
                 margen,
                 posicion,
                 anchoImagen,
-                altoImagen
+                altoImagen,
+                undefined,
+                "FAST"
             );
 
-            alturaRestante -= altoUtil;
+            alturaRestante -=
+                altoUtil;
 
         }
 
+
+        /* =============================================
+           NOMBRE DEL ARCHIVO
+           ============================================= */
 
         const numero =
             String(
@@ -2199,8 +2235,14 @@ async function generarPDF() {
             ".pdf";
 
 
+        /* =============================================
+           GENERAR BLOB
+           ============================================= */
+
         const pdfBlob =
-            pdf.output("blob");
+            pdf.output(
+                "blob"
+            );
 
 
         presupuestoPDFBlob =
@@ -2209,6 +2251,10 @@ async function generarPDF() {
         presupuestoPDFNombre =
             nombreArchivo;
 
+
+        /* =============================================
+           LIBERAR URL ANTERIOR
+           ============================================= */
 
         if (presupuestoPDFUrl) {
 
@@ -2225,11 +2271,14 @@ async function generarPDF() {
             );
 
 
+        /* =============================================
+           MOSTRAR PDF
+           ============================================= */
+
         const visor =
             document.getElementById(
                 "pdfViewer"
             );
-
 
         visor.src =
             presupuestoPDFUrl;
@@ -2241,9 +2290,25 @@ async function generarPDF() {
             "flex";
 
 
+        /* =============================================
+           MOSTRAR TAMAÑO EN CONSOLA
+           ============================================= */
+
+        console.log(
+            "📄 PDF generado:",
+            (pdfBlob.size / 1024).toFixed(0),
+            "KB"
+        );
+
+
         return {
-            blob: pdfBlob,
-            nombre: nombreArchivo
+
+            blob:
+                pdfBlob,
+
+            nombre:
+                nombreArchivo
+
         };
 
 
@@ -2454,11 +2519,9 @@ Muchas gracias por confiar en nosotros.`;
         );
 
 
-    /*
-       Si el navegador permite compartir archivos,
-       se abre el menú nativo y se puede elegir WhatsApp
-       con el PDF adjunto.
-    */
+    /* =============================================
+       COMPARTIR PDF DIRECTAMENTE
+       ============================================= */
 
     if (
         navigator.share &&
@@ -2508,10 +2571,9 @@ Muchas gracias por confiar en nosotros.`;
     }
 
 
-    /*
-       En navegadores que no permiten adjuntar archivos
-       automáticamente, descargamos el PDF y abrimos WhatsApp.
-    */
+    /* =============================================
+       FALLBACK
+       ============================================= */
 
     descargarPDF();
 
@@ -2567,10 +2629,6 @@ async function enviarWhatsApp() {
     }
 
 
-    /*
-       Generamos primero el PDF.
-    */
-
     await generarPDF();
 
 }
@@ -2612,20 +2670,11 @@ async function enviarPresupuestoGuardadoSupabase(
     }
 
 
-    /*
-       Cargamos el presupuesto guardado
-       sin mover automáticamente la pantalla.
-    */
-
     cargarPresupuestoSupabase(
         presupuesto,
         false
     );
 
-
-    /*
-       Generamos su PDF.
-    */
 
     const resultado =
         await generarPDF();
