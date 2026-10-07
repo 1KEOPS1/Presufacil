@@ -10,7 +10,7 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>PresuFácil v0.9</title>
+<title>PresuFácil v1.0</title>
 
 <link
     rel="manifest"
@@ -245,7 +245,7 @@ header h1 {
 
 
 /* =========================================================
-   BOTÓN APK DENTRO DE LA APP
+   BOTÓN APK
 ========================================================= */
 
 .apkHeaderBtn {
@@ -482,7 +482,7 @@ header h1 {
 
 
 /* =========================================================
-   BOTONES DENTRO DE VISTA PREVIA
+   BOTONES PREVIEW
 ========================================================= */
 
 .previewActions {
@@ -582,7 +582,7 @@ header h1 {
 
 
 /* =========================================================
-   RESPONSIVE — CELULAR
+   RESPONSIVE
 ========================================================= */
 
 @media (max-width: 700px) {
@@ -676,9 +676,6 @@ header h1 {
         min-height: 110px;
     }
 
-
-    /* MATERIALES */
-
     .material {
         padding: 12px;
     }
@@ -706,9 +703,6 @@ header h1 {
         margin-top: 12px;
     }
 
-
-    /* BOTONES */
-
     .actions {
         flex-direction: column;
     }
@@ -721,9 +715,6 @@ header h1 {
         min-height: 48px;
         font-size: 15px;
     }
-
-
-    /* VISTA PREVIA */
 
     #preview {
         padding: 15px;
@@ -801,9 +792,6 @@ header h1 {
         font-size: 15px;
     }
 
-
-    /* HISTORIAL */
-
     .historyItem {
         padding: 13px;
     }
@@ -823,9 +811,6 @@ header h1 {
         min-height: 44px;
         font-size: 14px;
     }
-
-
-    /* LOGIN */
 
     #authOverlay {
         padding: 15px;
@@ -852,9 +837,6 @@ header h1 {
         margin-top: 18px;
     }
 
-
-    /* MODAL PDF */
-
     #pdfModal {
         padding: 12px;
     }
@@ -870,22 +852,14 @@ header h1 {
         font-size: 15px;
     }
 
-
-    /* SEGURIDAD */
-
     .previewBusiness,
     .historyItem,
     .card {
         max-width: 100%;
         overflow-wrap: anywhere;
     }
-
 }
 
-
-/* =========================================================
-   CELULARES MUY PEQUEÑOS
-========================================================= */
 
 @media (max-width: 380px) {
 
@@ -1008,10 +982,6 @@ header h1 {
         </div>
 
 
-        <!-- =================================================
-             DESCARGAR APP ANDROID
-        ================================================= -->
-
         <a
             class="apkDownload"
             href="https://github.com/1KEOPS1/Presufacil/raw/refs/heads/main/PresuF%C3%A1cil.apk"
@@ -1044,13 +1014,11 @@ header h1 {
 
 <header>
 
-    <h1>PresuFácil v0.9</h1>
+    <h1>PresuFácil v1.0</h1>
 
     <div class="userPanel">
 
         <span id="usuarioEmail"></span>
-
-        <!-- BOTÓN APK DENTRO DE LA APP -->
 
         <a
             href="https://github.com/1KEOPS1/Presufacil/raw/refs/heads/main/PresuF%C3%A1cil.apk"
@@ -1339,6 +1307,8 @@ let presupuestoSeleccionadoWhatsApp = null;
 
 let presupuestosActuales = [];
 
+let usuarioMostradoId = null;
+
 
 /* =========================================================
    CONECTAR SUPABASE
@@ -1582,24 +1552,176 @@ async function iniciarSesion() {
 
 
 /* =========================================================
+   LIMPIAR FORMULARIO TEMPORAL
+========================================================= */
+
+function limpiarFormularioUsuario() {
+
+    const campos = [
+
+        "cliente",
+        "telefono",
+        "trabajo",
+        "condiciones"
+
+    ];
+
+
+    campos.forEach(
+        campo => {
+
+            const elemento =
+                document.getElementById(campo);
+
+            if (elemento) {
+                elemento.value = "";
+            }
+
+        }
+    );
+
+
+    const manoObra =
+        document.getElementById("manoObra");
+
+    if (manoObra) {
+        manoObra.value = "0";
+    }
+
+
+    const fecha =
+        document.getElementById("fecha");
+
+    if (fecha) {
+        fecha.value = "";
+    }
+
+
+    materiales = [];
+
+
+    const contenedor =
+        document.getElementById("materiales");
+
+    if (contenedor) {
+        contenedor.innerHTML = "";
+    }
+
+
+    presupuestoPDF = null;
+
+    presupuestoSeleccionadoWhatsApp = null;
+
+    presupuestosActuales = [];
+
+
+    const historial =
+        document.getElementById("historial");
+
+    if (historial) {
+        historial.innerHTML =
+            "<p>Cargando presupuestos...</p>";
+    }
+
+
+    cerrarPDFModal();
+}
+
+
+/* =========================================================
+   LIMPIAR DATOS COMPLETOS DEL USUARIO
+========================================================= */
+
+function limpiarDatosVisuales() {
+
+    limpiarFormularioUsuario();
+
+
+    const camposNegocio = [
+
+        "negocio",
+        "negocioTelefono",
+        "negocioEmail",
+        "negocioDireccion",
+        "negocioCuit"
+
+    ];
+
+
+    camposNegocio.forEach(
+        campo => {
+
+            const elemento =
+                document.getElementById(campo);
+
+            if (elemento) {
+                elemento.value = "";
+            }
+
+        }
+    );
+
+
+    const usuarioEmail =
+        document.getElementById("usuarioEmail");
+
+    if (usuarioEmail) {
+        usuarioEmail.textContent = "";
+    }
+
+
+    const preview =
+        document.getElementById("preview");
+
+    if (preview) {
+        preview.innerHTML = "";
+    }
+}
+
+
+/* =========================================================
    CERRAR SESIÓN
 ========================================================= */
 
 async function cerrarSesion() {
 
-    if (supabaseClient) {
+    try {
 
-        await supabaseClient.auth.signOut();
+        if (supabaseClient) {
+
+            await supabaseClient.auth.signOut();
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Error cerrando sesión:",
+            error
+        );
 
     }
 
+
     usuarioActual = null;
 
-    presupuestosActuales = [];
+    usuarioMostradoId = null;
+
+    limpiarDatosVisuales();
+
 
     document.getElementById("app").style.display = "none";
 
     document.getElementById("authOverlay").style.display = "flex";
+
+    mostrarLogin();
+
+
+    document.getElementById("loginEmail").value = "";
+
+    document.getElementById("loginPassword").value = "";
+
+    document.getElementById("authMessage").textContent = "";
 }
 
 
@@ -1612,6 +1734,24 @@ function mostrarApp() {
     if (!usuarioActual) {
         return;
     }
+
+
+    const nuevoUsuarioId =
+        usuarioActual.id;
+
+
+    if (
+        usuarioMostradoId &&
+        usuarioMostradoId !== nuevoUsuarioId
+    ) {
+
+        limpiarDatosVisuales();
+
+    }
+
+
+    usuarioMostradoId =
+        nuevoUsuarioId;
 
 
     document.getElementById("authOverlay").style.display = "none";
@@ -1685,6 +1825,10 @@ async function comprobarSesion() {
 
         usuarioActual = null;
 
+        usuarioMostradoId = null;
+
+        limpiarDatosVisuales();
+
         document.getElementById("authOverlay").style.display = "flex";
 
         document.getElementById("app").style.display = "none";
@@ -1739,10 +1883,33 @@ function establecerFechaActual() {
 
 
 /* =========================================================
-   DATOS NEGOCIO
+   DATOS NEGOCIO POR USUARIO
 ========================================================= */
 
+function claveNegocio(campo) {
+
+    if (!usuarioActual || !usuarioActual.id) {
+
+        return null;
+
+    }
+
+
+    return (
+        "presufacil_" +
+        usuarioActual.id +
+        "_" +
+        campo
+    );
+}
+
+
 function cargarDatosNegocio() {
+
+    if (!usuarioActual) {
+        return;
+    }
+
 
     const campos = [
 
@@ -1766,17 +1933,25 @@ function cargarDatosNegocio() {
                 document.getElementById(campo);
 
 
-            const valor =
-                localStorage.getItem(
-                    "presufacil_" + campo
-                );
-
-
-            if (valor !== null) {
-
-                elemento.value = valor;
-
+            if (!elemento) {
+                return;
             }
+
+
+            const clave =
+                claveNegocio(campo);
+
+
+            const valor =
+                clave
+                ? localStorage.getItem(clave)
+                : null;
+
+
+            elemento.value =
+                valor !== null
+                ? valor
+                : "";
 
 
             if (!elemento.dataset.listenerAgregado) {
@@ -1798,6 +1973,11 @@ function cargarDatosNegocio() {
 
 function guardarDatosNegocio() {
 
+    if (!usuarioActual) {
+        return;
+    }
+
+
     const campos = [
 
         "negocio",
@@ -1816,13 +1996,28 @@ function guardarDatosNegocio() {
     campos.forEach(
         campo => {
 
-            localStorage.setItem(
+            const elemento =
+                document.getElementById(campo);
 
-                "presufacil_" + campo,
 
-                document.getElementById(campo).value
+            const clave =
+                claveNegocio(campo);
 
-            );
+
+            if (
+                elemento &&
+                clave
+            ) {
+
+                localStorage.setItem(
+
+                    clave,
+
+                    elemento.value
+
+                );
+
+            }
 
         }
     );
@@ -1920,6 +2115,11 @@ function renderMateriales() {
 
     const contenedor =
         document.getElementById("materiales");
+
+
+    if (!contenedor) {
+        return;
+    }
 
 
     contenedor.innerHTML = "";
@@ -3023,7 +3223,7 @@ async function eliminarPresupuesto(id) {
 
 
 /* =========================================================
-   GENERAR PDF
+   GENERAR PDF MULTIPÁGINA
 ========================================================= */
 
 async function generarPDF() {
@@ -3071,16 +3271,6 @@ async function generarPDF() {
             );
 
 
-        const imgData =
-            canvas.toDataURL(
-
-                "image/jpeg",
-
-                0.75
-
-            );
-
-
         const {
             jsPDF
         } =
@@ -3113,53 +3303,149 @@ async function generarPDF() {
             pdf.internal.pageSize.getHeight();
 
 
-        const ratio =
-            Math.min(
+        const margenX = 8;
 
-                pageWidth / canvas.width,
+        const margenY = 5;
 
-                pageHeight / canvas.height
+
+        const contenidoWidth =
+            pageWidth -
+            (margenX * 2);
+
+
+        const contenidoHeight =
+            pageHeight -
+            (margenY * 2);
+
+
+        const escala =
+            contenidoWidth /
+            canvas.width;
+
+
+        const altoPaginaPx =
+            Math.floor(
+                contenidoHeight /
+                escala
+            );
+
+
+        let posicionY = 0;
+
+        let pagina = 0;
+
+
+        while (
+            posicionY < canvas.height
+        ) {
+
+            const altoSegmento =
+                Math.min(
+
+                    altoPaginaPx,
+
+                    canvas.height -
+                    posicionY
+
+                );
+
+
+            const canvasPagina =
+                document.createElement("canvas");
+
+
+            canvasPagina.width =
+                canvas.width;
+
+
+            canvasPagina.height =
+                altoSegmento;
+
+
+            const contexto =
+                canvasPagina.getContext("2d");
+
+
+            contexto.fillStyle =
+                "#ffffff";
+
+
+            contexto.fillRect(
+
+                0,
+
+                0,
+
+                canvasPagina.width,
+
+                canvasPagina.height
 
             );
 
 
-        const imgWidth =
-            canvas.width * ratio;
+            contexto.drawImage(
+
+                canvas,
+
+                0,
+                posicionY,
+                canvas.width,
+                altoSegmento,
+
+                0,
+                0,
+                canvas.width,
+                altoSegmento
+
+            );
 
 
-        const imgHeight =
-            canvas.height * ratio;
+            const imagenPagina =
+                canvasPagina.toDataURL(
+
+                    "image/jpeg",
+
+                    0.82
+
+                );
 
 
-        const x =
+            if (pagina > 0) {
 
-            (
+                pdf.addPage();
 
-                pageWidth -
-
-                imgWidth
-
-            ) / 2;
+            }
 
 
-        const y = 5;
+            const altoPaginaMM =
+                altoSegmento *
+                escala;
 
 
-        pdf.addImage(
+            pdf.addImage(
 
-            imgData,
+                imagenPagina,
 
-            "JPEG",
+                "JPEG",
 
-            x,
+                margenX,
 
-            y,
+                margenY,
 
-            imgWidth,
+                contenidoWidth,
 
-            imgHeight
+                altoPaginaMM
 
-        );
+            );
+
+
+            posicionY +=
+                altoSegmento;
+
+
+            pagina++;
+
+        }
 
 
         presupuestoPDF =
@@ -3168,18 +3454,27 @@ async function generarPDF() {
 
         console.log(
 
-            "PDF generado:",
+            "PDF multipágina generado:",
 
-            Math.round(
+            pagina,
 
-                pdf.output("blob").size / 1024
-
-            ),
-
-            "KB"
+            "página(s)"
 
         );
 
+
+    } catch (error) {
+
+        console.error(
+            "Error generando PDF:",
+            error
+        );
+
+        alert(
+            "No se pudo generar el PDF."
+        );
+
+        return;
 
     } finally {
 
@@ -3327,7 +3622,7 @@ function normalizarTelefonoWhatsApp(telefono) {
 
 
 /* =========================================================
-   OBTENER MENSAJE WHATSAPP
+   MENSAJE WHATSAPP
 ========================================================= */
 
 function obtenerMensajeWhatsApp() {
@@ -3655,43 +3950,56 @@ if ("serviceWorker" in navigator) {
 
         "load",
 
-        function() {
+        async function() {
 
-            navigator.serviceWorker
+            try {
 
-                .register("./service-worker.js")
+                const registration =
 
-                .then(
+                    await navigator.serviceWorker.register(
 
-                    function(registration) {
+                        "./service-worker.js",
 
-                        console.log(
+                        {
 
-                            "PresuFácil: Service Worker registrado.",
+                            updateViaCache:
+                                "none"
 
-                            registration.scope
+                        }
 
-                        );
+                    );
 
-                    }
 
-                )
+                console.log(
 
-                .catch(
+                    "PresuFácil: Service Worker registrado.",
 
-                    function(error) {
-
-                        console.error(
-
-                            "PresuFácil: error registrando Service Worker:",
-
-                            error
-
-                        );
-
-                    }
+                    registration.scope
 
                 );
+
+
+                await registration.update();
+
+
+                console.log(
+
+                    "PresuFácil: comprobación de actualización realizada."
+
+                );
+
+
+            } catch (error) {
+
+                console.error(
+
+                    "PresuFácil: error registrando Service Worker:",
+
+                    error
+
+                );
+
+            }
 
         }
 
@@ -3739,6 +4047,11 @@ if (supabaseConectado) {
 
                 usuarioActual =
                     null;
+
+                usuarioMostradoId =
+                    null;
+
+                limpiarDatosVisuales();
 
                 document.getElementById("app").style.display =
                     "none";
