@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,825 +12,547 @@
 
 <style>
 
+/* =========================================================
+   ESTILOS GENERALES
+========================================================= */
+
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #eef1f5;
-    color: #1f2937;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f4f6;
+    color: #222;
+}
+
+button {
+    cursor: pointer;
+}
+
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+#authOverlay {
+    position: fixed;
+    inset: 0;
+    background: #f3f4f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.authBox {
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+}
+
+.authBox h1 {
+    text-align: center;
+    margin-top: 0;
+}
+
+.authBox input {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.authBtn {
+    width: 100%;
+    padding: 13px;
+    border: 0;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.authSecondary {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #2563eb;
+    border-radius: 8px;
+    background: white;
+    color: #2563eb;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.authMessage {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+#app {
+    display: none;
 }
 
 header {
     background: #111827;
     color: white;
-    padding: 20px;
-}
-
-.header-content {
-    max-width: 1200px;
-    margin: auto;
+    padding: 16px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.userPanel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.logoutBtn {
+    background: #dc2626;
+    border: 0;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 7px;
 }
 
 .container {
     max-width: 1200px;
-    margin: 30px auto;
-    padding: 0 20px;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px;
+    margin: auto;
+    padding: 20px;
 }
 
 .card {
     background: white;
-    padding: 25px;
     border-radius: 14px;
-    margin-bottom: 25px;
-    box-shadow: 0 5px 18px rgba(0,0,0,.07);
-}
-
-h2 {
+    padding: 20px;
     margin-bottom: 20px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
 }
 
-label {
-    display: block;
-    font-weight: bold;
-    margin-top: 15px;
-    margin-bottom: 7px;
-}
-
-input,
-textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 15px;
-    background: #fff;
-}
-
-textarea {
-    min-height: 90px;
-    resize: vertical;
-}
-
-button {
-    border: none;
-    padding: 12px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 15px;
-}
-
-button:hover {
-    opacity: .9;
-}
-
-.btn-primary {
-    background: #2563eb;
-    color: white;
-}
-
-.btn-success {
-    background: #16a34a;
-    color: white;
-}
-
-.btn-whatsapp {
-    background: #25D366;
-    color: white;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.whatsapp-icon {
-    width: 20px;
-    height: 20px;
-    display: block;
-    flex-shrink: 0;
-}
-
-.btn-danger {
-    background: #dc2626;
-    color: white;
-}
-
-.btn-secondary {
-    background: #6b7280;
-    color: white;
-}
-
-.btn-dark {
-    background: #111827;
-    color: white;
-}
-
-.material {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr auto;
-    gap: 8px;
-    margin-bottom: 10px;
-}
-
-.material button {
+.card h2 {
     margin-top: 0;
 }
 
-.total-box {
-    margin-top: 25px;
-    padding: 20px;
-    background: #f3f4f6;
-    border-radius: 10px;
-    text-align: right;
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
 }
 
-.total {
-    font-size: 30px;
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.field input,
+.field textarea {
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.field textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* =========================================================
+   MATERIALES
+========================================================= */
+
+.materiales {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.material {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 12px;
+    background: #fafafa;
+}
+
+.materialGrid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 10px;
+    align-items: end;
+}
+
+.material input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+}
+
+.removeMaterial {
+    background: #dc2626;
+    color: white;
+    border: 0;
+    border-radius: 7px;
+    padding: 10px 12px;
+}
+
+.addMaterial {
+    background: #16a34a;
+    color: white;
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 16px;
+    margin-top: 10px;
+}
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.primaryBtn {
+    background: #2563eb;
+    color: white;
+    border: 0;
+    padding: 12px 18px;
+    border-radius: 8px;
     font-weight: bold;
 }
 
-.preview {
-    background: white;
-    border: 1px solid #ddd;
-    padding: 40px;
-    min-height: 700px;
+.successBtn {
+    background: #16a34a;
+    color: white;
+    border: 0;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: bold;
 }
 
-.preview-business {
+.whatsappBtn {
+    background: #25D366;
+    color: white;
+    border: 0;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.dangerBtn {
+    background: #dc2626;
+    color: white;
+    border: 0;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+#preview {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    min-height: 500px;
+}
+
+.previewHeader {
     display: flex;
     justify-content: space-between;
-    border-bottom: 2px solid #111827;
-    padding-bottom: 20px;
-    margin-bottom: 25px;
+    border-bottom: 2px solid #222;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-.business-name {
-    font-size: 25px;
-    font-weight: bold;
+.previewBusiness h2 {
+    margin: 0 0 5px 0;
 }
 
-.business-info {
-    margin-top: 8px;
-    color: #6b7280;
-    line-height: 1.5;
-}
-
-.quote-title {
-    text-align: right;
-}
-
-.client-box {
+.previewClient {
     background: #f8fafc;
-    padding: 18px;
+    padding: 15px;
     border-radius: 8px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
-.client-box p {
-    margin: 5px 0;
-}
-
-.preview table {
+.previewTable {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 15px;
 }
 
-.preview th {
-    background: #111827;
-    color: white;
+.previewTable th,
+.previewTable td {
+    border-bottom: 1px solid #ddd;
     padding: 10px;
     text-align: left;
 }
 
-.preview td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-.preview td:last-child,
-.preview th:last-child {
+.previewTotal {
     text-align: right;
-}
-
-.final-total {
-    margin-top: 20px;
-    background: #111827;
-    color: white;
-    padding: 15px;
-    text-align: right;
-    font-size: 25px;
-    font-weight: bold;
-}
-
-.conditions {
-    margin-top: 30px;
-    border-top: 1px solid #ddd;
-    padding-top: 20px;
-}
-
-.signature {
-    margin-top: 70px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.signature-box {
-    width: 220px;
-    border-top: 1px solid #111827;
-    text-align: center;
-    padding-top: 8px;
-}
-
-.saved {
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 12px;
-}
-
-.status {
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 8px;
-    background: #f3f4f6;
-    font-size: 14px;
-}
-
-.status.ok {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.status.error {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.status.loading {
-    background: #e0f2fe;
-    color: #075985;
-}
-
-
-/* =====================================================
-   SISTEMA DE USUARIOS
-   ===================================================== */
-
-.auth-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 100000;
-    background: #eef1f5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.auth-card {
-    width: 100%;
-    max-width: 420px;
-    background: white;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 10px 35px rgba(0,0,0,.12);
-}
-
-.auth-logo {
-    text-align: center;
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.auth-subtitle {
-    text-align: center;
-    color: #6b7280;
-    margin-bottom: 25px;
-}
-
-.auth-card h2 {
-    margin-bottom: 15px;
-}
-
-.auth-card input {
-    margin-bottom: 5px;
-}
-
-.auth-card button {
-    width: 100%;
-}
-
-.auth-switch {
-    text-align: center;
-    margin-top: 20px;
-    color: #6b7280;
-}
-
-.auth-switch button {
-    background: none;
-    color: #2563eb;
-    padding: 0;
-    margin: 0;
-    width: auto;
-}
-
-.auth-message {
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 8px;
-    display: none;
-    font-size: 14px;
-}
-
-.auth-message.ok {
-    display: block;
-    background: #dcfce7;
-    color: #166534;
-}
-
-.auth-message.error {
-    display: block;
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.user-panel {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.user-email {
-    font-size: 14px;
-    opacity: .9;
-}
-
-.btn-logout {
-    background: #dc2626;
-    color: white;
-    padding: 8px 12px;
-    margin: 0;
-}
-
-@media(max-width:600px) {
-
-    .auth-card {
-        padding: 22px;
-    }
-
-    .user-panel {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 5px;
-    }
-
-    .user-email {
-        font-size: 12px;
-        max-width: 180px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-}
-
-
-/* =====================================================
-   VENTANA PDF
-   ===================================================== */
-
-.pdf-modal {
-    display: none;
-    position: fixed;
-    z-index: 99999;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.78);
-    padding: 20px;
-}
-
-.pdf-modal-content {
-    width: 100%;
-    max-width: 1000px;
-    height: 95vh;
-    margin: auto;
-    background: white;
-    border-radius: 14px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 40px rgba(0,0,0,.4);
-}
-
-.pdf-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    background: #111827;
-    color: white;
-}
-
-.pdf-modal-header h2 {
-    margin: 0;
-    font-size: 20px;
-}
-
-.pdf-close {
-    border: none;
-    background: transparent;
-    color: white;
     font-size: 22px;
-    cursor: pointer;
-    margin: 0;
-    padding: 5px 10px;
+    font-weight: bold;
+    margin-top: 20px;
 }
 
-.pdf-preview-container {
-    flex: 1;
-    background: #525252;
-    min-height: 0;
+.previewConditions {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
 }
 
-#pdfViewer {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: white;
-}
+/* =========================================================
+   HISTORIAL
+========================================================= */
 
-.pdf-modal-buttons {
-    display: flex;
-    gap: 10px;
+.historyItem {
+    border: 1px solid #ddd;
+    border-radius: 10px;
     padding: 15px;
-    background: #f3f4f6;
-    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.historyInfo {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
     flex-wrap: wrap;
 }
 
-.pdf-modal-buttons button {
-    border: none;
-    border-radius: 8px;
-    padding: 12px 18px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
+.historyActions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.smallBtn {
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 7px;
+    color: white;
+}
+
+.viewBtn {
+    background: #2563eb;
+}
+
+.deleteBtn {
+    background: #dc2626;
+}
+
+.historyWhatsapp {
+    background: #25D366;
+}
+
+/* =========================================================
+   MODAL PDF
+========================================================= */
+
+#pdfModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 5000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.pdfModalBox {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+}
+
+.pdfModalBox h2 {
     margin-top: 0;
 }
 
-.btn-pdf {
-    background: #2563eb;
-    color: white;
+.pdfModalActions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.btn-cerrar {
-    background: #6b7280;
-    color: white;
-}
-
-
-/* =====================================================
+/* =========================================================
    RESPONSIVE
-   ===================================================== */
+========================================================= */
 
-@media(max-width:800px) {
+@media (max-width: 700px) {
 
-    .container {
-        margin: 15px auto;
-        padding: 0 12px;
-    }
-
-    .grid {
-        grid-template-columns: 1fr;
-        gap: 0;
-    }
-
-    .card {
-        padding: 18px;
-        border-radius: 12px;
-        margin-bottom: 15px;
-    }
-
-    input,
-    textarea {
-        width: 100%;
-        min-width: 0;
-        font-size: 16px;
-        padding: 12px;
-        background: #ffffff;
-    }
-
-    .material {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 10px;
-        padding: 14px;
-        margin-bottom: 12px;
-        border: 1px solid #d1d5db;
-        border-radius: 10px;
-        background: #f8fafc;
-    }
-
-    .material input {
-        margin: 0;
-    }
-
-    .material button {
-        width: 100%;
-        margin-top: 0;
-    }
-
-    .preview {
-        padding: 20px;
-        min-height: 0;
-        overflow-x: auto;
-    }
-
-    .preview-business {
+    header {
         flex-direction: column;
-    }
-
-    .quote-title {
-        text-align: left;
-        margin-top: 20px;
-    }
-
-    .preview table {
-        min-width: 600px;
-    }
-
-    .preview-card {
-        overflow: hidden;
-    }
-
-    .pdf-modal {
-        padding: 5px;
-    }
-
-    .pdf-modal-content {
-        height: 98vh;
-        border-radius: 8px;
-    }
-
-    .pdf-modal-buttons {
-        padding: 10px;
-        gap: 8px;
-    }
-
-    .pdf-modal-buttons button {
-        flex: 1 1 100%;
-        width: 100%;
-    }
-
-    .btn-whatsapp {
-        min-height: 46px;
-    }
-
-    .saved button {
-        width: 100%;
-        margin-top: 10px;
-    }
-
-}
-
-
-/* =====================================================
-   IMPRESIÓN
-   ===================================================== */
-
-@media print {
-
-    body {
-        background: white;
-    }
-
-    header,
-    .form-section,
-    .saved-section,
-    .no-print,
-    .pdf-modal,
-    .auth-overlay {
-        display: none !important;
-    }
-
-    .container {
-        margin: 0;
-        padding: 0;
-        max-width: none;
+        align-items: flex-start;
     }
 
     .grid {
-        display: block;
+        grid-template-columns: 1fr;
     }
 
-    .preview-card {
-        box-shadow: none;
-        padding: 0;
-        margin: 0;
+    .materialGrid {
+        grid-template-columns: 1fr;
     }
 
-    .preview {
-        border: none;
-        padding: 20px;
+    #preview {
+        padding: 15px;
     }
 
-    @page {
-        size: A4;
-        margin: 15mm;
+    .previewHeader {
+        flex-direction: column;
+        gap: 15px;
     }
 
+    .previewTable {
+        font-size: 13px;
+    }
 }
 
 </style>
-
 </head>
 
 <body>
 
-
 <!-- =====================================================
-     AUTENTICACIÓN
-     ===================================================== -->
+     LOGIN
+===================================================== -->
 
-<div id="authOverlay" class="auth-overlay">
+<div id="authOverlay">
 
-    <div class="auth-card">
+    <div class="authBox">
 
-        <div class="auth-logo">
-            💼 PresuFácil
-        </div>
-
-        <div class="auth-subtitle">
-            Tu sistema de presupuestos
-        </div>
-
-
-        <!-- LOGIN -->
+        <h1>PresuFácil</h1>
 
         <div id="loginForm">
 
-            <h2>🔐 Iniciar sesión</h2>
-
-            <label>Email</label>
-
             <input
-                id="loginEmail"
                 type="email"
-                placeholder="tu@email.com"
-                autocomplete="email"
+                id="loginEmail"
+                placeholder="Correo electrónico"
             >
 
-            <label>Contraseña</label>
-
             <input
-                id="loginPassword"
                 type="password"
-                placeholder="Tu contraseña"
-                autocomplete="current-password"
+                id="loginPassword"
+                placeholder="Contraseña"
             >
 
             <button
-                type="button"
-                class="btn-primary"
+                class="authBtn"
                 onclick="iniciarSesion()"
             >
-                🔐 Iniciar sesión
+                Iniciar sesión
             </button>
 
-            <div
-                id="loginMessage"
-                class="auth-message"
-            ></div>
-
-            <div class="auth-switch">
-
-                ¿No tenés cuenta?
-
-                <button
-                    type="button"
-                    onclick="mostrarRegistro()"
-                >
-                    Crear cuenta
-                </button>
-
-            </div>
+            <button
+                class="authSecondary"
+                onclick="mostrarRegistro()"
+            >
+                Crear cuenta
+            </button>
 
         </div>
 
-
-        <!-- REGISTRO -->
-
-        <div
-            id="registerForm"
-            style="display:none;"
-        >
-
-            <h2>📝 Crear cuenta</h2>
-
-            <label>Email</label>
+        <div id="registerForm" style="display:none;">
 
             <input
-                id="registerEmail"
                 type="email"
-                placeholder="tu@email.com"
-                autocomplete="email"
+                id="registerEmail"
+                placeholder="Correo electrónico"
             >
 
-            <label>Contraseña</label>
-
             <input
+                type="password"
                 id="registerPassword"
-                type="password"
-                placeholder="Mínimo 6 caracteres"
-                autocomplete="new-password"
-            >
-
-            <label>Repetir contraseña</label>
-
-            <input
-                id="registerPassword2"
-                type="password"
-                placeholder="Repetí tu contraseña"
-                autocomplete="new-password"
+                placeholder="Contraseña"
             >
 
             <button
-                type="button"
-                class="btn-success"
+                class="authBtn"
                 onclick="registrarUsuario()"
             >
-                📝 Crear cuenta
+                Crear cuenta
             </button>
 
-            <div
-                id="registerMessage"
-                class="auth-message"
-            ></div>
-
-            <div class="auth-switch">
-
-                ¿Ya tenés cuenta?
-
-                <button
-                    type="button"
-                    onclick="mostrarLogin()"
-                >
-                    Iniciar sesión
-                </button>
-
-            </div>
+            <button
+                class="authSecondary"
+                onclick="mostrarLogin()"
+            >
+                Volver al inicio de sesión
+            </button>
 
         </div>
+
+        <div
+            id="authMessage"
+            class="authMessage"
+        ></div>
 
     </div>
 
 </div>
 
+
+<!-- =====================================================
+     APP
+===================================================== -->
+
+<div id="app">
 
 <header>
 
-<div class="header-content">
+    <h1>PresuFácil v0.9</h1>
 
-    <div>
-        <strong>💼 PresuFácil</strong>
-    </div>
+    <div class="userPanel">
 
-    <div
-        class="user-panel"
-        id="userPanel"
-    >
-
-        <span
-            class="user-email"
-            id="userEmail"
-        >
-        </span>
+        <span id="usuarioEmail"></span>
 
         <button
-            type="button"
-            class="btn-logout"
+            class="logoutBtn"
             onclick="cerrarSesion()"
         >
-            🚪 Salir
+            Cerrar sesión
         </button>
 
     </div>
-
-</div>
 
 </header>
 
@@ -841,444 +562,262 @@ button:hover {
 
 <!-- =====================================================
      DATOS DEL NEGOCIO
-     ===================================================== -->
-
-<div class="card form-section">
-
-<h2>🏢 Datos de tu negocio</h2>
-
-<label>Nombre del negocio</label>
-
-<input
-id="negocio"
-placeholder="Ej: Electricidad Juan"
->
-
-<label>Teléfono</label>
-
-<input
-id="negocioTelefono"
-placeholder="Ej: 2945123456"
->
-
-<label>Email</label>
-
-<input
-id="negocioEmail"
-placeholder="Ej: contacto@email.com"
->
-
-<label>Dirección</label>
-
-<input
-id="negocioDireccion"
-placeholder="Ej: Av. San Martín 123"
->
-
-<label>CUIT</label>
-
-<input
-id="negocioCuit"
-placeholder="Opcional"
->
-
-</div>
-
-
-<!-- =====================================================
-     CREAR PRESUPUESTO
-     ===================================================== -->
-
-<div class="grid">
-
-<div class="form-section" id="crearPresupuesto">
+===================================================== -->
 
 <div class="card">
 
-<h2>📋 Crear presupuesto</h2>
+    <h2>Datos del negocio</h2>
 
-<label>Cliente</label>
+    <div class="grid">
 
-<input
-id="cliente"
-placeholder="Nombre del cliente"
->
+        <div class="field">
+            <label>Nombre del negocio</label>
+            <input id="negocio">
+        </div>
 
-<label>WhatsApp del cliente</label>
+        <div class="field">
+            <label>Teléfono</label>
+            <input id="negocioTelefono">
+        </div>
 
-<input
-id="telefono"
-placeholder="Ej: 5492945123456"
->
+        <div class="field">
+            <label>Email</label>
+            <input id="negocioEmail">
+        </div>
 
-<label>Trabajo</label>
+        <div class="field">
+            <label>Dirección</label>
+            <input id="negocioDireccion">
+        </div>
 
-<input
-id="trabajo"
-placeholder="Ej: Instalación eléctrica"
->
+        <div class="field">
+            <label>CUIT</label>
+            <input id="negocioCuit">
+        </div>
 
-<label>Fecha</label>
-
-<input
-id="fecha"
-type="date"
->
-
-<h3 style="margin-top:25px;">
-📦 Materiales
-</h3>
-
-<div id="materiales"></div>
-
-<button
-type="button"
-class="btn-secondary"
-onclick="agregarMaterial()"
->
-➕ Agregar material
-</button>
-
-<label>Mano de obra</label>
-
-<input
-id="manoObra"
-type="number"
-value="0"
-min="0"
->
-
-<label>Condiciones / notas</label>
-
-<textarea
-id="condiciones"
-placeholder="Ej: Presupuesto válido por 15 días."
-></textarea>
-
-<div class="total-box">
-
-<div>TOTAL</div>
-
-<div class="total">
-$<span id="total">0.00</span>
-</div>
-
-</div>
-
-<button
-type="button"
-class="btn-primary"
-onclick="actualizarPreview()"
->
-🧾 Actualizar presupuesto
-</button>
-
-<button
-type="button"
-class="btn-success"
-onclick="guardarPresupuesto()"
->
-💾 Guardar presupuesto
-</button>
-
-<button
-type="button"
-class="btn-dark"
-onclick="generarPDF()"
->
-📄 Generar PDF
-</button>
-
-<button
-type="button"
-class="btn-whatsapp"
-onclick="enviarWhatsApp()"
->
-
-<svg
-class="whatsapp-icon"
-viewBox="0 0 24 24"
-fill="currentColor"
-aria-hidden="true"
->
-<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.198.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.198-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982 1-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.437-9.884 9.89-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.892 6.992c-.002 5.45-4.438 9.886-9.888 9.886m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.89a11.84 11.84 0 001.592 5.945L.057 24l6.304-1.654a11.882 11.882 0 005.684 1.448h.005c6.554 0 11.89-5.335 11.893-11.89a11.821 11.821 0 00-3.479-8.416"/>
-</svg>
-
-Compartir en WhatsApp
-
-</button>
-
-<div
-id="supabaseStatus"
-class="status loading"
->
-☁️ Conectando con Supabase...
-</div>
-
-</div>
+    </div>
 
 </div>
 
 
 <!-- =====================================================
-     VISTA PREVIA
-     ===================================================== -->
+     CLIENTE
+===================================================== -->
 
-<div>
+<div class="card">
 
-<div class="card preview-card">
+    <h2>Datos del cliente</h2>
 
-<h2 class="no-print">
-👁️ Vista previa
-</h2>
+    <div class="grid">
 
-<div class="preview" id="preview">
+        <div class="field">
+            <label>Cliente</label>
+            <input id="cliente">
+        </div>
 
-<div class="preview-business">
+        <div class="field">
+            <label>Teléfono</label>
+            <input id="telefono">
+        </div>
 
-<div>
+        <div class="field">
+            <label>Trabajo</label>
+            <input id="trabajo">
+        </div>
 
-<div
-class="business-name"
-id="previewNegocio"
->
-Mi negocio
-</div>
+        <div class="field">
+            <label>Fecha</label>
+            <input
+                type="date"
+                id="fecha"
+            >
+        </div>
 
-<div
-class="business-info"
-id="previewNegocioInfo"
->
-Teléfono: -<br>
-Email: -<br>
-Dirección: -<br>
-CUIT: -
-</div>
-
-</div>
-
-<div class="quote-title">
-
-<h2>PRESUPUESTO</h2>
-
-<div>
-N° <span id="previewNumero">0001</span>
-</div>
-
-<div>
-Fecha:
-<span id="previewFecha">-</span>
-</div>
-
-</div>
+    </div>
 
 </div>
 
 
-<div class="client-box">
+<!-- =====================================================
+     MATERIALES
+===================================================== -->
 
-<strong>
-DATOS DEL CLIENTE
-</strong>
+<div class="card">
 
-<p>
-<strong>Nombre:</strong>
-<span id="previewCliente">-</span>
-</p>
+    <h2>Materiales</h2>
 
-<p>
-<strong>WhatsApp:</strong>
-<span id="previewTelefono">-</span>
-</p>
+    <div
+        id="materiales"
+        class="materiales"
+    ></div>
 
-<p>
-<strong>Trabajo:</strong>
-<span id="previewTrabajo">-</span>
-</p>
-
-</div>
-
-
-<h3>
-Detalle del presupuesto
-</h3>
-
-<table>
-
-<thead>
-
-<tr>
-<th>Descripción</th>
-<th>Cant.</th>
-<th>Precio unit.</th>
-<th>Subtotal</th>
-</tr>
-
-</thead>
-
-<tbody id="previewMateriales"></tbody>
-
-</table>
-
-
-<p style="text-align:right;margin-top:15px;">
-
-Mano de obra:
-
-<strong>
-$<span id="previewManoObra">0.00</span>
-</strong>
-
-</p>
-
-
-<div class="final-total">
-
-TOTAL:
-$<span id="previewTotal">0.00</span>
+    <button
+        class="addMaterial"
+        onclick="agregarMaterial()"
+    >
+        + Agregar material
+    </button>
 
 </div>
 
 
-<div class="conditions">
+<!-- =====================================================
+     MANO DE OBRA
+===================================================== -->
 
-<h3>
-Condiciones / notas
-</h3>
+<div class="card">
 
-<p id="previewCondiciones">
--
-</p>
+    <h2>Mano de obra</h2>
+
+    <div class="field">
+
+        <label>Importe</label>
+
+        <input
+            type="number"
+            id="manoObra"
+            value="0"
+            min="0"
+            step="0.01"
+            oninput="actualizarPreview()"
+        >
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CONDICIONES
+===================================================== -->
+
+<div class="card">
+
+    <h2>Condiciones</h2>
+
+    <div class="field">
+
+        <textarea
+            id="condiciones"
+            placeholder="Condiciones del presupuesto..."
+            oninput="actualizarPreview()"
+        ></textarea>
+
+    </div>
 
 </div>
 
 
-<div class="signature">
+<!-- =====================================================
+     ACCIONES
+===================================================== -->
 
-<div class="signature-box">
-Firma del cliente
+<div class="card">
+
+    <div class="actions">
+
+        <button
+            class="primaryBtn"
+            onclick="guardarPresupuesto()"
+        >
+            Guardar presupuesto
+        </button>
+
+        <button
+            class="successBtn"
+            onclick="generarPDF()"
+        >
+            Generar PDF
+        </button>
+
+        <button
+            class="whatsappBtn"
+            onclick="enviarWhatsApp()"
+        >
+            Compartir en WhatsApp
+        </button>
+
+    </div>
+
 </div>
 
-<div class="signature-box">
-Firma / sello
-</div>
 
-</div>
+<!-- =====================================================
+     PREVIEW
+===================================================== -->
 
-</div>
+<div class="card">
 
-</div>
+    <h2>Vista previa</h2>
 
-</div>
+    <div id="preview"></div>
 
 </div>
 
 
 <!-- =====================================================
      HISTORIAL
-     ===================================================== -->
+===================================================== -->
 
-<div class="card saved-section">
+<div class="card">
 
-<h2>
-📋 Presupuestos guardados
-</h2>
+    <h2>Historial de presupuestos</h2>
 
-<div id="presupuestosGuardados">
-<p>☁️ Cargando presupuestos...</p>
+    <div id="historial">
+
+        <p>Cargando presupuestos...</p>
+
+    </div>
+
 </div>
 
-</div>
 
+</div>
 </div>
 
 
 <!-- =====================================================
-     VENTANA PDF
-     ===================================================== -->
+     MODAL PDF
+===================================================== -->
 
-<div id="pdfModal" class="pdf-modal">
+<div id="pdfModal">
 
-<div class="pdf-modal-content">
+    <div class="pdfModalBox">
 
-<div class="pdf-modal-header">
+        <h2>Presupuesto listo</h2>
 
-<h2>
-📄 Presupuesto en PDF
-</h2>
+        <p>
+            El PDF fue generado correctamente.
+        </p>
 
-<button
-type="button"
-onclick="cerrarPDF()"
-class="pdf-close"
->
-✖️
-</button>
+        <div class="pdfModalActions">
 
-</div>
+            <button
+                class="successBtn"
+                onclick="compartirPDFWhatsApp()"
+            >
+                Compartir en WhatsApp
+            </button>
 
+            <button
+                class="primaryBtn"
+                onclick="cerrarPDFModal()"
+            >
+                Cerrar
+            </button>
 
-<div class="pdf-preview-container">
+        </div>
 
-<iframe
-id="pdfViewer"
-title="Vista previa del PDF"
->
-</iframe>
-
-</div>
-
-
-<div class="pdf-modal-buttons">
-
-<button
-type="button"
-onclick="descargarPDF()"
-class="btn-pdf"
->
-⬇️ Descargar PDF
-</button>
-
-<button
-type="button"
-onclick="compartirPDFWhatsApp()"
-class="btn-whatsapp"
->
-
-<svg
-class="whatsapp-icon"
-viewBox="0 0 24 24"
-fill="currentColor"
-aria-hidden="true"
->
-<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.198-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982 1-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.437-9.884 9.89-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.892 6.992c-.002 5.45-4.438 9.886-9.888 9.886m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.89a11.84 11.84 0 001.592 5.945L.057 24l6.304-1.654a11.882 11.882 0 005.684 1.448h.005c6.554 0 11.89-5.335 11.893-11.89a11.821 11.821 0 00-3.479-8.416"/>
-</svg>
-
-Compartir en WhatsApp
-
-</button>
-
-<button
-type="button"
-onclick="cerrarPDF()"
-class="btn-cerrar"
->
-Cerrar
-</button>
-
-</div>
-
-</div>
+    </div>
 
 </div>
 
 
 <script>
 
-
-/* =====================================================
+/* =========================================================
    SUPABASE
-   ===================================================== */
+========================================================= */
 
 const SUPABASE_URL =
 "https://tgqjjvmekfsliuagvsub.supabase.co";
@@ -1288,43 +827,34 @@ const SUPABASE_KEY =
 
 let supabaseClient = null;
 
-const supabaseStatus =
-document.getElementById("supabaseStatus");
+let usuarioActual = null;
 
+let materiales = [];
+
+let presupuestoPDF = null;
+
+let presupuestoSeleccionadoWhatsApp = null;
+
+
+/* =========================================================
+   CONECTAR SUPABASE
+========================================================= */
 
 function conectarSupabase() {
 
-    if (!window.supabase) {
-
-        console.error(
-            "❌ Supabase JS no se cargó."
-        );
-
-        supabaseStatus.textContent =
-            "❌ No se pudo cargar la librería de Supabase.";
-
-        supabaseStatus.className =
-            "status error";
-
-        return false;
-    }
-
-    if (!SUPABASE_KEY) {
-
-        console.error(
-            "❌ Falta la Publishable Key."
-        );
-
-        supabaseStatus.textContent =
-            "⚠️ Falta la Publishable Key.";
-
-        supabaseStatus.className =
-            "status error";
-
-        return false;
-    }
-
     try {
+
+        if (
+            !window.supabase ||
+            !window.supabase.createClient
+        ) {
+
+            console.error(
+                "Supabase JS no está cargado."
+            );
+
+            return false;
+        }
 
         supabaseClient =
             window.supabase.createClient(
@@ -1333,817 +863,568 @@ function conectarSupabase() {
             );
 
         console.log(
-            "✅ Supabase JS cargado correctamente."
+            "Supabase conectado correctamente."
         );
-
-        console.log(
-            "✅ Cliente Supabase creado correctamente."
-        );
-
-        supabaseStatus.textContent =
-            "☁️ Supabase conectado.";
-
-        supabaseStatus.className =
-            "status ok";
 
         return true;
 
     } catch (error) {
 
         console.error(
-            "❌ Error creando cliente Supabase:",
+            "Error conectando Supabase:",
             error
         );
 
-        supabaseStatus.textContent =
-            "❌ Error configurando Supabase.";
-
-        supabaseStatus.className =
-            "status error";
-
         return false;
     }
-
 }
 
 
-/* =====================================================
-   AUTENTICACIÓN DE USUARIOS
-   ===================================================== */
-
-let usuarioActual = null;
-
-let presuFacilInicializado = false;
-
-
-/* =====================================================
-   MOSTRAR LOGIN
-   ===================================================== */
-
-function mostrarLogin() {
-
-    document.getElementById("loginForm").style.display =
-        "block";
-
-    document.getElementById("registerForm").style.display =
-        "none";
-
-    limpiarMensajesAuth();
-
-}
-
-
-/* =====================================================
-   MOSTRAR REGISTRO
-   ===================================================== */
+/* =========================================================
+   AUTH
+========================================================= */
 
 function mostrarRegistro() {
 
-    document.getElementById("loginForm").style.display =
-        "none";
-
-    document.getElementById("registerForm").style.display =
-        "block";
-
-    limpiarMensajesAuth();
-
-}
-
-
-/* =====================================================
-   MENSAJES AUTH
-   ===================================================== */
-
-function mostrarMensajeAuth(
-    elemento,
-    mensaje,
-    tipo
-) {
-
-    elemento.textContent =
-        mensaje;
-
-    elemento.className =
-        "auth-message " + tipo;
-
-}
-
-
-function limpiarMensajesAuth() {
-
-    const loginMessage =
-        document.getElementById("loginMessage");
-
-    const registerMessage =
-        document.getElementById("registerMessage");
-
-
-    loginMessage.textContent = "";
-    loginMessage.className = "auth-message";
-
-    registerMessage.textContent = "";
-    registerMessage.className = "auth-message";
-
-}
-
-
-/* =====================================================
-   MOSTRAR APLICACIÓN
-   ===================================================== */
-
-function mostrarAplicacion(usuario) {
-
-    usuarioActual =
-        usuario;
+    document.getElementById(
+        "loginForm"
+    ).style.display = "none";
 
     document.getElementById(
-        "authOverlay"
-    ).style.display =
-        "none";
-
-
-    const email =
-        usuario?.email || "";
-
+        "registerForm"
+    ).style.display = "block";
 
     document.getElementById(
-        "userEmail"
-    ).textContent =
-        "👤 " + email;
-
-
-    console.log(
-        "👤 Usuario conectado:",
-        usuario
-    );
+        "authMessage"
+    ).textContent = "";
 
 }
 
 
-/* =====================================================
-   MOSTRAR PANTALLA AUTH
-   ===================================================== */
-
-function mostrarPantallaAuth() {
-
-    usuarioActual = null;
+function mostrarLogin() {
 
     document.getElementById(
-        "authOverlay"
-    ).style.display =
-        "flex";
-
+        "registerForm"
+    ).style.display = "none";
 
     document.getElementById(
-        "userEmail"
-    ).textContent =
-        "";
+        "loginForm"
+    ).style.display = "block";
+
+    document.getElementById(
+        "authMessage"
+    ).textContent = "";
 
 }
 
 
-/* =====================================================
+/* =========================================================
    REGISTRAR USUARIO
-   ===================================================== */
+========================================================= */
 
 async function registrarUsuario() {
-
-    if (!supabaseClient) {
-
-        alert(
-            "Supabase todavía no está conectado."
-        );
-
-        return;
-
-    }
-
 
     const email =
         document.getElementById(
             "registerEmail"
         ).value.trim();
 
-
     const password =
         document.getElementById(
             "registerPassword"
         ).value;
 
-
-    const password2 =
-        document.getElementById(
-            "registerPassword2"
-        ).value;
-
-
     const mensaje =
         document.getElementById(
-            "registerMessage"
+            "authMessage"
         );
 
 
-    if (!email) {
+    if (!email || !password) {
 
-        mostrarMensajeAuth(
-            mensaje,
-            "Ingresá un email.",
-            "error"
-        );
+        mensaje.textContent =
+            "Completá email y contraseña.";
 
         return;
-
     }
 
 
     if (password.length < 6) {
 
-        mostrarMensajeAuth(
-            mensaje,
-            "La contraseña debe tener al menos 6 caracteres.",
-            "error"
-        );
+        mensaje.textContent =
+            "La contraseña debe tener al menos 6 caracteres.";
 
         return;
-
     }
 
 
-    if (password !== password2) {
-
-        mostrarMensajeAuth(
-            mensaje,
-            "Las contraseñas no coinciden.",
-            "error"
-        );
-
-        return;
-
-    }
+    mensaje.textContent =
+        "Creando cuenta...";
 
 
-    try {
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.signUp({
 
-        mostrarMensajeAuth(
-            mensaje,
-            "Creando cuenta...",
-            "ok"
-        );
+            email:
+                email,
 
+            password:
+                password,
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.auth.signUp({
+            options: {
 
-                email:
-                    email,
+                emailRedirectTo:
+                    "https://1keops1.github.io/Presufacil/"
 
-                password:
-                    password
+            }
 
-            });
+        });
 
 
-        if (error) {
-
-            throw error;
-
-        }
-
-
-        console.log(
-            "✅ Usuario registrado:",
-            data
-        );
-
-
-        if (
-            data.user &&
-            !data.session
-        ) {
-
-            mostrarMensajeAuth(
-                mensaje,
-                "✅ Cuenta creada. Revisá tu email y confirmá tu cuenta antes de iniciar sesión.",
-                "ok"
-            );
-
-            return;
-
-        }
-
-
-        if (data.session) {
-
-            mostrarAplicacion(
-                data.user
-            );
-
-            await iniciarPresuFacil();
-
-        }
-
-    } catch (error) {
+    if (error) {
 
         console.error(
-            "❌ Error registrando usuario:",
             error
         );
 
+        mensaje.textContent =
+            error.message;
 
-        mostrarMensajeAuth(
-            mensaje,
-            "❌ " +
-            (
-                error.message ||
-                "No se pudo crear la cuenta."
-            ),
-            "error"
-        );
-
+        return;
     }
+
+
+    mensaje.textContent =
+        "Cuenta creada. Revisá tu correo para confirmar la cuenta.";
 
 }
 
 
-/* =====================================================
+/* =========================================================
    INICIAR SESIÓN
-   ===================================================== */
+========================================================= */
 
 async function iniciarSesion() {
-
-    if (!supabaseClient) {
-
-        alert(
-            "Supabase todavía no está conectado."
-        );
-
-        return;
-
-    }
-
 
     const email =
         document.getElementById(
             "loginEmail"
         ).value.trim();
 
-
     const password =
         document.getElementById(
             "loginPassword"
         ).value;
 
-
     const mensaje =
         document.getElementById(
-            "loginMessage"
+            "authMessage"
         );
 
 
     if (!email || !password) {
 
-        mostrarMensajeAuth(
-            mensaje,
-            "Ingresá tu email y contraseña.",
-            "error"
-        );
+        mensaje.textContent =
+            "Completá email y contraseña.";
 
         return;
-
     }
 
 
-    try {
-
-        mostrarMensajeAuth(
-            mensaje,
-            "Iniciando sesión...",
-            "ok"
-        );
+    mensaje.textContent =
+        "Iniciando sesión...";
 
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.auth.signInWithPassword({
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.signInWithPassword({
 
-                email:
-                    email,
+            email:
+                email,
 
-                password:
-                    password
+            password:
+                password
 
-            });
-
-
-        if (error) {
-
-            throw error;
-
-        }
+        });
 
 
-        console.log(
-            "✅ Sesión iniciada:",
-            data.user
-        );
-
-
-        mostrarAplicacion(
-            data.user
-        );
-
-
-        await iniciarPresuFacil();
-
-
-    } catch (error) {
+    if (error) {
 
         console.error(
-            "❌ Error iniciando sesión:",
             error
         );
 
+        mensaje.textContent =
+            error.message;
 
-        mostrarMensajeAuth(
-            mensaje,
-            "❌ " +
-            (
-                error.message ||
-                "Email o contraseña incorrectos."
-            ),
-            "error"
-        );
-
+        return;
     }
+
+
+    usuarioActual =
+        data.user;
+
+    mostrarApp();
 
 }
 
 
-/* =====================================================
+/* =========================================================
    CERRAR SESIÓN
-   ===================================================== */
+========================================================= */
 
 async function cerrarSesion() {
 
-    if (!supabaseClient) {
+    await supabaseClient.auth.signOut();
 
-        return;
+    usuarioActual = null;
+
+    document.getElementById(
+        "app"
+    ).style.display = "none";
+
+    document.getElementById(
+        "authOverlay"
+    ).style.display = "flex";
+
+}
+
+
+/* =========================================================
+   MOSTRAR APP
+========================================================= */
+
+function mostrarApp() {
+
+    document.getElementById(
+        "authOverlay"
+    ).style.display = "none";
+
+    document.getElementById(
+        "app"
+    ).style.display = "block";
+
+
+    if (usuarioActual) {
+
+        document.getElementById(
+            "usuarioEmail"
+        ).textContent =
+            usuarioActual.email || "";
 
     }
 
 
-    try {
+    cargarDatosNegocio();
 
-        const {
-            error
-        } =
-            await supabaseClient.auth.signOut();
+    if (materiales.length === 0) {
 
+        agregarMaterial();
 
-        if (error) {
+    }
 
-            throw error;
+    mostrarPresupuestos();
 
-        }
+    actualizarPreview();
 
-
-        console.log(
-            "🚪 Sesión cerrada."
-        );
+}
 
 
-        mostrarPantallaAuth();
+/* =========================================================
+   SESIÓN ACTUAL
+========================================================= */
 
-        mostrarLogin();
+async function comprobarSesion() {
+
+    const {
+        data
+    } =
+        await supabaseClient.auth.getSession();
 
 
-    } catch (error) {
+    if (
+        data &&
+        data.session &&
+        data.session.user
+    ) {
 
-        console.error(
-            "❌ Error cerrando sesión:",
-            error
-        );
+        usuarioActual =
+            data.session.user;
 
+        mostrarApp();
 
-        alert(
-            "❌ No se pudo cerrar sesión.\n\n" +
-            error.message
-        );
+    } else {
+
+        document.getElementById(
+            "authOverlay"
+        ).style.display = "flex";
+
+        document.getElementById(
+            "app"
+        ).style.display = "none";
 
     }
 
 }
 
 
-/* =====================================================
-   VERIFICAR SESIÓN ACTUAL
-   ===================================================== */
-
-async function verificarSesion() {
-
-    if (!supabaseClient) {
-
-        mostrarPantallaAuth();
-
-        return;
-
-    }
-
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.auth.getSession();
-
-
-        if (error) {
-
-            throw error;
-
-        }
-
-
-        const session =
-            data.session;
-
-
-        if (session?.user) {
-
-            console.log(
-                "✅ Sesión encontrada:",
-                session.user.email
-            );
-
-
-            mostrarAplicacion(
-                session.user
-            );
-
-
-            await iniciarPresuFacil();
-
-        } else {
-
-            console.log(
-                "ℹ️ No hay usuario conectado."
-            );
-
-
-            mostrarPantallaAuth();
-
-            mostrarLogin();
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "❌ Error verificando sesión:",
-            error
-        );
-
-
-        mostrarPantallaAuth();
-
-    }
-
-}
-
-
-/* =====================================================
-   CAMBIOS DE SESIÓN
-   ===================================================== */
-
-function escucharCambiosAuth() {
-
-    supabaseClient.auth.onAuthStateChange(
-        (
-            event,
-            session
-        ) => {
-
-            console.log(
-                "🔐 Auth:",
-                event
-            );
-
-
-            if (
-                session?.user
-            ) {
-
-                usuarioActual =
-                    session.user;
-
-                mostrarAplicacion(
-                    session.user
-                );
-
-            } else {
-
-                mostrarPantallaAuth();
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   VARIABLES
-   ===================================================== */
-
-let materiales = [];
-
-let numeroPresupuesto = 1;
-
-let numeroPreview = null;
-
-let presupuestoPDFBlob = null;
-
-let presupuestoPDFNombre = "";
-
-let presupuestoPDFUrl = null;
-
-
-/* =====================================================
-   FECHA
-   ===================================================== */
-
-document.getElementById("fecha").value =
-new Date()
-    .toISOString()
-    .split("T")[0];
-
-
-/* =====================================================
+/* =========================================================
    DATOS NEGOCIO
-   ===================================================== */
+========================================================= */
 
 function cargarDatosNegocio() {
 
-    document.getElementById("negocio").value =
-        localStorage.getItem("negocio") || "";
+    const campos = [
+        "negocio",
+        "negocioTelefono",
+        "negocioEmail",
+        "negocioDireccion",
+        "negocioCuit"
+    ];
 
-    document.getElementById("negocioTelefono").value =
-        localStorage.getItem("negocioTelefono") || "";
 
-    document.getElementById("negocioEmail").value =
-        localStorage.getItem("negocioEmail") || "";
+    campos.forEach(
+        campo => {
 
-    document.getElementById("negocioDireccion").value =
-        localStorage.getItem("negocioDireccion") || "";
+            const valor =
+                localStorage.getItem(
+                    "presufacil_" + campo
+                );
 
-    document.getElementById("negocioCuit").value =
-        localStorage.getItem("negocioCuit") || "";
+            if (valor !== null) {
+
+                document.getElementById(
+                    campo
+                ).value = valor;
+
+            }
+
+            document.getElementById(
+                campo
+            ).addEventListener(
+                "input",
+                guardarDatosNegocio
+            );
+
+        }
+    );
 
 }
 
 
 function guardarDatosNegocio() {
 
-    localStorage.setItem(
+    const campos = [
         "negocio",
-        document.getElementById("negocio").value
-    );
-
-    localStorage.setItem(
         "negocioTelefono",
-        document.getElementById("negocioTelefono").value
-    );
-
-    localStorage.setItem(
         "negocioEmail",
-        document.getElementById("negocioEmail").value
-    );
-
-    localStorage.setItem(
         "negocioDireccion",
-        document.getElementById("negocioDireccion").value
-    );
-
-    localStorage.setItem(
-        "negocioCuit",
-        document.getElementById("negocioCuit").value
-    );
-
-}
+        "negocioCuit"
+    ];
 
 
-/* =====================================================
-   MATERIAL
-   ===================================================== */
+    campos.forEach(
+        campo => {
 
-function agregarMaterial() {
-
-    materiales.push({
-
-        nombre: "",
-        cantidad: 1,
-        precio: 0
-
-    });
-
-    mostrarMateriales();
-
-}
-
-
-function mostrarMateriales() {
-
-    const contenedor =
-        document.getElementById("materiales");
-
-    contenedor.innerHTML = "";
-
-    materiales.forEach(
-        (material, index) => {
-
-            const div =
-                document.createElement("div");
-
-            div.className = "material";
-
-            div.innerHTML = `
-
-                <input
-                    placeholder="Material"
-                    value="${escapeHTML(material.nombre)}"
-                    oninput="
-                        actualizarMaterial(
-                            ${index},
-                            'nombre',
-                            this.value
-                        )
-                    "
-                >
-
-                <input
-                    type="number"
-                    min="0"
-                    value="${material.cantidad}"
-                    oninput="
-                        actualizarMaterial(
-                            ${index},
-                            'cantidad',
-                            this.value
-                        )
-                    "
-                >
-
-                <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value="${material.precio}"
-                    oninput="
-                        actualizarMaterial(
-                            ${index},
-                            'precio',
-                            this.value
-                        )
-                    "
-                >
-
-                <button
-                    type="button"
-                    class="btn-danger"
-                    onclick="
-                        eliminarMaterial(${index})
-                    "
-                >
-                    ✕ Eliminar material
-                </button>
-
-            `;
-
-            contenedor.appendChild(div);
+            localStorage.setItem(
+                "presufacil_" + campo,
+                document.getElementById(
+                    campo
+                ).value
+            );
 
         }
     );
 
-    calcularTotal();
+}
+
+
+/* =========================================================
+   MATERIALES
+========================================================= */
+
+function agregarMaterial(
+    nombre = "",
+    cantidad = 1,
+    precio = 0
+) {
+
+    const id =
+        Date.now() +
+        Math.random();
+
+
+    materiales.push({
+
+        id,
+        nombre,
+        cantidad,
+        precio
+
+    });
+
+
+    renderMateriales();
+
+    actualizarPreview();
 
 }
 
 
-/* =====================================================
+function eliminarMaterial(id) {
+
+    materiales =
+        materiales.filter(
+            material =>
+                material.id !== id
+        );
+
+    renderMateriales();
+
+    actualizarPreview();
+
+}
+
+
+function actualizarMaterial(
+    id,
+    campo,
+    valor
+) {
+
+    const material =
+        materiales.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!material) return;
+
+
+    if (
+        campo === "cantidad" ||
+        campo === "precio"
+    ) {
+
+        material[campo] =
+            parseFloat(valor) || 0;
+
+    } else {
+
+        material[campo] =
+            valor;
+
+    }
+
+
+    actualizarPreview();
+
+}
+
+
+function renderMateriales() {
+
+    const contenedor =
+        document.getElementById(
+            "materiales"
+        );
+
+
+    contenedor.innerHTML = "";
+
+
+    materiales.forEach(
+        material => {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "material";
+
+
+            div.innerHTML = `
+
+                <div class="materialGrid">
+
+                    <div class="field">
+
+                        <label>Material</label>
+
+                        <input
+                            type="text"
+                            value="${escapeHTML(material.nombre)}"
+                            oninput="actualizarMaterial(${material.id}, 'nombre', this.value)"
+                        >
+
+                    </div>
+
+                    <div class="field">
+
+                        <label>Cantidad</label>
+
+                        <input
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value="${material.cantidad}"
+                            oninput="actualizarMaterial(${material.id}, 'cantidad', this.value)"
+                        >
+
+                    </div>
+
+                    <div class="field">
+
+                        <label>Precio</label>
+
+                        <input
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value="${material.precio}"
+                            oninput="actualizarMaterial(${material.id}, 'precio', this.value)"
+                        >
+
+                    </div>
+
+                    <button
+                        class="removeMaterial"
+                        onclick="eliminarMaterial(${material.id})"
+                    >
+                        Eliminar
+                    </button>
+
+                </div>
+
+            `;
+
+
+            contenedor.appendChild(
+                div
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
    ESCAPE HTML
-   ===================================================== */
+========================================================= */
 
 function escapeHTML(text) {
 
-    return String(text || "")
+    return String(text)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -2153,346 +1434,472 @@ function escapeHTML(text) {
 }
 
 
-/* =====================================================
-   ACTUALIZAR MATERIAL
-   ===================================================== */
-
-function actualizarMaterial(
-    index,
-    campo,
-    valor
-) {
-
-    if (
-        campo === "cantidad" ||
-        campo === "precio"
-    ) {
-
-        valor =
-            parseFloat(valor) || 0;
-
-    }
-
-    materiales[index][campo] = valor;
-
-    calcularTotal();
-
-    actualizarPreview();
-
-}
-
-
-function eliminarMaterial(index) {
-
-    materiales.splice(index, 1);
-
-    mostrarMateriales();
-
-    actualizarPreview();
-
-}
-
-
-/* =====================================================
+/* =========================================================
    TOTAL
-   ===================================================== */
+========================================================= */
 
 function calcularTotal() {
 
-    let materialesTotal = 0;
+    let totalMateriales = 0;
+
 
     materiales.forEach(
         material => {
 
-            materialesTotal +=
+            totalMateriales +=
                 (
-                    Number(material.cantidad) || 0
+                    parseFloat(
+                        material.cantidad
+                    ) || 0
                 ) *
                 (
-                    Number(material.precio) || 0
+                    parseFloat(
+                        material.precio
+                    ) || 0
                 );
 
         }
     );
 
-    let manoObra =
+
+    const manoObra =
         parseFloat(
-            document.getElementById("manoObra").value
+            document.getElementById(
+                "manoObra"
+            ).value
         ) || 0;
 
-    let total =
-        materialesTotal +
+
+    return totalMateriales +
         manoObra;
-
-    document.getElementById("total").textContent =
-        total.toFixed(2);
-
-    return total;
 
 }
 
 
-/* =====================================================
+/* =========================================================
    PREVIEW
-   ===================================================== */
+========================================================= */
 
 function actualizarPreview() {
 
-    guardarDatosNegocio();
+    const negocio =
+        document.getElementById(
+            "negocio"
+        ).value;
 
-    document.getElementById("previewNegocio").textContent =
-        document.getElementById("negocio").value ||
-        "Mi negocio";
+    const telefonoNegocio =
+        document.getElementById(
+            "negocioTelefono"
+        ).value;
 
-    document.getElementById("previewNegocioInfo").innerHTML =
+    const emailNegocio =
+        document.getElementById(
+            "negocioEmail"
+        ).value;
 
-        "Teléfono: " +
-        escapeHTML(
-            document.getElementById("negocioTelefono").value || "-"
-        ) +
-        "<br>" +
+    const direccion =
+        document.getElementById(
+            "negocioDireccion"
+        ).value;
 
-        "Email: " +
-        escapeHTML(
-            document.getElementById("negocioEmail").value || "-"
-        ) +
-        "<br>" +
-
-        "Dirección: " +
-        escapeHTML(
-            document.getElementById("negocioDireccion").value || "-"
-        ) +
-        "<br>" +
-
-        "CUIT: " +
-        escapeHTML(
-            document.getElementById("negocioCuit").value || "-"
-        );
-
-    const numeroMostrar =
-        numeroPreview !== null
-            ? numeroPreview
-            : numeroPresupuesto;
-
-    document.getElementById("previewNumero").textContent =
-        String(numeroMostrar).padStart(4, "0");
-
-    document.getElementById("previewFecha").textContent =
-        document.getElementById("fecha").value || "-";
-
-    document.getElementById("previewCliente").textContent =
-        document.getElementById("cliente").value || "-";
-
-    document.getElementById("previewTelefono").textContent =
-        document.getElementById("telefono").value || "-";
-
-    document.getElementById("previewTrabajo").textContent =
-        document.getElementById("trabajo").value || "-";
-
-    document.getElementById("previewCondiciones").textContent =
-        document.getElementById("condiciones").value || "-";
-
-    actualizarMaterialesPreview();
-
-    let manoObra =
-        parseFloat(
-            document.getElementById("manoObra").value
-        ) || 0;
-
-    document.getElementById("previewManoObra").textContent =
-        manoObra.toFixed(2);
-
-    let total = calcularTotal();
-
-    document.getElementById("previewTotal").textContent =
-        total.toFixed(2);
-
-}
+    const cuit =
+        document.getElementById(
+            "negocioCuit"
+        ).value;
 
 
-function actualizarMaterialesPreview() {
+    const cliente =
+        document.getElementById(
+            "cliente"
+        ).value;
 
-    const tbody =
-        document.getElementById("previewMateriales");
+    const telefono =
+        document.getElementById(
+            "telefono"
+        ).value;
 
-    tbody.innerHTML = "";
+    const trabajo =
+        document.getElementById(
+            "trabajo"
+        ).value;
+
+    const fecha =
+        document.getElementById(
+            "fecha"
+        ).value;
+
+    const condiciones =
+        document.getElementById(
+            "condiciones"
+        ).value;
+
+
+    let filas = "";
+
 
     materiales.forEach(
         material => {
 
-            if (!material.nombre) return;
+            const subtotal =
+                (
+                    parseFloat(
+                        material.cantidad
+                    ) || 0
+                ) *
+                (
+                    parseFloat(
+                        material.precio
+                    ) || 0
+                );
 
-            let cantidad =
-                Number(material.cantidad) || 0;
 
-            let precio =
-                Number(material.precio) || 0;
+            filas += `
 
-            let subtotal =
-                cantidad * precio;
+                <tr>
 
-            let tr =
-                document.createElement("tr");
+                    <td>
+                        ${escapeHTML(material.nombre)}
+                    </td>
 
-            tr.innerHTML = `
+                    <td>
+                        ${material.cantidad}
+                    </td>
 
-                <td>
-                    ${escapeHTML(material.nombre)}
-                </td>
+                    <td>
+                        $ ${formatearNumero(material.precio)}
+                    </td>
 
-                <td>
-                    ${cantidad}
-                </td>
+                    <td>
+                        $ ${formatearNumero(subtotal)}
+                    </td>
 
-                <td>
-                    $${precio.toFixed(2)}
-                </td>
-
-                <td>
-                    $${subtotal.toFixed(2)}
-                </td>
+                </tr>
 
             `;
 
-            tbody.appendChild(tr);
+        }
+    );
 
+
+    const manoObra =
+        parseFloat(
+            document.getElementById(
+                "manoObra"
+            ).value
+        ) || 0;
+
+
+    if (manoObra > 0) {
+
+        filas += `
+
+            <tr>
+
+                <td>
+                    Mano de obra
+                </td>
+
+                <td>
+                    1
+                </td>
+
+                <td>
+                    $ ${formatearNumero(manoObra)}
+                </td>
+
+                <td>
+                    $ ${formatearNumero(manoObra)}
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    const total =
+        calcularTotal();
+
+
+    document.getElementById(
+        "preview"
+    ).innerHTML = `
+
+        <div class="previewHeader">
+
+            <div class="previewBusiness">
+
+                <h2>
+                    ${escapeHTML(
+                        negocio ||
+                        "PresuFácil"
+                    )}
+                </h2>
+
+                ${
+                    telefonoNegocio
+                    ? `<div>Tel: ${escapeHTML(telefonoNegocio)}</div>`
+                    : ""
+                }
+
+                ${
+                    emailNegocio
+                    ? `<div>Email: ${escapeHTML(emailNegocio)}</div>`
+                    : ""
+                }
+
+                ${
+                    direccion
+                    ? `<div>${escapeHTML(direccion)}</div>`
+                    : ""
+                }
+
+                ${
+                    cuit
+                    ? `<div>CUIT: ${escapeHTML(cuit)}</div>`
+                    : ""
+                }
+
+            </div>
+
+            <div>
+
+                <strong>
+                    PRESUPUESTO
+                </strong>
+
+                ${
+                    fecha
+                    ? `<div>${escapeHTML(fecha)}</div>`
+                    : ""
+                }
+
+            </div>
+
+        </div>
+
+
+        <div class="previewClient">
+
+            <strong>Cliente:</strong>
+            ${escapeHTML(cliente || "-")}
+
+            <br>
+
+            <strong>Teléfono:</strong>
+            ${escapeHTML(telefono || "-")}
+
+            <br>
+
+            <strong>Trabajo:</strong>
+            ${escapeHTML(trabajo || "-")}
+
+        </div>
+
+
+        <table class="previewTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Descripción
+                    </th>
+
+                    <th>
+                        Cant.
+                    </th>
+
+                    <th>
+                        Precio
+                    </th>
+
+                    <th>
+                        Subtotal
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${
+                    filas ||
+                    `
+                    <tr>
+                        <td colspan="4">
+                            No hay materiales cargados.
+                        </td>
+                    </tr>
+                    `
+                }
+
+            </tbody>
+
+        </table>
+
+
+        <div class="previewTotal">
+
+            Total:
+            $ ${formatearNumero(total)}
+
+        </div>
+
+
+        ${
+            condiciones
+            ?
+            `
+            <div class="previewConditions">
+
+                <strong>
+                    Condiciones
+                </strong>
+
+                <p>
+                    ${escapeHTML(condiciones)}
+                </p>
+
+            </div>
+            `
+            :
+            ""
+        }
+
+    `;
+
+}
+
+
+/* =========================================================
+   FORMATO NÚMEROS
+========================================================= */
+
+function formatearNumero(numero) {
+
+    return Number(
+        numero || 0
+    ).toLocaleString(
+        "es-AR",
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
         }
     );
 
 }
 
 
-/* =====================================================
-   OBTENER PRESUPUESTO
-   ===================================================== */
+/* =========================================================
+   GUARDAR PRESUPUESTO
+========================================================= */
 
-function obtenerPresupuesto() {
+async function guardarPresupuesto() {
 
-    actualizarPreview();
+    if (!usuarioActual) {
 
-    return {
-
-        numero: numeroPresupuesto,
-
-        negocio:
-            document.getElementById("negocio").value,
-
-        negocioTelefono:
-            document.getElementById("negocioTelefono").value,
-
-        negocioEmail:
-            document.getElementById("negocioEmail").value,
-
-        negocioDireccion:
-            document.getElementById("negocioDireccion").value,
-
-        negocioCuit:
-            document.getElementById("negocioCuit").value,
-
-        cliente:
-            document.getElementById("cliente").value,
-
-        telefono:
-            document.getElementById("telefono").value,
-
-        trabajo:
-            document.getElementById("trabajo").value,
-
-        fecha:
-            document.getElementById("fecha").value,
-
-        materiales:
-            JSON.parse(
-                JSON.stringify(materiales)
-            ),
-
-        manoObra:
-            parseFloat(
-                document.getElementById("manoObra").value
-            ) || 0,
-
-        condiciones:
-            document.getElementById("condiciones").value,
-
-        total:
-            calcularTotal()
-
-    };
-
-}
-
-
-/* =====================================================
-   GUARDAR EN SUPABASE
-   ===================================================== */
-
-async function guardarEnSupabase(presupuesto) {
-
-    if (!supabaseClient) {
-
-        throw new Error(
-            "Supabase no está conectado."
+        alert(
+            "Primero iniciá sesión."
         );
 
+        return;
     }
+
+
+    const negocio =
+        document.getElementById(
+            "negocio"
+        ).value.trim();
+
+    const trabajo =
+        document.getElementById(
+            "trabajo"
+        ).value.trim();
+
+    const cliente =
+        document.getElementById(
+            "cliente"
+        ).value.trim();
+
+
+    const total =
+        calcularTotal();
+
+
+    const numero =
+        "PF-" +
+        Date.now();
+
 
     const datos = {
 
+        negocio,
         negocioTelefono:
-            presupuesto.negocioTelefono,
+            document.getElementById(
+                "negocioTelefono"
+            ).value,
 
         negocioEmail:
-            presupuesto.negocioEmail,
+            document.getElementById(
+                "negocioEmail"
+            ).value,
 
         negocioDireccion:
-            presupuesto.negocioDireccion,
+            document.getElementById(
+                "negocioDireccion"
+            ).value,
 
         negocioCuit:
-            presupuesto.negocioCuit,
+            document.getElementById(
+                "negocioCuit"
+            ).value,
+
+        cliente,
 
         telefono:
-            presupuesto.telefono,
+            document.getElementById(
+                "telefono"
+            ).value,
+
+        trabajo,
 
         fecha:
-            presupuesto.fecha,
+            document.getElementById(
+                "fecha"
+            ).value,
 
-        materiales:
-            presupuesto.materiales,
+        materiales,
 
         manoObra:
-            presupuesto.manoObra,
+            parseFloat(
+                document.getElementById(
+                    "manoObra"
+                ).value
+            ) || 0,
 
         condiciones:
-            presupuesto.condiciones
+            document.getElementById(
+                "condiciones"
+            ).value
 
     };
+
 
     const registro = {
 
-        numero:
-            presupuesto.numero,
-
-        negocio:
-            presupuesto.negocio,
-
-        trabajo:
-            presupuesto.trabajo,
-
-        cliente:
-            presupuesto.cliente,
-
-        total:
-            presupuesto.total,
-
-        datos:
-            datos
+        numero,
+        negocio,
+        trabajo,
+        cliente,
+        total,
+        datos
 
     };
 
-    console.log(
-        "📤 Enviando presupuesto a Supabase:",
-        registro
-    );
 
     const {
         error
@@ -2501,39 +1908,49 @@ async function guardarEnSupabase(presupuesto) {
             .from("presupuestos")
             .insert([registro]);
 
+
     if (error) {
 
         console.error(
-            "❌ Error Supabase:",
             error
         );
 
-        throw error;
+        alert(
+            "Error al guardar: " +
+            error.message
+        );
 
+        return;
     }
 
-    console.log(
-        "✅ Presupuesto insertado correctamente."
+
+    alert(
+        "Presupuesto guardado correctamente."
     );
 
-    return true;
+
+    mostrarPresupuestos();
 
 }
 
 
-/* =====================================================
-   OBTENER PRESUPUESTOS
-   ===================================================== */
+/* =========================================================
+   MOSTRAR PRESUPUESTOS
+========================================================= */
 
-async function obtenerPresupuestosSupabase() {
+async function mostrarPresupuestos() {
+
+    const contenedor =
+        document.getElementById(
+            "historial"
+        );
+
 
     if (!supabaseClient) {
 
-        throw new Error(
-            "Supabase no está conectado."
-        );
-
+        return;
     }
+
 
     const {
         data,
@@ -2543,922 +1960,568 @@ async function obtenerPresupuestosSupabase() {
             .from("presupuestos")
             .select("*")
             .order(
-                "numero",
+                "id",
                 {
                     ascending: false
                 }
             );
 
+
     if (error) {
 
         console.error(
-            "❌ Error cargando historial:",
             error
         );
 
-        throw error;
-
-    }
-
-    return data || [];
-
-}
-
-
-/* =====================================================
-   PRÓXIMO NÚMERO
-   ===================================================== */
-
-async function actualizarNumeroPresupuesto() {
-
-    try {
-
-        const presupuestos =
-            await obtenerPresupuestosSupabase();
-
-        if (presupuestos.length === 0) {
-
-            numeroPresupuesto = 1;
-
-            return;
-
-        }
-
-        let mayor = 0;
-
-        presupuestos.forEach(
-            p => {
-
-                const numero =
-                    Number(p.numero) || 0;
-
-                if (numero > mayor) {
-
-                    mayor = numero;
-
-                }
-
-            }
-        );
-
-        numeroPresupuesto =
-            mayor + 1;
-
-    } catch (error) {
-
-        console.error(
-            "❌ No se pudo determinar el próximo número:",
-            error
-        );
-
-        numeroPresupuesto = 1;
-
-    }
-
-}
-
-
-/* =====================================================
-   MOSTRAR HISTORIAL
-   ===================================================== */
-
-async function mostrarPresupuestos() {
-
-    const contenedor =
-        document.getElementById(
-            "presupuestosGuardados"
-        );
-
-    if (!supabaseClient) {
-
-        contenedor.innerHTML = `
-            <p>
-                ⚠️ Supabase no está conectado.
-            </p>
-        `;
+        contenedor.innerHTML =
+            "<p>No se pudo cargar el historial.</p>";
 
         return;
-
     }
 
-    contenedor.innerHTML = `
-        <p>
-            ☁️ Cargando presupuestos desde Supabase...
-        </p>
-    `;
 
-    try {
+    if (!data || data.length === 0) {
 
-        const presupuestos =
-            await obtenerPresupuestosSupabase();
+        contenedor.innerHTML =
+            "<p>No hay presupuestos guardados.</p>";
 
-        contenedor.innerHTML = "";
+        return;
+    }
 
-        if (presupuestos.length === 0) {
 
-            contenedor.innerHTML =
-                "<p>No hay presupuestos guardados.</p>";
+    contenedor.innerHTML = "";
 
-            return;
 
-        }
+    data.forEach(
+        presupuesto => {
 
-        presupuestos.forEach(
-            presupuesto => {
+            const div =
+                document.createElement(
+                    "div"
+                );
 
-                const datos =
-                    presupuesto.datos || {};
 
-                const fecha =
-                    datos.fecha || "";
+            div.className =
+                "historyItem";
 
-                const div =
-                    document.createElement("div");
 
-                div.className = "saved";
+            div.innerHTML = `
 
-                const numero =
-                    Number(presupuesto.numero) || 0;
+                <div class="historyInfo">
 
-                div.innerHTML = `
+                    <div>
 
-                    <strong>
-                        Presupuesto #${String(numero).padStart(4, "0")}
-                    </strong>
+                        <strong>
+                            ${escapeHTML(
+                                presupuesto.numero ||
+                                ""
+                            )}
+                        </strong>
 
-                    <p>
+                        <br>
+
                         Cliente:
                         ${escapeHTML(
                             presupuesto.cliente ||
-                            "Sin nombre"
+                            "-"
                         )}
-                    </p>
 
-                    <p>
+                        <br>
+
                         Trabajo:
                         ${escapeHTML(
                             presupuesto.trabajo ||
                             "-"
                         )}
-                    </p>
 
-                    <p>
-                        Fecha:
-                        ${escapeHTML(
-                            fecha || "-"
-                        )}
-                    </p>
+                    </div>
 
-                    <p>
-                        Total:
+                    <div>
+
                         <strong>
-                            $${Number(
-                                presupuesto.total || 0
-                            ).toFixed(2)}
+                            $ ${formatearNumero(
+                                presupuesto.total
+                            )}
                         </strong>
-                    </p>
 
-                `;
+                    </div>
 
-
-                const btnVer =
-                    document.createElement("button");
-
-                btnVer.className =
-                    "btn-primary";
-
-                btnVer.type =
-                    "button";
-
-                btnVer.textContent =
-                    "👁️ Ver";
-
-                btnVer.addEventListener(
-                    "click",
-                    function(event) {
-
-                        event.preventDefault();
-                        event.stopPropagation();
-
-                        cargarPresupuestoSupabase(
-                            presupuesto
-                        );
-
-                    }
-                );
+                </div>
 
 
-                const btnWhatsApp =
-                    document.createElement("button");
+                <div class="historyActions">
 
-                btnWhatsApp.className =
-                    "btn-whatsapp";
-
-                btnWhatsApp.type =
-                    "button";
-
-                btnWhatsApp.innerHTML = `
-
-                    <svg
-                    class="whatsapp-icon"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
+                    <button
+                        class="smallBtn viewBtn"
+                        onclick="cargarPresupuestoSupabase(
+                            ${escapeHTML(
+                                JSON.stringify(
+                                    presupuesto
+                                )
+                            )}
+                        )"
                     >
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982 1-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.437-9.884 9.89-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.892 6.992c-.002 5.45-4.438 9.886-9.888 9.886m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.89a11.84 11.84 0 001.592 5.945L.057 24l6.304-1.654a11.882 11.882 0 005.684 1.448h.005c6.554 0 11.89-5.335 11.893-11.89a11.821 11.821 0 00-3.479-8.416"/>
-                    </svg>
+                        Ver
+                    </button>
 
-                    Compartir en WhatsApp
+                    <button
+                        class="smallBtn historyWhatsapp"
+                        onclick="enviarPresupuestoGuardadoSupabase(
+                            ${escapeHTML(
+                                JSON.stringify(
+                                    presupuesto
+                                )
+                            )}
+                        )"
+                    >
+                        WhatsApp
+                    </button>
 
-                `;
+                    <button
+                        class="smallBtn deleteBtn"
+                        onclick="eliminarPresupuesto(
+                            ${presupuesto.id}
+                        )"
+                    >
+                        Eliminar
+                    </button>
 
-                btnWhatsApp.addEventListener(
-                    "click",
-                    async function(event) {
+                </div>
 
-                        event.preventDefault();
-                        event.stopPropagation();
-
-                        await enviarPresupuestoGuardadoSupabase(
-                            presupuesto
-                        );
-
-                    }
-                );
-
-
-                const btnEliminar =
-                    document.createElement("button");
-
-                btnEliminar.className =
-                    "btn-danger";
-
-                btnEliminar.type =
-                    "button";
-
-                btnEliminar.textContent =
-                    "🗑️ Eliminar";
-
-                btnEliminar.addEventListener(
-                    "click",
-                    function(event) {
-
-                        event.preventDefault();
-                        event.stopPropagation();
-
-                        eliminarPresupuestoSupabase(
-                            numero
-                        );
-
-                    }
-                );
+            `;
 
 
-                div.appendChild(btnVer);
-                div.appendChild(btnWhatsApp);
-                div.appendChild(btnEliminar);
-
-                contenedor.appendChild(div);
-
-            }
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        contenedor.innerHTML = `
-
-            <p style="color:#dc2626;">
-                ❌ No se pudo cargar el historial desde Supabase.
-            </p>
-
-            <p>
-                ${escapeHTML(error.message)}
-            </p>
-
-        `;
-
-    }
-
-}
-
-
-/* =====================================================
-   GUARDAR PRESUPUESTO
-   ===================================================== */
-
-async function guardarPresupuesto() {
-
-    numeroPreview = null;
-
-    const presupuesto =
-        obtenerPresupuesto();
-
-    if (!supabaseClient) {
-
-        alert(
-            "⚠️ Supabase no está conectado."
-        );
-
-        return;
-
-    }
-
-    try {
-
-        supabaseStatus.textContent =
-            "☁️ Guardando en Supabase...";
-
-        supabaseStatus.className =
-            "status loading";
-
-        await guardarEnSupabase(
-            presupuesto
-        );
-
-        numeroPresupuesto =
-            presupuesto.numero + 1;
-
-        numeroPreview = null;
-
-        supabaseStatus.textContent =
-            "☁️ Presupuesto guardado correctamente en Supabase.";
-
-        supabaseStatus.className =
-            "status ok";
-
-        try {
-
-            await mostrarPresupuestos();
-
-        } catch (historialError) {
-
-            console.error(
-                "⚠️ Guardado correcto, pero no se pudo cargar el historial:",
-                historialError
+            contenedor.appendChild(
+                div
             );
 
         }
-
-        actualizarPreview();
-
-        alert(
-            "✅ Presupuesto guardado correctamente en Supabase."
-        );
-
-    } catch (error) {
-
-        console.error(
-            "❌ Error guardando:",
-            error
-        );
-
-        supabaseStatus.textContent =
-            "❌ Error al guardar en Supabase.";
-
-        supabaseStatus.className =
-            "status error";
-
-        alert(
-            "❌ No se pudo guardar en Supabase.\n\n" +
-            error.message
-        );
-
-    }
+    );
 
 }
 
 
-/* =====================================================
+/* =========================================================
    CARGAR PRESUPUESTO
-   ===================================================== */
+========================================================= */
 
 function cargarPresupuestoSupabase(
     presupuesto,
     desplazar = true
 ) {
 
-    if (!presupuesto) return;
-
     const datos =
         presupuesto.datos || {};
 
 
-    document.getElementById("negocio").value =
-        presupuesto.negocio || "";
-
-    document.getElementById("negocioTelefono").value =
-        datos.negocioTelefono || "";
-
-    document.getElementById("negocioEmail").value =
-        datos.negocioEmail || "";
-
-    document.getElementById("negocioDireccion").value =
-        datos.negocioDireccion || "";
-
-    document.getElementById("negocioCuit").value =
-        datos.negocioCuit || "";
+    document.getElementById(
+        "negocio"
+    ).value =
+        datos.negocio ||
+        presupuesto.negocio ||
+        "";
 
 
-    document.getElementById("cliente").value =
-        presupuesto.cliente || "";
-
-    document.getElementById("telefono").value =
-        datos.telefono || "";
-
-    document.getElementById("trabajo").value =
-        presupuesto.trabajo || "";
-
-    document.getElementById("fecha").value =
-        datos.fecha || "";
+    document.getElementById(
+        "negocioTelefono"
+    ).value =
+        datos.negocioTelefono ||
+        "";
 
 
-    document.getElementById("manoObra").value =
-        datos.manoObra || 0;
+    document.getElementById(
+        "negocioEmail"
+    ).value =
+        datos.negocioEmail ||
+        "";
 
-    document.getElementById("condiciones").value =
-        datos.condiciones || "";
+
+    document.getElementById(
+        "negocioDireccion"
+    ).value =
+        datos.negocioDireccion ||
+        "";
+
+
+    document.getElementById(
+        "negocioCuit"
+    ).value =
+        datos.negocioCuit ||
+        "";
+
+
+    document.getElementById(
+        "cliente"
+    ).value =
+        datos.cliente ||
+        presupuesto.cliente ||
+        "";
+
+
+    document.getElementById(
+        "telefono"
+    ).value =
+        datos.telefono ||
+        "";
+
+
+    document.getElementById(
+        "trabajo"
+    ).value =
+        datos.trabajo ||
+        presupuesto.trabajo ||
+        "";
+
+
+    document.getElementById(
+        "fecha"
+    ).value =
+        datos.fecha ||
+        "";
+
+
+    document.getElementById(
+        "manoObra"
+    ).value =
+        datos.manoObra ||
+        0;
+
+
+    document.getElementById(
+        "condiciones"
+    ).value =
+        datos.condiciones ||
+        "";
 
 
     materiales =
-        Array.isArray(datos.materiales)
-            ? JSON.parse(
-                JSON.stringify(datos.materiales)
-              )
-            : [];
+        Array.isArray(
+            datos.materiales
+        )
+        ?
+        datos.materiales
+        :
+        [];
 
 
-    numeroPreview =
-        Number(presupuesto.numero) || 1;
-
-
-    mostrarMateriales();
-
-    calcularTotal();
+    renderMateriales();
 
     actualizarPreview();
 
 
     if (desplazar) {
 
-        const formulario =
-            document.getElementById(
-                "crearPresupuesto"
-            );
-
-        if (formulario) {
-
-            formulario.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-
-        }
+        document.getElementById(
+            "preview"
+        ).scrollIntoView({
+            behavior: "smooth"
+        });
 
     }
 
 }
 
 
-/* =====================================================
-   GENERAR PDF - CALIDAD EQUILIBRADA
-   ===================================================== */
+/* =========================================================
+   ELIMINAR
+========================================================= */
 
-async function generarPDF() {
+async function eliminarPresupuesto(id) {
 
-    try {
+    if (
+        !confirm(
+            "¿Eliminar este presupuesto?"
+        )
+    ) {
 
-        actualizarPreview();
-
-        if (
-            typeof html2canvas === "undefined" ||
-            typeof window.jspdf === "undefined"
-        ) {
-
-            alert(
-                "❌ No se cargaron las librerías necesarias para generar el PDF."
-            );
-
-            return null;
-
-        }
-
-        const elemento =
-            document.getElementById("preview");
-
-        if (!elemento) {
-
-            alert(
-                "❌ No se encontró la vista previa."
-            );
-
-            return null;
-
-        }
-
-        const { jsPDF } =
-            window.jspdf;
+        return;
+    }
 
 
-        const canvas =
-            await html2canvas(
-                elemento,
-                {
-                    scale: 1.5,
-                    useCORS: true,
-                    backgroundColor: "#ffffff",
-                    logging: false
-                }
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("presupuestos")
+            .delete()
+            .eq(
+                "id",
+                id
             );
 
 
-        const imgData =
-            canvas.toDataURL(
-                "image/jpeg",
-                0.75
-            );
-
-
-        const pdf =
-            new jsPDF({
-                orientation: "portrait",
-                unit: "mm",
-                format: "a4",
-                compress: true
-            });
-
-
-        const anchoPDF = 210;
-        const altoPDF = 297;
-        const margen = 10;
-
-        const anchoImagen =
-            anchoPDF -
-            (margen * 2);
-
-        const altoImagen =
-            canvas.height *
-            anchoImagen /
-            canvas.width;
-
-        const altoUtil =
-            altoPDF -
-            (margen * 2);
-
-        let posicion =
-            margen;
-
-        let alturaRestante =
-            altoImagen;
-
-
-        pdf.addImage(
-            imgData,
-            "JPEG",
-            margen,
-            posicion,
-            anchoImagen,
-            altoImagen,
-            undefined,
-            "FAST"
-        );
-
-
-        alturaRestante -=
-            altoUtil;
-
-
-        while (
-            alturaRestante > 0
-        ) {
-
-            posicion -=
-                altoUtil;
-
-            pdf.addPage();
-
-            pdf.addImage(
-                imgData,
-                "JPEG",
-                margen,
-                posicion,
-                anchoImagen,
-                altoImagen,
-                undefined,
-                "FAST"
-            );
-
-            alturaRestante -=
-                altoUtil;
-
-        }
-
-
-        const numero =
-            String(
-                numeroPreview !== null
-                    ? numeroPreview
-                    : numeroPresupuesto
-            ).padStart(
-                4,
-                "0"
-            );
-
-
-        const cliente =
-            document.getElementById(
-                "cliente"
-            ).value ||
-            "Cliente";
-
-
-        const nombreCliente =
-            cliente
-                .replace(
-                    /[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]/g,
-                    ""
-                )
-                .trim()
-                .replace(
-                    /\s+/g,
-                    "-"
-                ) ||
-            "Cliente";
-
-
-        const nombreArchivo =
-            "Presupuesto-" +
-            numero +
-            "-" +
-            nombreCliente +
-            ".pdf";
-
-
-        const pdfBlob =
-            pdf.output(
-                "blob"
-            );
-
-
-        presupuestoPDFBlob =
-            pdfBlob;
-
-        presupuestoPDFNombre =
-            nombreArchivo;
-
-
-        if (presupuestoPDFUrl) {
-
-            URL.revokeObjectURL(
-                presupuestoPDFUrl
-            );
-
-        }
-
-
-        presupuestoPDFUrl =
-            URL.createObjectURL(
-                pdfBlob
-            );
-
-
-        const visor =
-            document.getElementById(
-                "pdfViewer"
-            );
-
-        visor.src =
-            presupuestoPDFUrl;
-
-
-        document.getElementById(
-            "pdfModal"
-        ).style.display =
-            "flex";
-
-
-        console.log(
-            "📄 PDF generado:",
-            (pdfBlob.size / 1024).toFixed(0),
-            "KB"
-        );
-
-
-        return {
-
-            blob:
-                pdfBlob,
-
-            nombre:
-                nombreArchivo
-
-        };
-
-
-    } catch (error) {
+    if (error) {
 
         console.error(
-            "❌ Error generando PDF:",
             error
         );
 
         alert(
-            "❌ No se pudo generar el PDF.\n\n" +
+            "Error al eliminar: " +
             error.message
         );
 
-        return null;
-
-    }
-
-}
-
-
-/* =====================================================
-   DESCARGAR PDF
-   ===================================================== */
-
-function descargarPDF() {
-
-    if (!presupuestoPDFBlob) {
-
-        alert(
-            "Primero generá el PDF."
-        );
-
         return;
-
     }
 
 
-    const url =
-        URL.createObjectURL(
-            presupuestoPDFBlob
-        );
-
-
-    const enlace =
-        document.createElement("a");
-
-
-    enlace.href =
-        url;
-
-    enlace.download =
-        presupuestoPDFNombre ||
-        "Presupuesto.pdf";
-
-
-    document.body.appendChild(
-        enlace
-    );
-
-    enlace.click();
-
-    enlace.remove();
-
-
-    setTimeout(
-        function() {
-
-            URL.revokeObjectURL(
-                url
-            );
-
-        },
-        1000
-    );
+    mostrarPresupuestos();
 
 }
 
 
-/* =====================================================
-   CERRAR PDF
-   ===================================================== */
+/* =========================================================
+   GENERAR PDF
+========================================================= */
 
-function cerrarPDF() {
+async function generarPDF() {
+
+    actualizarPreview();
+
+
+    const elemento =
+        document.getElementById(
+            "preview"
+        );
+
+
+    const canvas =
+        await html2canvas(
+            elemento,
+            {
+
+                scale: 1.5,
+
+                useCORS: true,
+
+                backgroundColor:
+                    "#ffffff",
+
+                logging:
+                    false
+
+            }
+        );
+
+
+    const imgData =
+        canvas.toDataURL(
+            "image/jpeg",
+            0.75
+        );
+
+
+    const {
+        jsPDF
+    } =
+        window.jspdf;
+
+
+    const pdf =
+        new jsPDF({
+
+            orientation:
+                "portrait",
+
+            unit:
+                "mm",
+
+            format:
+                "a4",
+
+            compress:
+                true
+
+        });
+
+
+    const pageWidth =
+        pdf.internal.pageSize.getWidth();
+
+    const pageHeight =
+        pdf.internal.pageSize.getHeight();
+
+
+    const ratio =
+        Math.min(
+            pageWidth /
+                canvas.width,
+            pageHeight /
+                canvas.height
+        );
+
+
+    const imgWidth =
+        canvas.width *
+        ratio;
+
+
+    const imgHeight =
+        canvas.height *
+        ratio;
+
+
+    const x =
+        (
+            pageWidth -
+            imgWidth
+        ) / 2;
+
+
+    const y = 5;
+
+
+    pdf.addImage(
+        imgData,
+        "JPEG",
+        x,
+        y,
+        imgWidth,
+        imgHeight
+    );
+
+
+    presupuestoPDF =
+        pdf;
+
+
+    console.log(
+        "PDF generado:",
+        Math.round(
+            pdf.output(
+                "blob"
+            ).size / 1024
+        ),
+        "KB"
+    );
+
+
+    document.getElementById(
+        "pdfModal"
+    ).style.display =
+        "flex";
+
+}
+
+
+/* =========================================================
+   CERRAR MODAL PDF
+========================================================= */
+
+function cerrarPDFModal() {
 
     document.getElementById(
         "pdfModal"
     ).style.display =
         "none";
 
+}
 
-    const visor =
+
+/* =========================================================
+   WHATSAPP
+========================================================= */
+
+async function enviarWhatsApp() {
+
+    const telefono =
         document.getElementById(
-            "pdfViewer"
+            "telefono"
+        ).value.trim();
+
+
+    if (!telefono) {
+
+        alert(
+            "Ingresá el teléfono del cliente antes de compartir."
         );
 
+        return;
+    }
 
-    visor.src =
-        "about:blank";
+
+    presupuestoSeleccionadoWhatsApp = {
+
+        telefono
+
+    };
+
+
+    await generarPDF();
 
 }
 
 
-/* =====================================================
-   COMPARTIR PDF POR WHATSAPP
-   ===================================================== */
+/* =========================================================
+   WHATSAPP PRESUPUESTO GUARDADO
+========================================================= */
+
+async function enviarPresupuestoGuardadoSupabase(
+    presupuesto
+) {
+
+    cargarPresupuestoSupabase(
+        presupuesto,
+        false
+    );
+
+
+    const telefono =
+        document.getElementById(
+            "telefono"
+        ).value.trim();
+
+
+    if (!telefono) {
+
+        alert(
+            "Este presupuesto no tiene teléfono de cliente."
+        );
+
+        return;
+    }
+
+
+    presupuestoSeleccionadoWhatsApp =
+        presupuesto;
+
+
+    await generarPDF();
+
+}
+
+
+/* =========================================================
+   COMPARTIR PDF WHATSAPP
+========================================================= */
 
 async function compartirPDFWhatsApp() {
 
-    if (!presupuestoPDFBlob) {
+    if (!presupuestoPDF) {
 
         alert(
             "Primero generá el PDF."
         );
 
         return;
-
     }
 
 
-    const telefono =
-        document.getElementById(
-            "telefono"
-        ).value
-            .replace(
-                /\D/g,
-                ""
-            );
-
-
-    if (!telefono) {
-
-        alert(
-            "Ingresá primero el WhatsApp del cliente."
+    const blob =
+        presupuestoPDF.output(
+            "blob"
         );
-
-        return;
-
-    }
-
-
-    const cliente =
-        document.getElementById(
-            "cliente"
-        ).value ||
-        "cliente";
-
-
-    const negocio =
-        document.getElementById(
-            "negocio"
-        ).value ||
-        "nuestro negocio";
-
-
-    const trabajo =
-        document.getElementById(
-            "trabajo"
-        ).value ||
-        "-";
-
-
-    const total =
-        document.getElementById(
-            "total"
-        ).textContent;
-
-
-    const numero =
-        String(
-            numeroPreview !== null
-                ? numeroPreview
-                : numeroPresupuesto
-        ).padStart(
-            4,
-            "0"
-        );
-
-
-    const mensaje =
-
-`Hola ${cliente}! 👋
-
-Te envío el presupuesto de ${negocio}.
-
-📋 Presupuesto #${numero}
-
-🔧 Trabajo:
-${trabajo}
-
-💰 Total:
-$${total}
-
-Muchas gracias por confiar en nosotros.`;
 
 
     const archivo =
         new File(
             [
-                presupuestoPDFBlob
+                blob
             ],
-            presupuestoPDFNombre ||
-            "Presupuesto.pdf",
+            "presupuesto.pdf",
             {
-                type: "application/pdf"
+                type:
+                    "application/pdf"
             }
         );
 
@@ -3467,7 +2530,9 @@ Muchas gracias por confiar en nosotros.`;
         navigator.share &&
         navigator.canShare &&
         navigator.canShare({
-            files: [archivo]
+            files: [
+                archivo
+            ]
         })
     ) {
 
@@ -3475,16 +2540,15 @@ Muchas gracias por confiar en nosotros.`;
 
             await navigator.share({
 
-                title:
-                    "Presupuesto #" +
-                    numero,
-
-                text:
-                    mensaje,
-
                 files: [
                     archivo
-                ]
+                ],
+
+                title:
+                    "Presupuesto",
+
+                text:
+                    "Presupuesto PresuFácil"
 
             });
 
@@ -3492,17 +2556,8 @@ Muchas gracias por confiar en nosotros.`;
 
         } catch (error) {
 
-            if (
-                error.name ===
-                "AbortError"
-            ) {
-
-                return;
-
-            }
-
-            console.warn(
-                "No se pudo compartir directamente:",
+            console.log(
+                "Compartir cancelado:",
                 error
             );
 
@@ -3511,300 +2566,129 @@ Muchas gracias por confiar en nosotros.`;
     }
 
 
-    descargarPDF();
-
-
-    const url =
-        "https://wa.me/" +
-        telefono +
-        "?text=" +
-        encodeURIComponent(
-            mensaje +
-            "\n\n📎 Te adjunto el PDF del presupuesto."
-        );
-
-
-    window.open(
-        url,
-        "_blank"
+    presupuestoPDF.save(
+        "presupuesto.pdf"
     );
 
-
-    alert(
-        "📄 El PDF fue descargado.\n\n" +
-        "Adjuntalo manualmente en el chat de WhatsApp."
-    );
-
-}
-
-
-/* =====================================================
-   BOTÓN WHATSAPP DEL PRESUPUESTO ACTUAL
-   ===================================================== */
-
-async function enviarWhatsApp() {
 
     const telefono =
+        presupuestoSeleccionadoWhatsApp &&
+        presupuestoSeleccionadoWhatsApp.telefono
+        ?
+        presupuestoSeleccionadoWhatsApp.telefono
+        :
         document.getElementById(
             "telefono"
-        ).value
-            .replace(
-                /\D/g,
-                ""
-            );
+        ).value.trim();
 
 
-    if (!telefono) {
-
-        alert(
-            "Ingresá primero el WhatsApp del cliente."
-        );
-
-        return;
-
-    }
-
-
-    await generarPDF();
-
-}
-
-
-/* =====================================================
-   WHATSAPP DESDE HISTORIAL
-   ===================================================== */
-
-async function enviarPresupuestoGuardadoSupabase(
-    presupuesto
-) {
-
-    if (!presupuesto) return;
-
-
-    const datos =
-        presupuesto.datos || {};
-
-
-    const telefono =
-        (
-            datos.telefono ||
-            ""
-        ).replace(
+    const telefonoLimpio =
+        telefono.replace(
             /\D/g,
             ""
         );
 
 
-    if (!telefono) {
-
-        alert(
-            "Este presupuesto no tiene WhatsApp."
+    const mensaje =
+        encodeURIComponent(
+            "Hola, te envío el presupuesto en PDF. Adjunto el archivo."
         );
 
-        return;
 
-    }
+    let numeroWhatsApp =
+        telefonoLimpio;
 
-
-    cargarPresupuestoSupabase(
-        presupuesto,
-        false
-    );
-
-
-    const resultado =
-        await generarPDF();
-
-
-    if (!resultado) {
-
-        return;
-
-    }
-
-}
-
-
-/* =====================================================
-   ELIMINAR
-   ===================================================== */
-
-async function eliminarPresupuestoSupabase(
-    numero
-) {
 
     if (
-        !confirm(
-            "¿Eliminar este presupuesto de Supabase?"
+        numeroWhatsApp.startsWith(
+            "0"
         )
     ) {
 
-        return;
+        numeroWhatsApp =
+            numeroWhatsApp.substring(
+                1
+            );
 
     }
 
 
-    if (!supabaseClient) {
+    if (
+        numeroWhatsApp.length === 10
+    ) {
 
-        alert(
-            "Supabase no está conectado."
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("presupuestos")
-                .delete()
-                .eq(
-                    "numero",
-                    numero
-                );
-
-
-        if (error) {
-
-            throw error;
-
-        }
-
-
-        await actualizarNumeroPresupuesto();
-
-        await mostrarPresupuestos();
-
-
-        supabaseStatus.textContent =
-            "☁️ Presupuesto eliminado de Supabase.";
-
-        supabaseStatus.className =
-            "status ok";
-
-
-    } catch (error) {
-
-        console.error(
-            "❌ Error eliminando:",
-            error
-        );
-
-        alert(
-            "❌ No se pudo eliminar.\n\n" +
-            error.message
-        );
+        numeroWhatsApp =
+            "54" +
+            numeroWhatsApp;
 
     }
+
+
+    window.open(
+        "https://wa.me/" +
+        numeroWhatsApp +
+        "?text=" +
+        mensaje,
+        "_blank"
+    );
 
 }
 
 
-/* =====================================================
-   EVENTOS
-   ===================================================== */
+/* =========================================================
+   INICIO
+========================================================= */
 
-document
-    .getElementById("manoObra")
-    .addEventListener(
-        "input",
-        function() {
+conectarSupabase();
 
-            calcularTotal();
+comprobarSesion();
 
-            actualizarPreview();
+
+/* =========================================================
+   CAMBIOS EN TIEMPO REAL
+========================================================= */
+
+if (supabaseClient) {
+
+    supabaseClient.auth.onAuthStateChange(
+        async (
+            event,
+            session
+        ) => {
+
+            if (
+                session &&
+                session.user
+            ) {
+
+                usuarioActual =
+                    session.user;
+
+                mostrarApp();
+
+            } else {
+
+                usuarioActual =
+                    null;
+
+                document.getElementById(
+                    "app"
+                ).style.display =
+                    "none";
+
+                document.getElementById(
+                    "authOverlay"
+                ).style.display =
+                    "flex";
+
+            }
 
         }
     );
 
-
-/* =====================================================
-   INICIO PRESUFÁCIL
-   ===================================================== */
-
-async function iniciarPresuFacil() {
-
-    console.log(
-        "🚀 PresuFácil iniciando..."
-    );
-
-
-    if (!presuFacilInicializado) {
-
-        cargarDatosNegocio();
-
-        agregarMaterial();
-
-        calcularTotal();
-
-        actualizarPreview();
-
-        presuFacilInicializado = true;
-
-    }
-
-
-    if (!supabaseClient) {
-
-        console.warn(
-            "⚠️ PresuFácil funciona localmente, pero Supabase no está conectado."
-        );
-
-        return;
-
-    }
-
-
-    await actualizarNumeroPresupuesto();
-
-    await mostrarPresupuestos();
-
-    actualizarPreview();
-
 }
-
-
-/* =====================================================
-   INICIO DEL SISTEMA
-   ===================================================== */
-
-async function iniciarSistema() {
-
-    console.log(
-        "🚀 Sistema de autenticación iniciando..."
-    );
-
-
-    const conectado =
-        conectarSupabase();
-
-
-    if (!conectado) {
-
-        mostrarPantallaAuth();
-
-        return;
-
-    }
-
-
-    escucharCambiosAuth();
-
-
-    await verificarSesion();
-
-}
-
-
-iniciarSistema();
 
 </script>
 
 </body>
 </html>
-```
