@@ -96,13 +96,19 @@ select {
 
 
 /* =========================================================
-   LOGIN
+   PANTALLA DE BIENVENIDA / LOGIN
 ========================================================= */
 
 #authOverlay {
     position: fixed;
     inset: 0;
-    background: #f3f4f6;
+    background:
+        radial-gradient(
+            circle at top,
+            #dbeafe 0%,
+            #f3f4f6 45%,
+            #e5e7eb 100%
+        );
     display: flex;
     justify-content: center;
     align-items: center;
@@ -113,56 +119,153 @@ select {
 
 .authBox {
     width: 100%;
-    max-width: 420px;
-    background: white;
-    padding: 30px;
-    border-radius: 18px;
-    box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+    max-width: 440px;
+    background: rgba(255,255,255,0.97);
+    padding: 38px 34px 32px;
+    border-radius: 24px;
+    box-shadow:
+        0 20px 60px rgba(15,23,42,0.16),
+        0 4px 15px rgba(15,23,42,0.06);
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.8);
 }
 
-.authBox h1 {
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 25px;
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.authLogo {
+    width: 92px;
+    height: 92px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 16px;
+    border-radius: 20px;
+}
+
+.authBrand {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: #111827;
+}
+
+.authTagline {
+    margin: 9px auto 28px;
+    max-width: 330px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #64748b;
+}
+
+
+/* =========================================================
+   FORMULARIOS
+========================================================= */
+
+#loginForm,
+#registerForm {
+    text-align: left;
 }
 
 .authBox input {
     width: 100%;
-    padding: 13px;
+    padding: 14px 15px;
     margin-bottom: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    background: #f9fafb;
+    color: #111827;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s;
 }
+
+.authBox input:focus {
+    border-color: #2563eb;
+    background: white;
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,0.10);
+}
+
+
+/* =========================================================
+   BOTÓN PRINCIPAL
+========================================================= */
 
 .authBtn {
     width: 100%;
-    padding: 13px;
+    padding: 14px;
     border: 0;
-    border-radius: 8px;
+    border-radius: 10px;
     background: #2563eb;
     color: white;
     font-weight: bold;
     margin-top: 5px;
-    min-height: 46px;
+    min-height: 50px;
+    font-size: 15px;
+    transition: 0.2s;
 }
+
+.authBtn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.authBtn:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================================
+   BOTÓN SECUNDARIO
+========================================================= */
 
 .authSecondary {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #2563eb;
-    border-radius: 8px;
+    padding: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
     background: white;
-    color: #2563eb;
+    color: #1f2937;
     font-weight: bold;
     margin-top: 10px;
-    min-height: 46px;
+    min-height: 50px;
+    font-size: 15px;
+    transition: 0.2s;
 }
 
-.authMessage {
-    margin-top: 15px;
-    text-align: center;
-    font-size: 14px;
-    overflow-wrap: anywhere;
+.authSecondary:hover {
+    background: #f8fafc;
+    border-color: #9ca3af;
+}
+
+.authSecondary:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================================
+   SEPARADOR
+========================================================= */
+
+.authDivider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 24px 0 18px;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.authDivider::before,
+.authDivider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e5e7eb;
 }
 
 
@@ -175,8 +278,7 @@ select {
     width: 100%;
     min-height: 50px;
     padding: 13px 16px;
-    margin-top: 20px;
-    border-radius: 8px;
+    border-radius: 10px;
     background: #111827;
     color: white;
     text-decoration: none;
@@ -190,6 +292,7 @@ select {
 
 .apkDownload:hover {
     background: #1f2937;
+    transform: translateY(-1px);
 }
 
 .apkDownload:active {
@@ -198,10 +301,46 @@ select {
 
 .apkDescription {
     text-align: center;
-    font-size: 13px;
-    color: #666;
-    margin: 8px 0 0 0;
-    line-height: 1.4;
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 9px 0 0;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   FUNCIONES
+========================================================= */
+
+.authFeatures {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 23px;
+}
+
+.authFeature {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   MENSAJE
+========================================================= */
+
+.authMessage {
+    margin-top: 17px;
+    text-align: center;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+    color: #475569;
+    min-height: 20px;
 }
 
 
@@ -582,7 +721,56 @@ header h1 {
 
 
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE LOGIN
+========================================================= */
+
+@media (max-width: 700px) {
+
+    #authOverlay {
+        padding: 14px;
+    }
+
+    .authBox {
+        max-width: 430px;
+        padding: 30px 22px 25px;
+        border-radius: 20px;
+    }
+
+    .authLogo {
+        width: 78px;
+        height: 78px;
+        margin-bottom: 13px;
+    }
+
+    .authBrand {
+        font-size: 29px;
+    }
+
+    .authTagline {
+        font-size: 14px;
+        margin-bottom: 23px;
+    }
+
+    .authBox input {
+        min-height: 48px;
+        font-size: 16px;
+    }
+
+    .authBtn,
+    .authSecondary,
+    .apkDownload {
+        min-height: 49px;
+        font-size: 15px;
+    }
+
+    .authFeatures {
+        margin-top: 19px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE APP
 ========================================================= */
 
 @media (max-width: 700px) {
@@ -812,31 +1000,6 @@ header h1 {
         font-size: 14px;
     }
 
-    #authOverlay {
-        padding: 15px;
-        align-items: center;
-    }
-
-    .authBox {
-        padding: 22px;
-        border-radius: 15px;
-    }
-
-    .authBox h1 {
-        font-size: 25px;
-    }
-
-    .authBtn,
-    .authSecondary,
-    .apkDownload {
-        min-height: 48px;
-        font-size: 15px;
-    }
-
-    .apkDownload {
-        margin-top: 18px;
-    }
-
     #pdfModal {
         padding: 12px;
     }
@@ -893,11 +1056,24 @@ header h1 {
     }
 
     .authBox {
-        padding: 18px;
+        padding: 25px 17px 22px;
     }
 
-    .apkDownload {
-        font-size: 14px;
+    .authLogo {
+        width: 70px;
+        height: 70px;
+    }
+
+    .authBrand {
+        font-size: 26px;
+    }
+
+    .authTagline {
+        font-size: 13px;
+    }
+
+    .authFeature {
+        font-size: 10px;
     }
 
 }
@@ -911,14 +1087,29 @@ header h1 {
 
 
 <!-- =====================================================
-     LOGIN
+     PANTALLA DE BIENVENIDA / LOGIN
 ===================================================== -->
 
 <div id="authOverlay">
 
     <div class="authBox">
 
-        <h1>PresuFácil</h1>
+        <img
+            src="./icon-192.png"
+            alt="Logo de PresuFácil"
+            class="authLogo"
+        >
+
+
+        <h1 class="authBrand">
+            PresuFácil
+        </h1>
+
+
+        <p class="authTagline">
+            Creá presupuestos profesionales en segundos.
+        </p>
+
 
         <div id="loginForm">
 
@@ -926,12 +1117,14 @@ header h1 {
                 type="email"
                 id="loginEmail"
                 placeholder="Correo electrónico"
+                autocomplete="email"
             >
 
             <input
                 type="password"
                 id="loginPassword"
                 placeholder="Contraseña"
+                autocomplete="current-password"
             >
 
             <button
@@ -951,18 +1144,23 @@ header h1 {
         </div>
 
 
-        <div id="registerForm" style="display:none;">
+        <div
+            id="registerForm"
+            style="display:none;"
+        >
 
             <input
                 type="email"
                 id="registerEmail"
                 placeholder="Correo electrónico"
+                autocomplete="email"
             >
 
             <input
                 type="password"
                 id="registerPassword"
                 placeholder="Contraseña"
+                autocomplete="new-password"
             >
 
             <button
@@ -982,6 +1180,11 @@ header h1 {
         </div>
 
 
+        <div class="authDivider">
+            <span>También disponible para Android</span>
+        </div>
+
+
         <a
             class="apkDownload"
             href="https://github.com/1KEOPS1/Presufacil/raw/refs/heads/main/PresuF%C3%A1cil.apk"
@@ -990,10 +1193,31 @@ header h1 {
             📱 Descargar PresuFácil para Android
         </a>
 
+
         <p class="apkDescription">
-            Instalá PresuFácil directamente en Android<br>
-            APK · 4 MB
+            Instalá la aplicación directamente en tu Android · APK 4 MB
         </p>
+
+
+        <div class="authFeatures">
+
+            <span class="authFeature">
+                🧾 Presupuestos
+            </span>
+
+            <span class="authFeature">
+                📦 Materiales
+            </span>
+
+            <span class="authFeature">
+                📄 PDF
+            </span>
+
+            <span class="authFeature">
+                💬 WhatsApp
+            </span>
+
+        </div>
 
 
         <div
