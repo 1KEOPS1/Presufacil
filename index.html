@@ -12,10 +12,6 @@
 
 <style>
 
-/* =========================================================
-   ESTILOS GENERALES
-========================================================= */
-
 * {
     box-sizing: border-box;
 }
@@ -444,6 +440,7 @@ header h1 {
     .previewTable {
         font-size: 13px;
     }
+
 }
 
 </style>
@@ -627,10 +624,12 @@ header h1 {
 
         <div class="field">
             <label>Fecha</label>
+
             <input
                 type="date"
                 id="fecha"
             >
+
         </div>
 
     </div>
@@ -877,6 +876,7 @@ function conectarSupabase() {
 
         return false;
     }
+
 }
 
 
@@ -962,43 +962,90 @@ async function registrarUsuario() {
         "Creando cuenta...";
 
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient.auth.signUp({
+    /*
+       IMPORTANTE:
 
-            email:
-                email,
+       Se genera automáticamente la dirección
+       exacta de la página desde la que se está
+       registrando el usuario.
 
-            password:
-                password,
+       Si PresuFácil está en:
 
-            options: {
+       https://1keops1.github.io/Presufacil/
 
-                emailRedirectTo:
-                    "https://1keops1.github.io/Presufacil/"
+       redirectURL será exactamente esa dirección.
+    */
 
-            }
-
-        });
+    const redirectURL =
+        window.location.origin +
+        window.location.pathname;
 
 
-    if (error) {
+    console.log(
+        "REDIRECT DE CONFIRMACIÓN:",
+        redirectURL
+    );
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.signUp({
+
+                email:
+                    email,
+
+                password:
+                    password,
+
+                options: {
+
+                    emailRedirectTo:
+                        redirectURL
+
+                }
+
+            });
+
+
+        if (error) {
+
+            console.error(
+                "Error registrando usuario:",
+                error
+            );
+
+            mensaje.textContent =
+                error.message;
+
+            return;
+        }
+
+
+        console.log(
+            "Usuario registrado:",
+            data
+        );
+
+
+        mensaje.textContent =
+            "Cuenta creada. Revisá tu correo para confirmar la cuenta.";
+
+
+    } catch (error) {
 
         console.error(
+            "Error inesperado:",
             error
         );
 
         mensaje.textContent =
-            error.message;
+            "Ocurrió un error al crear la cuenta.";
 
-        return;
     }
-
-
-    mensaje.textContent =
-        "Cuenta creada. Revisá tu correo para confirmar la cuenta.";
 
 }
 
@@ -1122,11 +1169,13 @@ function mostrarApp() {
 
     cargarDatosNegocio();
 
+
     if (materiales.length === 0) {
 
         agregarMaterial();
 
     }
+
 
     mostrarPresupuestos();
 
@@ -1196,6 +1245,7 @@ function cargarDatosNegocio() {
                     "presufacil_" + campo
                 );
 
+
             if (valor !== null) {
 
                 document.getElementById(
@@ -1203,6 +1253,7 @@ function cargarDatosNegocio() {
                 ).value = valor;
 
             }
+
 
             document.getElementById(
                 campo
@@ -1283,6 +1334,7 @@ function eliminarMaterial(id) {
             material =>
                 material.id !== id
         );
+
 
     renderMateriales();
 
@@ -1838,6 +1890,7 @@ async function guardarPresupuesto() {
     const datos = {
 
         negocio,
+
         negocioTelefono:
             document.getElementById(
                 "negocioTelefono"
@@ -2053,35 +2106,23 @@ async function mostrarPresupuestos() {
 
                     <button
                         class="smallBtn viewBtn"
-                        onclick="cargarPresupuestoSupabase(
-                            ${escapeHTML(
-                                JSON.stringify(
-                                    presupuesto
-                                )
-                            )}
-                        )"
+                        onclick='cargarPresupuestoSupabase(${JSON.stringify(presupuesto)}, true)'
                     >
                         Ver
                     </button>
 
+
                     <button
                         class="smallBtn historyWhatsapp"
-                        onclick="enviarPresupuestoGuardadoSupabase(
-                            ${escapeHTML(
-                                JSON.stringify(
-                                    presupuesto
-                                )
-                            )}
-                        )"
+                        onclick='enviarPresupuestoGuardadoSupabase(${JSON.stringify(presupuesto)})'
                     >
                         WhatsApp
                     </button>
 
+
                     <button
                         class="smallBtn deleteBtn"
-                        onclick="eliminarPresupuesto(
-                            ${presupuesto.id}
-                        )"
+                        onclick="eliminarPresupuesto(${presupuesto.id})"
                     >
                         Eliminar
                     </button>
@@ -2551,6 +2592,7 @@ async function compartirPDFWhatsApp() {
                     "Presupuesto PresuFácil"
 
             });
+
 
             return;
 
