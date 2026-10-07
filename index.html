@@ -8,6 +8,8 @@
 <title>PresuFácil v0.9</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 
@@ -271,6 +273,104 @@ button:hover {
     color: #075985;
 }
 
+
+/* =====================================================
+   VENTANA PDF
+   ===================================================== */
+
+.pdf-modal {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.78);
+    padding: 20px;
+}
+
+.pdf-modal-content {
+    width: 100%;
+    max-width: 1000px;
+    height: 95vh;
+    margin: auto;
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0,0,0,.4);
+}
+
+.pdf-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #111827;
+    color: white;
+}
+
+.pdf-modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.pdf-close {
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    margin: 0;
+    padding: 5px 10px;
+}
+
+.pdf-preview-container {
+    flex: 1;
+    background: #525252;
+    min-height: 0;
+}
+
+#pdfViewer {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: white;
+}
+
+.pdf-modal-buttons {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    background: #f3f4f6;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.pdf-modal-buttons button {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 0;
+}
+
+.btn-pdf {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-cerrar {
+    background: #6b7280;
+    color: white;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
 @media(max-width:800px) {
 
     .grid {
@@ -290,7 +390,25 @@ button:hover {
         margin-top: 20px;
     }
 
+    .pdf-modal {
+        padding: 5px;
+    }
+
+    .pdf-modal-content {
+        height: 98vh;
+        border-radius: 8px;
+    }
+
+    .pdf-modal-buttons {
+        padding: 10px;
+    }
+
 }
+
+
+/* =====================================================
+   IMPRESIÓN
+   ===================================================== */
 
 @media print {
 
@@ -301,7 +419,8 @@ button:hover {
     header,
     .form-section,
     .saved-section,
-    .no-print {
+    .no-print,
+    .pdf-modal {
         display: none !important;
     }
 
@@ -355,11 +474,13 @@ button:hover {
 
 </header>
 
+
 <div class="container">
 
-<!-- ==========================================
+
+<!-- =====================================================
      DATOS DEL NEGOCIO
-     ========================================== -->
+     ===================================================== -->
 
 <div class="card form-section">
 
@@ -403,9 +524,9 @@ placeholder="Opcional"
 </div>
 
 
-<!-- ==========================================
-     CREAR PRESUPUESTO + PREVIEW
-     ========================================== -->
+<!-- =====================================================
+     CREAR PRESUPUESTO
+     ===================================================== -->
 
 <div class="grid">
 
@@ -527,9 +648,9 @@ class="status loading"
 </div>
 
 
-<!-- ==========================================
+<!-- =====================================================
      VISTA PREVIA
-     ========================================== -->
+     ===================================================== -->
 
 <div>
 
@@ -581,6 +702,7 @@ Fecha:
 
 </div>
 
+
 <div class="client-box">
 
 <strong>
@@ -604,6 +726,7 @@ DATOS DEL CLIENTE
 
 </div>
 
+
 <h3>
 Detalle del presupuesto
 </h3>
@@ -613,12 +736,10 @@ Detalle del presupuesto
 <thead>
 
 <tr>
-
 <th>Descripción</th>
 <th>Cant.</th>
 <th>Precio unit.</th>
 <th>Subtotal</th>
-
 </tr>
 
 </thead>
@@ -626,6 +747,7 @@ Detalle del presupuesto
 <tbody id="previewMateriales"></tbody>
 
 </table>
+
 
 <p style="text-align:right;margin-top:15px;">
 
@@ -637,12 +759,14 @@ $<span id="previewManoObra">0.00</span>
 
 </p>
 
+
 <div class="final-total">
 
 TOTAL:
 $<span id="previewTotal">0.00</span>
 
 </div>
+
 
 <div class="conditions">
 
@@ -655,6 +779,7 @@ Condiciones / notas
 </p>
 
 </div>
+
 
 <div class="signature">
 
@@ -677,9 +802,9 @@ Firma / sello
 </div>
 
 
-<!-- ==========================================
+<!-- =====================================================
      HISTORIAL
-     ========================================== -->
+     ===================================================== -->
 
 <div class="card saved-section">
 
@@ -696,7 +821,77 @@ Firma / sello
 </div>
 
 
+<!-- =====================================================
+     VENTANA PDF
+     ===================================================== -->
+
+<div id="pdfModal" class="pdf-modal">
+
+<div class="pdf-modal-content">
+
+<div class="pdf-modal-header">
+
+<h2>
+📄 Presupuesto en PDF
+</h2>
+
+<button
+type="button"
+onclick="cerrarPDF()"
+class="pdf-close"
+>
+✖️
+</button>
+
+</div>
+
+
+<div class="pdf-preview-container">
+
+<iframe
+id="pdfViewer"
+title="Vista previa del PDF"
+>
+</iframe>
+
+</div>
+
+
+<div class="pdf-modal-buttons">
+
+<button
+type="button"
+onclick="descargarPDF()"
+class="btn-pdf"
+>
+⬇️ Descargar PDF
+</button>
+
+<button
+type="button"
+onclick="compartirPDFWhatsApp()"
+class="btn-whatsapp"
+>
+📱 Compartir por WhatsApp
+</button>
+
+<button
+type="button"
+onclick="cerrarPDF()"
+class="btn-cerrar"
+>
+Cerrar
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
 <script>
+
 
 /* =====================================================
    SUPABASE
@@ -713,10 +908,6 @@ let supabaseClient = null;
 const supabaseStatus =
 document.getElementById("supabaseStatus");
 
-
-/* =====================================================
-   CONEXIÓN SUPABASE
-   ===================================================== */
 
 function conectarSupabase() {
 
@@ -804,6 +995,12 @@ let materiales = [];
 let numeroPresupuesto = 1;
 
 let numeroPreview = null;
+
+let presupuestoPDFBlob = null;
+
+let presupuestoPDFNombre = "";
+
+let presupuestoPDFUrl = null;
 
 
 /* =====================================================
@@ -1551,10 +1748,6 @@ async function mostrarPresupuestos() {
                 `;
 
 
-                /* ==============================
-                   BOTÓN VER
-                   ============================== */
-
                 const btnVer =
                     document.createElement("button");
 
@@ -1582,10 +1775,6 @@ async function mostrarPresupuestos() {
                 );
 
 
-                /* ==============================
-                   BOTÓN WHATSAPP
-                   ============================== */
-
                 const btnWhatsApp =
                     document.createElement("button");
 
@@ -1600,22 +1789,18 @@ async function mostrarPresupuestos() {
 
                 btnWhatsApp.addEventListener(
                     "click",
-                    function(event) {
+                    async function(event) {
 
                         event.preventDefault();
                         event.stopPropagation();
 
-                        enviarPresupuestoGuardadoSupabase(
+                        await enviarPresupuestoGuardadoSupabase(
                             presupuesto
                         );
 
                     }
                 );
 
-
-                /* ==============================
-                   BOTÓN ELIMINAR
-                   ============================== */
 
                 const btnEliminar =
                     document.createElement("button");
@@ -1645,9 +1830,7 @@ async function mostrarPresupuestos() {
 
 
                 div.appendChild(btnVer);
-
                 div.appendChild(btnWhatsApp);
-
                 div.appendChild(btnEliminar);
 
                 contenedor.appendChild(div);
@@ -1766,17 +1949,16 @@ async function guardarPresupuesto() {
    CARGAR PRESUPUESTO
    ===================================================== */
 
-function cargarPresupuestoSupabase(presupuesto) {
+function cargarPresupuestoSupabase(
+    presupuesto,
+    desplazar = true
+) {
 
     if (!presupuesto) return;
 
     const datos =
         presupuesto.datos || {};
 
-
-    /* ==============================
-       DATOS DEL NEGOCIO
-       ============================== */
 
     document.getElementById("negocio").value =
         presupuesto.negocio || "";
@@ -1794,10 +1976,6 @@ function cargarPresupuestoSupabase(presupuesto) {
         datos.negocioCuit || "";
 
 
-    /* ==============================
-       DATOS DEL CLIENTE
-       ============================== */
-
     document.getElementById("cliente").value =
         presupuesto.cliente || "";
 
@@ -1811,20 +1989,12 @@ function cargarPresupuestoSupabase(presupuesto) {
         datos.fecha || "";
 
 
-    /* ==============================
-       OTROS DATOS
-       ============================== */
-
     document.getElementById("manoObra").value =
         datos.manoObra || 0;
 
     document.getElementById("condiciones").value =
         datos.condiciones || "";
 
-
-    /* ==============================
-       MATERIALES
-       ============================== */
 
     materiales =
         Array.isArray(datos.materiales)
@@ -1834,17 +2004,9 @@ function cargarPresupuestoSupabase(presupuesto) {
             : [];
 
 
-    /* ==============================
-       NÚMERO
-       ============================== */
-
     numeroPreview =
         Number(presupuesto.numero) || 1;
 
-
-    /* ==============================
-       ACTUALIZAR
-       ============================== */
 
     mostrarMateriales();
 
@@ -1853,21 +2015,21 @@ function cargarPresupuestoSupabase(presupuesto) {
     actualizarPreview();
 
 
-    /* ==============================
-       IR DIRECTAMENTE A CREAR
-       ============================== */
+    if (desplazar) {
 
-    const formulario =
-        document.getElementById(
-            "crearPresupuesto"
-        );
+        const formulario =
+            document.getElementById(
+                "crearPresupuesto"
+            );
 
-    if (formulario) {
+        if (formulario) {
 
-        formulario.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
+            formulario.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }
 
     }
 
@@ -1875,36 +2037,343 @@ function cargarPresupuestoSupabase(presupuesto) {
 
 
 /* =====================================================
-   PDF
+   GENERAR PDF
    ===================================================== */
 
-function generarPDF() {
+async function generarPDF() {
 
-    actualizarPreview();
+    try {
+
+        actualizarPreview();
+
+        if (
+            typeof html2canvas === "undefined" ||
+            typeof window.jspdf === "undefined"
+        ) {
+
+            alert(
+                "❌ No se cargaron las librerías necesarias para generar el PDF."
+            );
+
+            return null;
+
+        }
+
+        const elemento =
+            document.getElementById("preview");
+
+        if (!elemento) {
+
+            alert(
+                "❌ No se encontró la vista previa."
+            );
+
+            return null;
+
+        }
+
+        const {
+            jsPDF
+        } = window.jspdf;
+
+
+        const canvas =
+            await html2canvas(
+                elemento,
+                {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: "#ffffff"
+                }
+            );
+
+
+        const imgData =
+            canvas.toDataURL(
+                "image/png"
+            );
+
+
+        const pdf =
+            new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4"
+            });
+
+
+        const anchoPDF = 210;
+        const altoPDF = 297;
+        const margen = 10;
+
+        const anchoImagen =
+            anchoPDF - (margen * 2);
+
+        const altoImagen =
+            canvas.height *
+            anchoImagen /
+            canvas.width;
+
+
+        const altoUtil =
+            altoPDF - (margen * 2);
+
+
+        let posicion =
+            margen;
+
+        let alturaRestante =
+            altoImagen;
+
+
+        pdf.addImage(
+            imgData,
+            "PNG",
+            margen,
+            posicion,
+            anchoImagen,
+            altoImagen
+        );
+
+
+        alturaRestante -= altoUtil;
+
+
+        while (alturaRestante > 0) {
+
+            posicion -= altoUtil;
+
+            pdf.addPage();
+
+            pdf.addImage(
+                imgData,
+                "PNG",
+                margen,
+                posicion,
+                anchoImagen,
+                altoImagen
+            );
+
+            alturaRestante -= altoUtil;
+
+        }
+
+
+        const numero =
+            String(
+                numeroPreview !== null
+                    ? numeroPreview
+                    : numeroPresupuesto
+            ).padStart(
+                4,
+                "0"
+            );
+
+
+        const cliente =
+            document.getElementById(
+                "cliente"
+            ).value ||
+            "Cliente";
+
+
+        const nombreCliente =
+            cliente
+                .replace(
+                    /[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]/g,
+                    ""
+                )
+                .trim()
+                .replace(
+                    /\s+/g,
+                    "-"
+                ) ||
+            "Cliente";
+
+
+        const nombreArchivo =
+            "Presupuesto-" +
+            numero +
+            "-" +
+            nombreCliente +
+            ".pdf";
+
+
+        const pdfBlob =
+            pdf.output("blob");
+
+
+        presupuestoPDFBlob =
+            pdfBlob;
+
+        presupuestoPDFNombre =
+            nombreArchivo;
+
+
+        if (presupuestoPDFUrl) {
+
+            URL.revokeObjectURL(
+                presupuestoPDFUrl
+            );
+
+        }
+
+
+        presupuestoPDFUrl =
+            URL.createObjectURL(
+                pdfBlob
+            );
+
+
+        const visor =
+            document.getElementById(
+                "pdfViewer"
+            );
+
+
+        visor.src =
+            presupuestoPDFUrl;
+
+
+        document.getElementById(
+            "pdfModal"
+        ).style.display =
+            "flex";
+
+
+        return {
+            blob: pdfBlob,
+            nombre: nombreArchivo
+        };
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Error generando PDF:",
+            error
+        );
+
+        alert(
+            "❌ No se pudo generar el PDF.\n\n" +
+            error.message
+        );
+
+        return null;
+
+    }
+
+}
+
+
+/* =====================================================
+   DESCARGAR PDF
+   ===================================================== */
+
+function descargarPDF() {
+
+    if (!presupuestoPDFBlob) {
+
+        alert(
+            "Primero generá el PDF."
+        );
+
+        return;
+
+    }
+
+
+    const url =
+        URL.createObjectURL(
+            presupuestoPDFBlob
+        );
+
+
+    const enlace =
+        document.createElement("a");
+
+
+    enlace.href =
+        url;
+
+    enlace.download =
+        presupuestoPDFNombre ||
+        "Presupuesto.pdf";
+
+
+    document.body.appendChild(
+        enlace
+    );
+
+    enlace.click();
+
+    enlace.remove();
+
 
     setTimeout(
         function() {
 
-            window.print();
+            URL.revokeObjectURL(
+                url
+            );
 
         },
-        200
+        1000
     );
 
 }
 
 
 /* =====================================================
-   WHATSAPP
+   CERRAR PDF
    ===================================================== */
 
-function enviarWhatsApp() {
+function cerrarPDF() {
 
-    actualizarPreview();
+    document.getElementById(
+        "pdfModal"
+    ).style.display =
+        "none";
 
-    let telefono =
-        document.getElementById("telefono").value
-            .replace(/\D/g, "");
+
+    const visor =
+        document.getElementById(
+            "pdfViewer"
+        );
+
+
+    visor.src =
+        "about:blank";
+
+}
+
+
+/* =====================================================
+   COMPARTIR PDF POR WHATSAPP
+   ===================================================== */
+
+async function compartirPDFWhatsApp() {
+
+    if (!presupuestoPDFBlob) {
+
+        alert(
+            "Primero generá el PDF."
+        );
+
+        return;
+
+    }
+
+
+    const telefono =
+        document.getElementById(
+            "telefono"
+        ).value
+            .replace(
+                /\D/g,
+                ""
+            );
+
 
     if (!telefono) {
 
@@ -1916,29 +2385,46 @@ function enviarWhatsApp() {
 
     }
 
-    let cliente =
-        document.getElementById("cliente").value ||
+
+    const cliente =
+        document.getElementById(
+            "cliente"
+        ).value ||
         "cliente";
 
-    let negocio =
-        document.getElementById("negocio").value ||
+
+    const negocio =
+        document.getElementById(
+            "negocio"
+        ).value ||
         "nuestro negocio";
 
-    let trabajo =
-        document.getElementById("trabajo").value ||
+
+    const trabajo =
+        document.getElementById(
+            "trabajo"
+        ).value ||
         "-";
 
-    let total =
-        document.getElementById("total").textContent;
 
-    let numero =
+    const total =
+        document.getElementById(
+            "total"
+        ).textContent;
+
+
+    const numero =
         String(
             numeroPreview !== null
                 ? numeroPreview
                 : numeroPresupuesto
-        ).padStart(4, "0");
+        ).padStart(
+            4,
+            "0"
+        );
 
-    let mensaje =
+
+    const mensaje =
 
 `Hola ${cliente}! 👋
 
@@ -1954,37 +2440,166 @@ $${total}
 
 Muchas gracias por confiar en nosotros.`;
 
-    let url =
+
+    const archivo =
+        new File(
+            [
+                presupuestoPDFBlob
+            ],
+            presupuestoPDFNombre ||
+            "Presupuesto.pdf",
+            {
+                type: "application/pdf"
+            }
+        );
+
+
+    /*
+       Si el navegador permite compartir archivos,
+       se abre el menú nativo y se puede elegir WhatsApp
+       con el PDF adjunto.
+    */
+
+    if (
+        navigator.share &&
+        navigator.canShare &&
+        navigator.canShare({
+            files: [archivo]
+        })
+    ) {
+
+        try {
+
+            await navigator.share({
+
+                title:
+                    "Presupuesto #" +
+                    numero,
+
+                text:
+                    mensaje,
+
+                files: [
+                    archivo
+                ]
+
+            });
+
+            return;
+
+        } catch (error) {
+
+            if (
+                error.name ===
+                "AbortError"
+            ) {
+
+                return;
+
+            }
+
+            console.warn(
+                "No se pudo compartir directamente:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+       En navegadores que no permiten adjuntar archivos
+       automáticamente, descargamos el PDF y abrimos WhatsApp.
+    */
+
+    descargarPDF();
+
+
+    const url =
         "https://wa.me/" +
         telefono +
         "?text=" +
-        encodeURIComponent(mensaje);
+        encodeURIComponent(
+            mensaje +
+            "\n\n📎 Te adjunto el PDF del presupuesto."
+        );
+
 
     window.open(
         url,
         "_blank"
     );
 
+
+    alert(
+        "📄 El PDF fue descargado.\n\n" +
+        "Adjuntalo manualmente en el chat de WhatsApp."
+    );
+
 }
 
 
 /* =====================================================
-   WHATSAPP HISTORIAL
+   BOTÓN WHATSAPP DEL PRESUPUESTO ACTUAL
    ===================================================== */
 
-function enviarPresupuestoGuardadoSupabase(
+async function enviarWhatsApp() {
+
+    const telefono =
+        document.getElementById(
+            "telefono"
+        ).value
+            .replace(
+                /\D/g,
+                ""
+            );
+
+
+    if (!telefono) {
+
+        alert(
+            "Ingresá primero el WhatsApp del cliente."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Generamos primero el PDF.
+    */
+
+    await generarPDF();
+
+}
+
+
+/* =====================================================
+   WHATSAPP DESDE HISTORIAL
+   ===================================================== */
+
+async function enviarPresupuestoGuardadoSupabase(
     presupuesto
 ) {
 
     if (!presupuesto) return;
 
+
     const datos =
         presupuesto.datos || {};
 
-    let telefono =
+
+    const telefono =
         (
-            datos.telefono || ""
-        ).replace(/\D/g, "");
+            datos.telefono ||
+            ""
+        ).replace(
+            /\D/g,
+            ""
+        );
+
 
     if (!telefono) {
 
@@ -1996,44 +2611,31 @@ function enviarPresupuestoGuardadoSupabase(
 
     }
 
-    let mensaje =
 
-`Hola ${
-    presupuesto.cliente ||
-    "cliente"
-}! 👋
+    /*
+       Cargamos el presupuesto guardado
+       sin mover automáticamente la pantalla.
+    */
 
-Te envío el presupuesto de ${
-    presupuesto.negocio ||
-    "nuestro negocio"
-}.
-
-📋 Presupuesto #${
-    String(
-        presupuesto.numero
-    ).padStart(4, "0")
-}
-
-🔧 Trabajo:
-${presupuesto.trabajo || "-"}
-
-💰 Total:
-$${Number(
-    presupuesto.total || 0
-).toFixed(2)}
-
-Muchas gracias por confiar en nosotros.`;
-
-    let url =
-        "https://wa.me/" +
-        telefono +
-        "?text=" +
-        encodeURIComponent(mensaje);
-
-    window.open(
-        url,
-        "_blank"
+    cargarPresupuestoSupabase(
+        presupuesto,
+        false
     );
+
+
+    /*
+       Generamos su PDF.
+    */
+
+    const resultado =
+        await generarPDF();
+
+
+    if (!resultado) {
+
+        return;
+
+    }
 
 }
 
@@ -2042,7 +2644,9 @@ Muchas gracias por confiar en nosotros.`;
    ELIMINAR
    ===================================================== */
 
-async function eliminarPresupuestoSupabase(numero) {
+async function eliminarPresupuestoSupabase(
+    numero
+) {
 
     if (
         !confirm(
@@ -2054,6 +2658,7 @@ async function eliminarPresupuestoSupabase(numero) {
 
     }
 
+
     if (!supabaseClient) {
 
         alert(
@@ -2064,6 +2669,7 @@ async function eliminarPresupuestoSupabase(numero) {
 
     }
 
+
     try {
 
         const {
@@ -2072,7 +2678,11 @@ async function eliminarPresupuestoSupabase(numero) {
             await supabaseClient
                 .from("presupuestos")
                 .delete()
-                .eq("numero", numero);
+                .eq(
+                    "numero",
+                    numero
+                );
+
 
         if (error) {
 
@@ -2080,15 +2690,18 @@ async function eliminarPresupuestoSupabase(numero) {
 
         }
 
+
         await actualizarNumeroPresupuesto();
 
         await mostrarPresupuestos();
+
 
         supabaseStatus.textContent =
             "☁️ Presupuesto eliminado de Supabase.";
 
         supabaseStatus.className =
             "status ok";
+
 
     } catch (error) {
 
@@ -2135,6 +2748,7 @@ async function iniciarPresuFacil() {
         "🚀 PresuFácil iniciando..."
     );
 
+
     cargarDatosNegocio();
 
     agregarMaterial();
@@ -2142,6 +2756,7 @@ async function iniciarPresuFacil() {
     calcularTotal();
 
     actualizarPreview();
+
 
     if (!supabaseClient) {
 
@@ -2152,6 +2767,7 @@ async function iniciarPresuFacil() {
         return;
 
     }
+
 
     await actualizarNumeroPresupuesto();
 
