@@ -12,10 +12,6 @@
 
 <title>PresuFácil v0.9</title>
 
-<!-- =====================================================
-     PWA
-===================================================== -->
-
 <link
     rel="manifest"
     href="./manifest.json"
@@ -51,10 +47,6 @@
     href="./icon-192.png"
 >
 
-<!-- =====================================================
-     LIBRERÍAS
-===================================================== -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -83,9 +75,17 @@ body {
     overflow-x: hidden;
 }
 
+button,
+input,
+textarea,
+select {
+    -webkit-tap-highlight-color: transparent;
+}
+
 button {
     cursor: pointer;
     font-family: inherit;
+    touch-action: manipulation;
 }
 
 input,
@@ -123,6 +123,7 @@ select {
 .authBox h1 {
     text-align: center;
     margin-top: 0;
+    margin-bottom: 25px;
 }
 
 .authBox input {
@@ -142,6 +143,7 @@ select {
     color: white;
     font-weight: bold;
     margin-top: 5px;
+    min-height: 46px;
 }
 
 .authSecondary {
@@ -153,12 +155,14 @@ select {
     color: #2563eb;
     font-weight: bold;
     margin-top: 10px;
+    min-height: 46px;
 }
 
 .authMessage {
     margin-top: 15px;
     text-align: center;
     font-size: 14px;
+    overflow-wrap: anywhere;
 }
 
 
@@ -167,21 +171,29 @@ select {
 ========================================================= */
 
 .apkDownload {
-    display: block;
+    display: flex;
     width: 100%;
-    padding: 13px;
-    margin-top: 18px;
+    min-height: 50px;
+    padding: 13px 16px;
+    margin-top: 20px;
     border-radius: 8px;
     background: #111827;
     color: white;
     text-decoration: none;
     text-align: center;
     font-weight: bold;
+    align-items: center;
+    justify-content: center;
     transition: 0.2s;
+    cursor: pointer;
 }
 
 .apkDownload:hover {
     background: #1f2937;
+}
+
+.apkDownload:active {
+    transform: scale(0.98);
 }
 
 .apkDescription {
@@ -189,6 +201,7 @@ select {
     font-size: 13px;
     color: #666;
     margin: 8px 0 0 0;
+    line-height: 1.4;
 }
 
 
@@ -541,22 +554,6 @@ header h1 {
 
 
 /* =========================================================
-   EXPERIENCIA TÁCTIL
-========================================================= */
-
-button,
-input,
-textarea,
-select {
-    -webkit-tap-highlight-color: transparent;
-}
-
-button {
-    touch-action: manipulation;
-}
-
-
-/* =========================================================
    RESPONSIVE — CELULAR
 ========================================================= */
 
@@ -643,9 +640,7 @@ button {
     }
 
 
-    /* =====================================================
-       MATERIALES
-    ===================================================== */
+    /* MATERIALES */
 
     .material {
         padding: 12px;
@@ -675,9 +670,7 @@ button {
     }
 
 
-    /* =====================================================
-       BOTONES
-    ===================================================== */
+    /* BOTONES */
 
     .actions {
         flex-direction: column;
@@ -693,9 +686,7 @@ button {
     }
 
 
-    /* =====================================================
-       VISTA PREVIA
-    ===================================================== */
+    /* VISTA PREVIA */
 
     #preview {
         padding: 15px;
@@ -774,9 +765,7 @@ button {
     }
 
 
-    /* =====================================================
-       HISTORIAL
-    ===================================================== */
+    /* HISTORIAL */
 
     .historyItem {
         padding: 13px;
@@ -799,9 +788,7 @@ button {
     }
 
 
-    /* =====================================================
-       LOGIN
-    ===================================================== */
+    /* LOGIN */
 
     #authOverlay {
         padding: 15px;
@@ -824,10 +811,12 @@ button {
         font-size: 15px;
     }
 
+    .apkDownload {
+        margin-top: 18px;
+    }
 
-    /* =====================================================
-       MODAL PDF
-    ===================================================== */
+
+    /* MODAL PDF */
 
     #pdfModal {
         padding: 12px;
@@ -836,6 +825,7 @@ button {
     .pdfModalBox {
         padding: 20px;
         border-radius: 14px;
+        margin-bottom: env(safe-area-inset-bottom);
     }
 
     .pdfModalActions button {
@@ -844,9 +834,7 @@ button {
     }
 
 
-    /* =====================================================
-       SEGURIDAD CONTRA DESBORDE
-    ===================================================== */
+    /* SEGURIDAD */
 
     .previewBusiness,
     .historyItem,
@@ -893,21 +881,12 @@ button {
         font-size: 18px;
     }
 
-}
-
-
-/* =========================================================
-   SAFE AREA — IPHONE
-========================================================= */
-
-@media (max-width: 700px) {
-
-    #app {
-        padding-bottom: env(safe-area-inset-bottom);
+    .authBox {
+        padding: 18px;
     }
 
-    .pdfModalBox {
-        margin-bottom: env(safe-area-inset-bottom);
+    .apkDownload {
+        font-size: 14px;
     }
 
 }
@@ -999,13 +978,13 @@ button {
         <a
             class="apkDownload"
             href="https://github.com/1KEOPS1/Presufacil/raw/refs/heads/main/PresuF%C3%A1cil.apk"
-            download="PresuFacil.apk"
         >
             📱 Descargar PresuFácil para Android
         </a>
 
         <p class="apkDescription">
-            Versión Android · APK · 4 MB
+            Instalá PresuFácil directamente en Android<br>
+            APK · 4 MB
         </p>
 
 
@@ -3105,6 +3084,7 @@ async function generarPDF() {
 
 
         const x =
+
             (
 
                 pageWidth -
