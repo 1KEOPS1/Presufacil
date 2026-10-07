@@ -332,6 +332,24 @@ header h1 {
 }
 
 /* =========================================================
+   BOTONES DENTRO DE VISTA PREVIA
+========================================================= */
+
+.previewActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #ddd;
+}
+
+.previewActions button {
+    flex: 1;
+    min-width: 180px;
+}
+
+/* =========================================================
    HISTORIAL
 ========================================================= */
 
@@ -439,6 +457,14 @@ header h1 {
 
     .previewTable {
         font-size: 13px;
+    }
+
+    .previewActions {
+        flex-direction: column;
+    }
+
+    .previewActions button {
+        width: 100%;
     }
 
 }
@@ -678,36 +704,6 @@ header h1 {
             placeholder="Condiciones del presupuesto..."
             oninput="actualizarPreview()"
         ></textarea>
-
-    </div>
-
-</div>
-
-
-<div class="card">
-
-    <div class="actions">
-
-        <button
-            class="primaryBtn"
-            onclick="guardarPresupuesto()"
-        >
-            Guardar presupuesto
-        </button>
-
-        <button
-            class="successBtn"
-            onclick="generarPDF()"
-        >
-            Generar PDF
-        </button>
-
-        <button
-            class="whatsappBtn"
-            onclick="enviarWhatsApp()"
-        >
-            Compartir en WhatsApp
-        </button>
 
     </div>
 
@@ -1774,6 +1770,36 @@ function actualizarPreview() {
             ""
         }
 
+
+        <!-- =================================================
+             BOTONES DE LA VISTA PREVIA
+        ================================================== -->
+
+        <div class="previewActions">
+
+            <button
+                class="primaryBtn"
+                onclick="guardarPresupuesto()"
+            >
+                💾 Guardar presupuesto
+            </button>
+
+            <button
+                class="successBtn"
+                onclick="generarPDF()"
+            >
+                📄 Generar PDF
+            </button>
+
+            <button
+                class="whatsappBtn"
+                onclick="enviarWhatsApp()"
+            >
+                💬 Compartir en WhatsApp
+            </button>
+
+        </div>
+
     `;
 
 }
@@ -2373,111 +2399,149 @@ async function generarPDF() {
         document.getElementById("preview");
 
 
-    const canvas =
-        await html2canvas(
-            elemento,
-            {
+    const acciones =
+        elemento.querySelector(".previewActions");
 
-                scale: 1.5,
 
-                useCORS: true,
+    /*
+       Ocultamos los botones antes de
+       generar el PDF para que no aparezcan
+       dentro del presupuesto.
+    */
+    if (acciones) {
 
-                backgroundColor:
-                    "#ffffff",
+        acciones.style.display =
+            "none";
 
-                logging:
-                    false
+    }
 
-            }
+
+    try {
+
+        const canvas =
+            await html2canvas(
+                elemento,
+                {
+
+                    scale: 1.5,
+
+                    useCORS: true,
+
+                    backgroundColor:
+                        "#ffffff",
+
+                    logging:
+                        false
+
+                }
+            );
+
+
+        const imgData =
+            canvas.toDataURL(
+                "image/jpeg",
+                0.75
+            );
+
+
+        const {
+            jsPDF
+        } =
+            window.jspdf;
+
+
+        const pdf =
+            new jsPDF({
+
+                orientation:
+                    "portrait",
+
+                unit:
+                    "mm",
+
+                format:
+                    "a4",
+
+                compress:
+                    true
+
+            });
+
+
+        const pageWidth =
+            pdf.internal.pageSize.getWidth();
+
+        const pageHeight =
+            pdf.internal.pageSize.getHeight();
+
+
+        const ratio =
+            Math.min(
+                pageWidth / canvas.width,
+                pageHeight / canvas.height
+            );
+
+
+        const imgWidth =
+            canvas.width * ratio;
+
+
+        const imgHeight =
+            canvas.height * ratio;
+
+
+        const x =
+            (
+                pageWidth -
+                imgWidth
+            ) / 2;
+
+
+        const y = 5;
+
+
+        pdf.addImage(
+            imgData,
+            "JPEG",
+            x,
+            y,
+            imgWidth,
+            imgHeight
         );
 
 
-    const imgData =
-        canvas.toDataURL(
-            "image/jpeg",
-            0.75
+        presupuestoPDF =
+            pdf;
+
+
+        console.log(
+            "PDF generado:",
+            Math.round(
+                pdf.output("blob").size / 1024
+            ),
+            "KB"
         );
 
 
-    const {
-        jsPDF
-    } =
-        window.jspdf;
+    } finally {
+
+        /*
+           Volvemos a mostrar los botones
+           en la vista previa.
+        */
+        if (acciones) {
+
+            acciones.style.display =
+                "";
+
+        }
+
+    }
 
 
-    const pdf =
-        new jsPDF({
-
-            orientation:
-                "portrait",
-
-            unit:
-                "mm",
-
-            format:
-                "a4",
-
-            compress:
-                true
-
-        });
-
-
-    const pageWidth =
-        pdf.internal.pageSize.getWidth();
-
-    const pageHeight =
-        pdf.internal.pageSize.getHeight();
-
-
-    const ratio =
-        Math.min(
-            pageWidth / canvas.width,
-            pageHeight / canvas.height
-        );
-
-
-    const imgWidth =
-        canvas.width * ratio;
-
-
-    const imgHeight =
-        canvas.height * ratio;
-
-
-    const x =
-        (
-            pageWidth -
-            imgWidth
-        ) / 2;
-
-
-    const y = 5;
-
-
-    pdf.addImage(
-        imgData,
-        "JPEG",
-        x,
-        y,
-        imgWidth,
-        imgHeight
-    );
-
-
-    presupuestoPDF =
-        pdf;
-
-
-    console.log(
-        "PDF generado:",
-        Math.round(
-            pdf.output("blob").size / 1024
-        ),
-        "KB"
-    );
-
-
+    /*
+       Mostramos el modal como antes.
+    */
     document.getElementById("pdfModal").style.display =
         "flex";
 
