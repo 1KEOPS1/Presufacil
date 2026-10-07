@@ -106,11 +106,15 @@ select {
     position: fixed;
 
     /*
-       En PC lo desplazamos hacia la izquierda
-       para que nunca tape "Cerrar sesión".
+       EN PC:
+       Lo colocamos en el centro de la pantalla
+       para que no tape el correo ni los botones
+       del panel de usuario.
     */
     top: 15px;
-    right: 330px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
 
     z-index: 11000;
 
@@ -143,11 +147,15 @@ select {
 
 #themeToggle:hover {
     background: #1f2937;
-    transform: translateY(-1px);
+    transform:
+        translateX(-50%)
+        translateY(-1px);
 }
 
 #themeToggle:active {
-    transform: scale(0.97);
+    transform:
+        translateX(-50%)
+        scale(0.97);
 }
 
 
@@ -1293,18 +1301,31 @@ body.darkMode #themeToggle:hover {
 @media (max-width: 700px) {
 
     /*
-       En celular vuelve a su posición original,
-       porque ahí ya estaba funcionando perfectamente.
+       EN CELULAR:
+       Conservamos la posición que ya funcionaba.
     */
     #themeToggle {
         top: 10px;
+
         right: 10px;
+
+        left: auto;
+
+        transform: none;
 
         min-height: 40px;
 
         padding: 8px 11px;
 
         font-size: 12px;
+    }
+
+    #themeToggle:hover {
+        transform: translateY(-1px);
+    }
+
+    #themeToggle:active {
+        transform: scale(0.97);
     }
 
     #authOverlay {
