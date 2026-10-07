@@ -1,11 +1,18 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PresuFácil v0.7</title>
+
+<title>PresuFácil v0.9</title>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -83,6 +90,10 @@ button {
     cursor: pointer;
     font-weight: bold;
     margin-top: 15px;
+}
+
+button:hover {
+    opacity: .9;
 }
 
 .btn-primary {
@@ -239,7 +250,31 @@ button {
     margin-top: 12px;
 }
 
+.status {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #f3f4f6;
+    font-size: 14px;
+}
+
+.status.ok {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.status.loading {
+    background: #e0f2fe;
+    color: #075985;
+}
+
 @media(max-width:800px) {
+
     .grid {
         grid-template-columns: 1fr;
     }
@@ -256,6 +291,7 @@ button {
         text-align: left;
         margin-top: 20px;
     }
+
 }
 
 @media print {
@@ -296,20 +332,34 @@ button {
         size: A4;
         margin: 15mm;
     }
+
 }
+
 </style>
+
 </head>
 
 <body>
 
 <header>
+
 <div class="header-content">
-    <div><strong>💼 PresuFácil</strong></div>
-    <div>v0.7</div>
+
+    <div>
+        <strong>💼 PresuFácil</strong>
+    </div>
+
+    <div>
+        v0.9
+    </div>
+
 </div>
+
 </header>
 
+
 <div class="container">
+
 
 <!-- DATOS NEGOCIO -->
 
@@ -318,24 +368,45 @@ button {
 <h2>🏢 Datos de tu negocio</h2>
 
 <label>Nombre del negocio</label>
-<input id="negocio" placeholder="Ej: Electricidad Juan">
+
+<input
+id="negocio"
+placeholder="Ej: Electricidad Juan"
+>
 
 <label>Teléfono</label>
-<input id="negocioTelefono" placeholder="Ej: 2945123456">
+
+<input
+id="negocioTelefono"
+placeholder="Ej: 2945123456"
+>
 
 <label>Email</label>
-<input id="negocioEmail" placeholder="Ej: contacto@email.com">
+
+<input
+id="negocioEmail"
+placeholder="Ej: contacto@email.com"
+>
 
 <label>Dirección</label>
-<input id="negocioDireccion" placeholder="Ej: Av. San Martín 123">
+
+<input
+id="negocioDireccion"
+placeholder="Ej: Av. San Martín 123"
+>
 
 <label>CUIT</label>
-<input id="negocioCuit" placeholder="Opcional">
+
+<input
+id="negocioCuit"
+placeholder="Opcional"
+>
 
 </div>
 
 
 <div class="grid">
+
 
 <!-- FORMULARIO -->
 
@@ -346,16 +417,33 @@ button {
 <h2>📋 Crear presupuesto</h2>
 
 <label>Cliente</label>
-<input id="cliente" placeholder="Nombre del cliente">
+
+<input
+id="cliente"
+placeholder="Nombre del cliente"
+>
 
 <label>WhatsApp del cliente</label>
-<input id="telefono" placeholder="Ej: 5492945123456">
+
+<input
+id="telefono"
+placeholder="Ej: 5492945123456"
+>
 
 <label>Trabajo</label>
-<input id="trabajo" placeholder="Ej: Instalación eléctrica">
+
+<input
+id="trabajo"
+placeholder="Ej: Instalación eléctrica"
+>
 
 <label>Fecha</label>
-<input id="fecha" type="date">
+
+<input
+id="fecha"
+type="date"
+>
+
 
 <h3 style="margin-top:25px;">
 📦 Materiales
@@ -365,19 +453,29 @@ button {
 
 <button
 class="btn-secondary"
-onclick="agregarMaterial()">
+onclick="agregarMaterial()"
+>
 ➕ Agregar material
 </button>
 
+
 <label>Mano de obra</label>
-<input id="manoObra" type="number" value="0" min="0">
+
+<input
+id="manoObra"
+type="number"
+value="0"
+min="0"
+>
+
 
 <label>Condiciones / notas</label>
 
 <textarea
 id="condiciones"
-placeholder="Ej: Presupuesto válido por 15 días.">
-</textarea>
+placeholder="Ej: Presupuesto válido por 15 días."
+></textarea>
+
 
 <div class="total-box">
 
@@ -389,29 +487,45 @@ $<span id="total">0.00</span>
 
 </div>
 
+
 <button
 class="btn-primary"
-onclick="actualizarPreview()">
+onclick="actualizarPreview()"
+>
 🧾 Actualizar presupuesto
 </button>
 
+
 <button
 class="btn-success"
-onclick="guardarPresupuesto()">
+onclick="guardarPresupuesto()"
+>
 💾 Guardar presupuesto
 </button>
 
+
 <button
 class="btn-dark"
-onclick="generarPDF()">
+onclick="generarPDF()"
+>
 📄 Generar PDF
 </button>
 
+
 <button
 class="btn-whatsapp"
-onclick="enviarWhatsApp()">
+onclick="enviarWhatsApp()"
+>
 📱 WhatsApp
 </button>
+
+
+<div
+id="supabaseStatus"
+class="status loading"
+>
+☁️ Conectando con Supabase...
+</div>
 
 </div>
 
@@ -428,7 +542,9 @@ onclick="enviarWhatsApp()">
 👁️ Vista previa
 </h2>
 
+
 <div class="preview" id="preview">
+
 
 <div class="preview-business">
 
@@ -436,13 +552,16 @@ onclick="enviarWhatsApp()">
 
 <div
 class="business-name"
-id="previewNegocio">
+id="previewNegocio"
+>
 Mi negocio
 </div>
 
+
 <div
 class="business-info"
-id="previewNegocioInfo">
+id="previewNegocioInfo"
+>
 Teléfono: -<br>
 Email: -<br>
 Dirección: -<br>
@@ -450,6 +569,7 @@ CUIT: -
 </div>
 
 </div>
+
 
 <div class="quote-title">
 
@@ -471,17 +591,22 @@ Fecha:
 
 <div class="client-box">
 
-<strong>DATOS DEL CLIENTE</strong>
+<strong>
+DATOS DEL CLIENTE
+</strong>
+
 
 <p>
 <strong>Nombre:</strong>
 <span id="previewCliente">-</span>
 </p>
 
+
 <p>
 <strong>WhatsApp:</strong>
 <span id="previewTelefono">-</span>
 </p>
+
 
 <p>
 <strong>Trabajo:</strong>
@@ -491,20 +616,26 @@ Fecha:
 </div>
 
 
-<h3>Detalle del presupuesto</h3>
+<h3>
+Detalle del presupuesto
+</h3>
+
 
 <table>
 
 <thead>
 
 <tr>
+
 <th>Descripción</th>
 <th>Cant.</th>
 <th>Precio unit.</th>
 <th>Subtotal</th>
+
 </tr>
 
 </thead>
+
 
 <tbody id="previewMateriales"></tbody>
 
@@ -512,10 +643,13 @@ Fecha:
 
 
 <p style="text-align:right;margin-top:15px;">
+
 Mano de obra:
+
 <strong>
 $<span id="previewManoObra">0.00</span>
 </strong>
+
 </p>
 
 
@@ -529,9 +663,13 @@ $<span id="previewTotal">0.00</span>
 
 <div class="conditions">
 
-<h3>Condiciones / notas</h3>
+<h3>
+Condiciones / notas
+</h3>
 
-<p id="previewCondiciones">-</p>
+<p id="previewCondiciones">
+-
+</p>
 
 </div>
 
@@ -548,6 +686,7 @@ Firma / sello
 
 </div>
 
+
 </div>
 
 </div>
@@ -561,768 +700,1292 @@ Firma / sello
 
 <div class="card saved-section">
 
-<h2>📋 Presupuestos guardados</h2>
+<h2>
+📋 Presupuestos guardados
+</h2>
 
-<div id="presupuestosGuardados"></div>
+<div id="presupuestosGuardados">
+<p>☁️ Cargando presupuestos...</p>
+</div>
 
 </div>
+
 
 </div>
 
 
 <script>
 
+/* =====================================================
+   SUPABASE
+   ===================================================== */
+
+const SUPABASE_URL =
+"https://tgqjjvmekfsliuagvsub.supabase.co";
+
+/*
+   PEGÁ ACÁ TU PUBLISHABLE KEY.
+
+   Ejemplo:
+
+   const SUPABASE_KEY =
+   "sb_publishable_xxxxxxxxxxxxxxxxx";
+
+   NO uses una sb_secret_...
+*/
+
+const SUPABASE_KEY =
+"sb_secret_yLCviCpuNUPPu2eNYNuShg_6SIhTEqn";
+
+
+let supabaseClient = null;
+
+const supabaseStatus =
+document.getElementById("supabaseStatus");
+
+
+/* =====================================================
+   CONEXIÓN SUPABASE
+   ===================================================== */
+
+function conectarSupabase() {
+
+    if (!window.supabase) {
+
+        console.error(
+            "❌ Supabase JS no se cargó."
+        );
+
+        supabaseStatus.textContent =
+            "❌ No se pudo cargar la librería de Supabase.";
+
+        supabaseStatus.className =
+            "status error";
+
+        return false;
+    }
+
+
+    if (
+        !SUPABASE_KEY ||
+        SUPABASE_KEY ===
+        "PEGAR_AQUI_TU_PUBLISHABLE_KEY"
+    ) {
+
+        console.error(
+            "❌ Falta la Publishable Key de Supabase."
+        );
+
+        supabaseStatus.textContent =
+            "⚠️ Pegá tu Publishable Key de Supabase.";
+
+        supabaseStatus.className =
+            "status error";
+
+        return false;
+    }
+
+
+    try {
+
+        supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        console.log(
+            "✅ Supabase JS cargado correctamente."
+        );
+
+        console.log(
+            "✅ Cliente Supabase creado correctamente."
+        );
+
+
+        supabaseStatus.textContent =
+            "☁️ Supabase conectado.";
+
+        supabaseStatus.className =
+            "status ok";
+
+
+        return true;
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Error creando cliente Supabase:",
+            error
+        );
+
+
+        supabaseStatus.textContent =
+            "❌ Error configurando Supabase.";
+
+        supabaseStatus.className =
+            "status error";
+
+
+        return false;
+    }
+
+}
+
+
+conectarSupabase();
+
+
+/* =====================================================
+   VARIABLES
+   ===================================================== */
+
 let materiales = [];
 
-let numeroPresupuesto =
-parseInt(
-localStorage.getItem("numeroPresupuesto")
-) || 1;
+let numeroPresupuesto = 1;
+
+let numeroPreview = null;
 
 
-/* FECHA */
+/* =====================================================
+   FECHA
+   ===================================================== */
 
 document.getElementById("fecha").value =
-new Date().toISOString().split("T")[0];
+new Date()
+    .toISOString()
+    .split("T")[0];
 
 
-/* DATOS DEL NEGOCIO */
+/* =====================================================
+   DATOS DEL NEGOCIO
+   ===================================================== */
 
 function cargarDatosNegocio() {
 
-document.getElementById("negocio").value =
-localStorage.getItem("negocio") || "";
+    document.getElementById("negocio").value =
+        localStorage.getItem("negocio") || "";
 
-document.getElementById("negocioTelefono").value =
-localStorage.getItem("negocioTelefono") || "";
+    document.getElementById("negocioTelefono").value =
+        localStorage.getItem("negocioTelefono") || "";
 
-document.getElementById("negocioEmail").value =
-localStorage.getItem("negocioEmail") || "";
+    document.getElementById("negocioEmail").value =
+        localStorage.getItem("negocioEmail") || "";
 
-document.getElementById("negocioDireccion").value =
-localStorage.getItem("negocioDireccion") || "";
+    document.getElementById("negocioDireccion").value =
+        localStorage.getItem("negocioDireccion") || "";
 
-document.getElementById("negocioCuit").value =
-localStorage.getItem("negocioCuit") || "";
+    document.getElementById("negocioCuit").value =
+        localStorage.getItem("negocioCuit") || "";
 
 }
 
 
 function guardarDatosNegocio() {
 
-localStorage.setItem(
-"negocio",
-document.getElementById("negocio").value
-);
+    localStorage.setItem(
+        "negocio",
+        document.getElementById("negocio").value
+    );
 
-localStorage.setItem(
-"negocioTelefono",
-document.getElementById("negocioTelefono").value
-);
+    localStorage.setItem(
+        "negocioTelefono",
+        document.getElementById("negocioTelefono").value
+    );
 
-localStorage.setItem(
-"negocioEmail",
-document.getElementById("negocioEmail").value
-);
+    localStorage.setItem(
+        "negocioEmail",
+        document.getElementById("negocioEmail").value
+    );
 
-localStorage.setItem(
-"negocioDireccion",
-document.getElementById("negocioDireccion").value
-);
+    localStorage.setItem(
+        "negocioDireccion",
+        document.getElementById("negocioDireccion").value
+    );
 
-localStorage.setItem(
-"negocioCuit",
-document.getElementById("negocioCuit").value
-);
+    localStorage.setItem(
+        "negocioCuit",
+        document.getElementById("negocioCuit").value
+    );
 
 }
 
 
-/* MATERIAL */
+/* =====================================================
+   MATERIAL
+   ===================================================== */
 
 function agregarMaterial() {
 
-materiales.push({
-nombre:"",
-cantidad:1,
-precio:0
-});
+    materiales.push({
 
-mostrarMateriales();
+        nombre: "",
+        cantidad: 1,
+        precio: 0
+
+    });
+
+    mostrarMateriales();
 
 }
 
 
 function mostrarMateriales() {
 
-const contenedor =
-document.getElementById("materiales");
+    const contenedor =
+        document.getElementById("materiales");
 
-contenedor.innerHTML = "";
+    contenedor.innerHTML = "";
 
-materiales.forEach(
-(material,index) => {
 
-const div =
-document.createElement("div");
+    materiales.forEach(
+        (material, index) => {
 
-div.className = "material";
+            const div =
+                document.createElement("div");
 
-div.innerHTML = `
+            div.className = "material";
 
-<input
-placeholder="Material"
-value="${material.nombre}"
-oninput="
-actualizarMaterial(
-${index},
-'nombre',
-this.value
-)">
 
-<input
-type="number"
-min="0"
-value="${material.cantidad}"
-oninput="
-actualizarMaterial(
-${index},
-'cantidad',
-this.value
-)">
+            div.innerHTML = `
 
-<input
-type="number"
-min="0"
-value="${material.precio}"
-oninput="
-actualizarMaterial(
-${index},
-'precio',
-this.value
-)">
+                <input
+                    placeholder="Material"
+                    value="${escapeHTML(material.nombre)}"
+                    oninput="
+                        actualizarMaterial(
+                            ${index},
+                            'nombre',
+                            this.value
+                        )
+                    "
+                >
 
-<button
-class="btn-danger"
-onclick="
-eliminarMaterial(${index})
-">
-✕
-</button>
+                <input
+                    type="number"
+                    min="0"
+                    value="${material.cantidad}"
+                    oninput="
+                        actualizarMaterial(
+                            ${index},
+                            'cantidad',
+                            this.value
+                        )
+                    "
+                >
 
-`;
+                <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value="${material.precio}"
+                    oninput="
+                        actualizarMaterial(
+                            ${index},
+                            'precio',
+                            this.value
+                        )
+                    "
+                >
 
-contenedor.appendChild(div);
+                <button
+                    class="btn-danger"
+                    onclick="
+                        eliminarMaterial(${index})
+                    "
+                >
+                    ✕
+                </button>
 
-});
+            `;
 
-calcularTotal();
+
+            contenedor.appendChild(div);
+
+        }
+    );
+
+
+    calcularTotal();
 
 }
 
+
+/* =====================================================
+   ESCAPE HTML
+   ===================================================== */
+
+function escapeHTML(text) {
+
+    return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================================
+   ACTUALIZAR MATERIAL
+   ===================================================== */
 
 function actualizarMaterial(
-index,
-campo,
-valor
+    index,
+    campo,
+    valor
 ) {
 
-if(
-campo === "cantidad" ||
-campo === "precio"
-) {
-valor = parseFloat(valor) || 0;
-}
+    if (
+        campo === "cantidad" ||
+        campo === "precio"
+    ) {
 
-materiales[index][campo] = valor;
+        valor =
+            parseFloat(valor) || 0;
 
-calcularTotal();
+    }
+
+
+    materiales[index][campo] = valor;
+
+    calcularTotal();
+
+    actualizarPreview();
 
 }
 
 
 function eliminarMaterial(index) {
 
-materiales.splice(index,1);
+    materiales.splice(index, 1);
 
-mostrarMateriales();
+    mostrarMateriales();
+
+    actualizarPreview();
 
 }
 
 
-/* TOTAL */
+/* =====================================================
+   TOTAL
+   ===================================================== */
 
 function calcularTotal() {
 
-let materialesTotal = 0;
-
-materiales.forEach(
-material => {
-
-materialesTotal +=
-material.cantidad *
-material.precio;
-
-});
+    let materialesTotal = 0;
 
 
-let manoObra =
-parseFloat(
-document.getElementById("manoObra").value
-) || 0;
+    materiales.forEach(
+        material => {
+
+            materialesTotal +=
+                (
+                    Number(material.cantidad) || 0
+                ) *
+                (
+                    Number(material.precio) || 0
+                );
+
+        }
+    );
 
 
-let total =
-materialesTotal + manoObra;
+    let manoObra =
+        parseFloat(
+            document.getElementById("manoObra").value
+        ) || 0;
 
 
-document.getElementById("total")
-.textContent =
-total.toFixed(2);
+    let total =
+        materialesTotal +
+        manoObra;
+
+
+    document.getElementById("total").textContent =
+        total.toFixed(2);
+
+
+    return total;
 
 }
 
 
-/* PREVIEW */
+/* =====================================================
+   PREVIEW
+   ===================================================== */
 
 function actualizarPreview() {
 
-guardarDatosNegocio();
+    guardarDatosNegocio();
 
 
-document.getElementById(
-"previewNegocio"
-).textContent =
-document.getElementById(
-"negocio"
-).value ||
-"Mi negocio";
+    document.getElementById("previewNegocio").textContent =
+        document.getElementById("negocio").value ||
+        "Mi negocio";
 
 
-document.getElementById(
-"previewNegocioInfo"
-).innerHTML =
+    document.getElementById("previewNegocioInfo").innerHTML =
 
-"Teléfono: " +
-(document.getElementById(
-"negocioTelefono"
-).value || "-") +
-"<br>" +
+        "Teléfono: " +
+        escapeHTML(
+            document.getElementById("negocioTelefono").value || "-"
+        ) +
+        "<br>" +
 
-"Email: " +
-(document.getElementById(
-"negocioEmail"
-).value || "-") +
-"<br>" +
+        "Email: " +
+        escapeHTML(
+            document.getElementById("negocioEmail").value || "-"
+        ) +
+        "<br>" +
 
-"Dirección: " +
-(document.getElementById(
-"negocioDireccion"
-).value || "-") +
-"<br>" +
+        "Dirección: " +
+        escapeHTML(
+            document.getElementById("negocioDireccion").value || "-"
+        ) +
+        "<br>" +
 
-"CUIT: " +
-(document.getElementById(
-"negocioCuit"
-).value || "-");
+        "CUIT: " +
+        escapeHTML(
+            document.getElementById("negocioCuit").value || "-"
+        );
 
 
-document.getElementById(
-"previewNumero"
-).textContent =
-String(numeroPresupuesto)
-.padStart(4,"0");
+    const numeroMostrar =
+        numeroPreview !== null
+            ? numeroPreview
+            : numeroPresupuesto;
 
 
-document.getElementById(
-"previewFecha"
-).textContent =
-document.getElementById(
-"fecha"
-).value || "-";
+    document.getElementById("previewNumero").textContent =
+        String(numeroMostrar).padStart(4, "0");
 
 
-document.getElementById(
-"previewCliente"
-).textContent =
-document.getElementById(
-"cliente"
-).value || "-";
+    document.getElementById("previewFecha").textContent =
+        document.getElementById("fecha").value || "-";
 
 
-document.getElementById(
-"previewTelefono"
-).textContent =
-document.getElementById(
-"telefono"
-).value || "-";
+    document.getElementById("previewCliente").textContent =
+        document.getElementById("cliente").value || "-";
 
 
-document.getElementById(
-"previewTrabajo"
-).textContent =
-document.getElementById(
-"trabajo"
-).value || "-";
+    document.getElementById("previewTelefono").textContent =
+        document.getElementById("telefono").value || "-";
 
 
-document.getElementById(
-"previewCondiciones"
-).textContent =
-document.getElementById(
-"condiciones"
-).value || "-";
+    document.getElementById("previewTrabajo").textContent =
+        document.getElementById("trabajo").value || "-";
 
 
-actualizarMaterialesPreview();
+    document.getElementById("previewCondiciones").textContent =
+        document.getElementById("condiciones").value || "-";
 
 
-let manoObra =
-parseFloat(
-document.getElementById(
-"manoObra"
-).value
-) || 0;
+    actualizarMaterialesPreview();
 
 
-document.getElementById(
-"previewManoObra"
-).textContent =
-manoObra.toFixed(2);
+    let manoObra =
+        parseFloat(
+            document.getElementById("manoObra").value
+        ) || 0;
 
 
-let total =
-parseFloat(
-document.getElementById(
-"total"
-).textContent
-) || 0;
+    document.getElementById("previewManoObra").textContent =
+        manoObra.toFixed(2);
 
 
-document.getElementById(
-"previewTotal"
-).textContent =
-total.toFixed(2);
+    let total = calcularTotal();
+
+
+    document.getElementById("previewTotal").textContent =
+        total.toFixed(2);
 
 }
 
 
 function actualizarMaterialesPreview() {
 
-const tbody =
-document.getElementById(
-"previewMateriales"
-);
-
-tbody.innerHTML = "";
+    const tbody =
+        document.getElementById("previewMateriales");
 
 
-materiales.forEach(
-material => {
-
-if(!material.nombre) return;
+    tbody.innerHTML = "";
 
 
-let subtotal =
-material.cantidad *
-material.precio;
+    materiales.forEach(
+        material => {
+
+            if (!material.nombre) return;
 
 
-let tr =
-document.createElement("tr");
+            let cantidad =
+                Number(material.cantidad) || 0;
 
 
-tr.innerHTML = `
-
-<td>${material.nombre}</td>
-
-<td>${material.cantidad}</td>
-
-<td>
-$${material.precio.toFixed(2)}
-</td>
-
-<td>
-$${subtotal.toFixed(2)}
-</td>
-
-`;
+            let precio =
+                Number(material.precio) || 0;
 
 
-tbody.appendChild(tr);
-
-});
-
-}
+            let subtotal =
+                cantidad * precio;
 
 
-/* GUARDAR */
-
-function guardarPresupuesto() {
-
-actualizarPreview();
+            let tr =
+                document.createElement("tr");
 
 
-let presupuesto = {
+            tr.innerHTML = `
 
-numero: numeroPresupuesto,
+                <td>
+                    ${escapeHTML(material.nombre)}
+                </td>
 
-negocio:
-document.getElementById("negocio").value,
+                <td>
+                    ${cantidad}
+                </td>
 
-negocioTelefono:
-document.getElementById("negocioTelefono").value,
+                <td>
+                    $${precio.toFixed(2)}
+                </td>
 
-negocioEmail:
-document.getElementById("negocioEmail").value,
+                <td>
+                    $${subtotal.toFixed(2)}
+                </td>
 
-negocioDireccion:
-document.getElementById("negocioDireccion").value,
-
-negocioCuit:
-document.getElementById("negocioCuit").value,
-
-cliente:
-document.getElementById("cliente").value,
-
-telefono:
-document.getElementById("telefono").value,
-
-trabajo:
-document.getElementById("trabajo").value,
-
-fecha:
-document.getElementById("fecha").value,
-
-materiales:
-materiales,
-
-manoObra:
-parseFloat(
-document.getElementById(
-"manoObra"
-).value
-) || 0,
-
-condiciones:
-document.getElementById(
-"condiciones"
-).value,
-
-total:
-parseFloat(
-document.getElementById(
-"total"
-).textContent
-) || 0
-
-};
+            `;
 
 
-let presupuestos =
-JSON.parse(
-localStorage.getItem(
-"presupuestos"
-)
-) || [];
+            tbody.appendChild(tr);
 
-
-presupuestos.push(presupuesto);
-
-
-localStorage.setItem(
-"presupuestos",
-JSON.stringify(presupuestos)
-);
-
-
-numeroPresupuesto++;
-
-
-localStorage.setItem(
-"numeroPresupuesto",
-numeroPresupuesto
-);
-
-
-mostrarPresupuestos();
-
-
-alert(
-"Presupuesto guardado correctamente."
-);
+        }
+    );
 
 }
 
 
-/* HISTORIAL */
+/* =====================================================
+   OBTENER PRESUPUESTO
+   ===================================================== */
 
-function mostrarPresupuestos() {
+function obtenerPresupuesto() {
 
-const contenedor =
-document.getElementById(
-"presupuestosGuardados"
-);
-
-const presupuestos =
-JSON.parse(
-localStorage.getItem(
-"presupuestos"
-)
-) || [];
+    actualizarPreview();
 
 
-contenedor.innerHTML = "";
+    return {
 
+        numero: numeroPresupuesto,
 
-if(presupuestos.length === 0) {
+        negocio:
+            document.getElementById("negocio").value,
 
-contenedor.innerHTML =
-"<p>No hay presupuestos guardados.</p>";
+        negocioTelefono:
+            document.getElementById("negocioTelefono").value,
 
-return;
+        negocioEmail:
+            document.getElementById("negocioEmail").value,
 
-}
+        negocioDireccion:
+            document.getElementById("negocioDireccion").value,
 
+        negocioCuit:
+            document.getElementById("negocioCuit").value,
 
-presupuestos
-.slice()
-.reverse()
-.forEach(
-(presupuesto,reverseIndex) => {
+        cliente:
+            document.getElementById("cliente").value,
 
-let index =
-presupuestos.length -
-1 -
-reverseIndex;
+        telefono:
+            document.getElementById("telefono").value,
 
+        trabajo:
+            document.getElementById("trabajo").value,
 
-let div =
-document.createElement("div");
+        fecha:
+            document.getElementById("fecha").value,
 
-div.className = "saved";
+        materiales:
+            JSON.parse(
+                JSON.stringify(materiales)
+            ),
 
+        manoObra:
+            parseFloat(
+                document.getElementById("manoObra").value
+            ) || 0,
 
-div.innerHTML = `
+        condiciones:
+            document.getElementById("condiciones").value,
 
-<strong>
-Presupuesto #${
-String(presupuesto.numero)
-.padStart(4,"0")
-}
-</strong>
+        total:
+            calcularTotal()
 
-<p>
-Cliente:
-${presupuesto.cliente || "Sin nombre"}
-</p>
-
-<p>
-Total:
-<strong>
-$${presupuesto.total.toFixed(2)}
-</strong>
-</p>
-
-<button
-class="btn-primary"
-onclick="
-cargarPresupuesto(${index})
-">
-👁️ Ver
-</button>
-
-<button
-class="btn-dark"
-onclick="
-cargarPresupuestoPDF(${index})
-">
-📄 PDF
-</button>
-
-<button
-class="btn-whatsapp"
-onclick="
-enviarPresupuestoGuardado(${index})
-">
-📱 WhatsApp
-</button>
-
-<button
-class="btn-danger"
-onclick="
-eliminarPresupuesto(${index})
-">
-🗑️ Eliminar
-</button>
-
-`;
-
-
-contenedor.appendChild(div);
-
-});
+    };
 
 }
 
 
-/* CARGAR */
+/* =====================================================
+   GUARDAR EN SUPABASE
+   ===================================================== */
 
-function cargarPresupuesto(index) {
+async function guardarEnSupabase(presupuesto) {
 
-const presupuestos =
-JSON.parse(
-localStorage.getItem(
-"presupuestos"
-)
-) || [];
+    if (!supabaseClient) {
 
+        throw new Error(
+            "Supabase no está conectado."
+        );
 
-const p =
-presupuestos[index];
+    }
 
 
-document.getElementById("negocio").value =
-p.negocio || "";
+    const datos = {
 
-document.getElementById("negocioTelefono").value =
-p.negocioTelefono || "";
+        negocioTelefono:
+            presupuesto.negocioTelefono,
 
-document.getElementById("negocioEmail").value =
-p.negocioEmail || "";
+        negocioEmail:
+            presupuesto.negocioEmail,
 
-document.getElementById("negocioDireccion").value =
-p.negocioDireccion || "";
+        negocioDireccion:
+            presupuesto.negocioDireccion,
 
-document.getElementById("negocioCuit").value =
-p.negocioCuit || "";
+        negocioCuit:
+            presupuesto.negocioCuit,
 
-document.getElementById("cliente").value =
-p.cliente || "";
+        telefono:
+            presupuesto.telefono,
 
-document.getElementById("telefono").value =
-p.telefono || "";
+        fecha:
+            presupuesto.fecha,
 
-document.getElementById("trabajo").value =
-p.trabajo || "";
+        materiales:
+            presupuesto.materiales,
 
-document.getElementById("fecha").value =
-p.fecha || "";
+        manoObra:
+            presupuesto.manoObra,
 
-document.getElementById("manoObra").value =
-p.manoObra || 0;
+        condiciones:
+            presupuesto.condiciones
 
-document.getElementById("condiciones").value =
-p.condiciones || "";
+    };
 
-materiales =
-p.materiales || [];
 
-numeroPresupuesto =
-p.numero;
+    const registro = {
 
-mostrarMateriales();
+        numero:
+            presupuesto.numero,
 
-actualizarPreview();
+        negocio:
+            presupuesto.negocio,
 
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
+        trabajo:
+            presupuesto.trabajo,
+
+        cliente:
+            presupuesto.cliente,
+
+        total:
+            presupuesto.total,
+
+        datos:
+            datos
+
+    };
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("presupuestos")
+            .insert([registro])
+            .select()
+            .single();
+
+
+    if (error) {
+
+        console.error(
+            "❌ Error Supabase:",
+            error
+        );
+
+        throw error;
+
+    }
+
+
+    return data;
 
 }
 
 
-/* PDF */
+/* =====================================================
+   OBTENER PRESUPUESTOS
+   ===================================================== */
+
+async function obtenerPresupuestosSupabase() {
+
+    if (!supabaseClient) {
+
+        throw new Error(
+            "Supabase no está conectado."
+        );
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("presupuestos")
+            .select("*")
+            .order(
+                "numero",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "❌ Error cargando historial:",
+            error
+        );
+
+        throw error;
+
+    }
+
+
+    return data || [];
+
+}
+
+
+/* =====================================================
+   PRÓXIMO NÚMERO
+   ===================================================== */
+
+async function actualizarNumeroPresupuesto() {
+
+    try {
+
+        const presupuestos =
+            await obtenerPresupuestosSupabase();
+
+
+        if (presupuestos.length === 0) {
+
+            numeroPresupuesto = 1;
+
+            return;
+
+        }
+
+
+        let mayor = 0;
+
+
+        presupuestos.forEach(
+            p => {
+
+                const numero =
+                    Number(p.numero) || 0;
+
+
+                if (numero > mayor) {
+
+                    mayor = numero;
+
+                }
+
+            }
+        );
+
+
+        numeroPresupuesto =
+            mayor + 1;
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ No se pudo determinar el próximo número:",
+            error
+        );
+
+        numeroPresupuesto = 1;
+
+    }
+
+}
+
+
+/* =====================================================
+   MOSTRAR HISTORIAL
+   ===================================================== */
+
+async function mostrarPresupuestos() {
+
+    const contenedor =
+        document.getElementById(
+            "presupuestosGuardados"
+        );
+
+
+    if (!supabaseClient) {
+
+        contenedor.innerHTML = `
+            <p>
+                ⚠️ Supabase no está conectado.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    contenedor.innerHTML = `
+        <p>
+            ☁️ Cargando presupuestos desde Supabase...
+        </p>
+    `;
+
+
+    try {
+
+        const presupuestos =
+            await obtenerPresupuestosSupabase();
+
+
+        contenedor.innerHTML = "";
+
+
+        if (presupuestos.length === 0) {
+
+            contenedor.innerHTML =
+                "<p>No hay presupuestos guardados.</p>";
+
+            return;
+
+        }
+
+
+        presupuestos.forEach(
+            presupuesto => {
+
+                const datos =
+                    presupuesto.datos || {};
+
+
+                const telefono =
+                    datos.telefono || "";
+
+
+                const fecha =
+                    datos.fecha || "";
+
+
+                const div =
+                    document.createElement("div");
+
+
+                div.className = "saved";
+
+
+                const numero =
+                    Number(presupuesto.numero) || 0;
+
+
+                div.innerHTML = `
+
+                    <strong>
+                        Presupuesto #${String(numero).padStart(4, "0")}
+                    </strong>
+
+                    <p>
+                        Cliente:
+                        ${escapeHTML(
+                            presupuesto.cliente ||
+                            "Sin nombre"
+                        )}
+                    </p>
+
+                    <p>
+                        Trabajo:
+                        ${escapeHTML(
+                            presupuesto.trabajo ||
+                            "-"
+                        )}
+                    </p>
+
+                    <p>
+                        Fecha:
+                        ${escapeHTML(
+                            fecha || "-"
+                        )}
+                    </p>
+
+                    <p>
+                        Total:
+                        <strong>
+                            $${Number(
+                                presupuesto.total || 0
+                            ).toFixed(2)}
+                        </strong>
+                    </p>
+
+                `;
+
+
+                const btnVer =
+                    document.createElement("button");
+
+                btnVer.className =
+                    "btn-primary";
+
+                btnVer.textContent =
+                    "👁️ Ver";
+
+                btnVer.onclick =
+                    function() {
+
+                        cargarPresupuestoSupabase(
+                            presupuesto
+                        );
+
+                    };
+
+
+                const btnWhatsApp =
+                    document.createElement("button");
+
+                btnWhatsApp.className =
+                    "btn-whatsapp";
+
+                btnWhatsApp.textContent =
+                    "📱 WhatsApp";
+
+                btnWhatsApp.onclick =
+                    function() {
+
+                        enviarPresupuestoGuardadoSupabase(
+                            presupuesto
+                        );
+
+                    };
+
+
+                const btnEliminar =
+                    document.createElement("button");
+
+                btnEliminar.className =
+                    "btn-danger";
+
+                btnEliminar.textContent =
+                    "🗑️ Eliminar";
+
+                btnEliminar.onclick =
+                    function() {
+
+                        eliminarPresupuestoSupabase(
+                            numero
+                        );
+
+                    };
+
+
+                div.appendChild(btnVer);
+
+                div.appendChild(btnWhatsApp);
+
+                div.appendChild(btnEliminar);
+
+
+                contenedor.appendChild(div);
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        contenedor.innerHTML = `
+
+            <p style="color:#dc2626;">
+                ❌ No se pudo cargar el historial desde Supabase.
+            </p>
+
+            <p>
+                ${escapeHTML(error.message)}
+            </p>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   GUARDAR PRESUPUESTO
+   ===================================================== */
+
+async function guardarPresupuesto() {
+
+    numeroPreview = null;
+
+
+    const presupuesto =
+        obtenerPresupuesto();
+
+
+    if (!supabaseClient) {
+
+        alert(
+            "⚠️ Supabase no está conectado. Revisá tu Publishable Key."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        supabaseStatus.textContent =
+            "☁️ Guardando en Supabase...";
+
+        supabaseStatus.className =
+            "status loading";
+
+
+        await guardarEnSupabase(
+            presupuesto
+        );
+
+
+        numeroPresupuesto =
+            presupuesto.numero + 1;
+
+
+        numeroPreview = null;
+
+
+        supabaseStatus.textContent =
+            "☁️ Presupuesto guardado correctamente en Supabase.";
+
+        supabaseStatus.className =
+            "status ok";
+
+
+        await mostrarPresupuestos();
+
+
+        actualizarPreview();
+
+
+        alert(
+            "✅ Presupuesto guardado correctamente en Supabase."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Error guardando:",
+            error
+        );
+
+
+        supabaseStatus.textContent =
+            "❌ Error al guardar en Supabase.";
+
+        supabaseStatus.className =
+            "status error";
+
+
+        alert(
+            "❌ No se pudo guardar en Supabase.\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CARGAR PRESUPUESTO
+   ===================================================== */
+
+function cargarPresupuestoSupabase(presupuesto) {
+
+    if (!presupuesto) return;
+
+
+    const datos =
+        presupuesto.datos || {};
+
+
+    document.getElementById("negocio").value =
+        presupuesto.negocio || "";
+
+
+    document.getElementById("negocioTelefono").value =
+        datos.negocioTelefono || "";
+
+
+    document.getElementById("negocioEmail").value =
+        datos.negocioEmail || "";
+
+
+    document.getElementById("negocioDireccion").value =
+        datos.negocioDireccion || "";
+
+
+    document.getElementById("negocioCuit").value =
+        datos.negocioCuit || "";
+
+
+    document.getElementById("cliente").value =
+        presupuesto.cliente || "";
+
+
+    document.getElementById("telefono").value =
+        datos.telefono || "";
+
+
+    document.getElementById("trabajo").value =
+        presupuesto.trabajo || "";
+
+
+    document.getElementById("fecha").value =
+        datos.fecha || "";
+
+
+    document.getElementById("manoObra").value =
+        datos.manoObra || 0;
+
+
+    document.getElementById("condiciones").value =
+        datos.condiciones || "";
+
+
+    materiales =
+        Array.isArray(datos.materiales)
+            ? datos.materiales
+            : [];
+
+
+    numeroPreview =
+        Number(presupuesto.numero) || 1;
+
+
+    mostrarMateriales();
+
+    actualizarPreview();
+
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+/* =====================================================
+   PDF
+   ===================================================== */
 
 function generarPDF() {
 
-actualizarPreview();
-
-setTimeout(
-function() {
-window.print();
-},
-200
-);
-
-}
+    actualizarPreview();
 
 
-function cargarPresupuestoPDF(index) {
+    setTimeout(
+        function() {
 
-cargarPresupuesto(index);
+            window.print();
 
-setTimeout(
-function() {
-generarPDF();
-},
-400
-);
+        },
+        200
+    );
 
 }
 
 
-/* WHATSAPP */
+/* =====================================================
+   WHATSAPP
+   ===================================================== */
 
 function enviarWhatsApp() {
 
-actualizarPreview();
+    actualizarPreview();
 
 
-let telefono =
-document.getElementById(
-"telefono"
-).value.replace(
-/\D/g,
-""
-);
+    let telefono =
+        document.getElementById("telefono").value
+            .replace(/\D/g, "");
 
 
-if(!telefono) {
+    if (!telefono) {
 
-alert(
-"Ingresá primero el WhatsApp del cliente."
-);
+        alert(
+            "Ingresá primero el WhatsApp del cliente."
+        );
 
-return;
+        return;
 
-}
-
-
-let cliente =
-document.getElementById(
-"cliente"
-).value ||
-"cliente";
+    }
 
 
-let negocio =
-document.getElementById(
-"negocio"
-).value ||
-"nuestro negocio";
+    let cliente =
+        document.getElementById("cliente").value ||
+        "cliente";
 
 
-let trabajo =
-document.getElementById(
-"trabajo"
-).value ||
-"-";
+    let negocio =
+        document.getElementById("negocio").value ||
+        "nuestro negocio";
 
 
-let total =
-document.getElementById(
-"total"
-).textContent;
+    let trabajo =
+        document.getElementById("trabajo").value ||
+        "-";
 
 
-let numero =
-String(numeroPresupuesto)
-.padStart(4,"0");
+    let total =
+        document.getElementById("total").textContent;
 
 
-let mensaje =
+    let numero =
+        String(
+            numeroPreview !== null
+                ? numeroPreview
+                : numeroPresupuesto
+        ).padStart(4, "0");
+
+
+    let mensaje =
 
 `Hola ${cliente}! 👋
 
@@ -1339,160 +2002,240 @@ $${total}
 Muchas gracias por confiar en nosotros.`;
 
 
-let url =
-"https://wa.me/" +
-telefono +
-"?text=" +
-encodeURIComponent(mensaje);
+    let url =
+        "https://wa.me/" +
+        telefono +
+        "?text=" +
+        encodeURIComponent(mensaje);
 
 
-window.open(
-url,
-"_blank"
-);
-
-}
-
-
-/* WHATSAPP HISTORIAL */
-
-function enviarPresupuestoGuardado(index) {
-
-const presupuestos =
-JSON.parse(
-localStorage.getItem(
-"presupuestos"
-)
-) || [];
-
-
-const p =
-presupuestos[index];
-
-
-let telefono =
-(p.telefono || "")
-.replace(
-/\D/g,
-""
-);
-
-
-if(!telefono) {
-
-alert(
-"Este presupuesto no tiene WhatsApp."
-);
-
-return;
+    window.open(
+        url,
+        "_blank"
+    );
 
 }
 
 
-let mensaje =
+/* =====================================================
+   WHATSAPP HISTORIAL
+   ===================================================== */
+
+function enviarPresupuestoGuardadoSupabase(
+    presupuesto
+) {
+
+    if (!presupuesto) return;
+
+
+    const datos =
+        presupuesto.datos || {};
+
+
+    let telefono =
+        (
+            datos.telefono || ""
+        ).replace(/\D/g, "");
+
+
+    if (!telefono) {
+
+        alert(
+            "Este presupuesto no tiene WhatsApp."
+        );
+
+        return;
+
+    }
+
+
+    let mensaje =
 
 `Hola ${
-p.cliente || "cliente"
+    presupuesto.cliente ||
+    "cliente"
 }! 👋
 
 Te envío el presupuesto de ${
-p.negocio || "nuestro negocio"
+    presupuesto.negocio ||
+    "nuestro negocio"
 }.
 
 📋 Presupuesto #${
-String(p.numero)
-.padStart(4,"0")
+    String(
+        presupuesto.numero
+    ).padStart(4, "0")
 }
 
 🔧 Trabajo:
-${p.trabajo || "-"}
+${presupuesto.trabajo || "-"}
 
 💰 Total:
-$${p.total.toFixed(2)}
+$${Number(
+    presupuesto.total || 0
+).toFixed(2)}
 
 Muchas gracias por confiar en nosotros.`;
 
 
-let url =
-"https://wa.me/" +
-telefono +
-"?text=" +
-encodeURIComponent(mensaje);
+    let url =
+        "https://wa.me/" +
+        telefono +
+        "?text=" +
+        encodeURIComponent(mensaje);
 
 
-window.open(
-url,
-"_blank"
-);
-
-}
-
-
-/* ELIMINAR */
-
-function eliminarPresupuesto(index) {
-
-if(
-!confirm(
-"¿Eliminar este presupuesto?"
-)
-) return;
-
-
-let presupuestos =
-JSON.parse(
-localStorage.getItem(
-"presupuestos"
-)
-) || [];
-
-
-presupuestos.splice(
-index,
-1
-);
-
-
-localStorage.setItem(
-"presupuestos",
-JSON.stringify(
-presupuestos
-)
-);
-
-
-mostrarPresupuestos();
+    window.open(
+        url,
+        "_blank"
+    );
 
 }
 
 
-/* EVENTOS */
+/* =====================================================
+   ELIMINAR
+   ===================================================== */
+
+async function eliminarPresupuestoSupabase(numero) {
+
+    if (
+        !confirm(
+            "¿Eliminar este presupuesto de Supabase?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    if (!supabaseClient) {
+
+        alert(
+            "Supabase no está conectado."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("presupuestos")
+                .delete()
+                .eq("numero", numero);
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        await actualizarNumeroPresupuesto();
+
+        await mostrarPresupuestos();
+
+
+        supabaseStatus.textContent =
+            "☁️ Presupuesto eliminado de Supabase.";
+
+        supabaseStatus.className =
+            "status ok";
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Error eliminando:",
+            error
+        );
+
+
+        alert(
+            "❌ No se pudo eliminar.\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   EVENTOS
+   ===================================================== */
 
 document
-.getElementById("manoObra")
-.addEventListener(
-"input",
-function() {
+    .getElementById("manoObra")
+    .addEventListener(
+        "input",
+        function() {
 
-calcularTotal();
-actualizarPreview();
+            calcularTotal();
 
-});
+            actualizarPreview();
+
+        }
+    );
 
 
-/* INICIO */
+/* =====================================================
+   INICIO
+   ===================================================== */
 
-cargarDatosNegocio();
+async function iniciarPresuFacil() {
 
-agregarMaterial();
+    console.log(
+        "🚀 PresuFácil iniciando..."
+    );
 
-mostrarPresupuestos();
 
-calcularTotal();
+    cargarDatosNegocio();
 
-actualizarPreview();
+
+    agregarMaterial();
+
+
+    calcularTotal();
+
+
+    actualizarPreview();
+
+
+    if (!supabaseClient) {
+
+        console.warn(
+            "⚠️ PresuFácil funciona localmente, pero Supabase no está conectado."
+        );
+
+        return;
+
+    }
+
+
+    await actualizarNumeroPresupuesto();
+
+
+    await mostrarPresupuestos();
+
+
+    actualizarPreview();
+
+}
+
+
+iniciarPresuFacil();
 
 </script>
 
 </body>
 </html>
+```
