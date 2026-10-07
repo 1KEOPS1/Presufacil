@@ -73,6 +73,9 @@ body {
     background: #f3f4f6;
     color: #222;
     overflow-x: hidden;
+    transition:
+        background 0.25s ease,
+        color 0.25s ease;
 }
 
 button,
@@ -96,12 +99,60 @@ select {
 
 
 /* =========================================================
+   BOTÓN LUZ NOCTURNA
+========================================================= */
+
+#themeToggle {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 11000;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    min-height: 42px;
+    padding: 9px 14px;
+
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 999px;
+
+    background: rgba(17,24,39,0.94);
+    color: white;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,0.18);
+
+    backdrop-filter: blur(8px);
+
+    transition:
+        background 0.2s,
+        transform 0.2s;
+}
+
+#themeToggle:hover {
+    background: #1f2937;
+    transform: translateY(-1px);
+}
+
+#themeToggle:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================================================
    PANTALLA DE BIENVENIDA / LOGIN
 ========================================================= */
 
 #authOverlay {
     position: fixed;
     inset: 0;
+
     background:
         radial-gradient(
             circle at top,
@@ -109,55 +160,204 @@ select {
             #f3f4f6 45%,
             #e5e7eb 100%
         );
+
     display: flex;
     justify-content: center;
     align-items: center;
+
     z-index: 9999;
-    padding: 20px;
+
+    padding: 25px 20px;
+
     overflow-y: auto;
+
+    transition:
+        background 0.25s ease;
 }
 
 .authBox {
     width: 100%;
-    max-width: 440px;
+    max-width: 470px;
+
     background: rgba(255,255,255,0.97);
-    padding: 38px 34px 32px;
-    border-radius: 24px;
+
+    padding: 34px 34px 30px;
+
+    border-radius: 26px;
+
     box-shadow:
-        0 20px 60px rgba(15,23,42,0.16),
-        0 4px 15px rgba(15,23,42,0.06);
+        0 25px 70px rgba(15,23,42,0.18),
+        0 4px 18px rgba(15,23,42,0.06);
+
     text-align: center;
-    border: 1px solid rgba(255,255,255,0.8);
+
+    border: 1px solid rgba(255,255,255,0.9);
+
+    transition:
+        background 0.25s ease,
+        border 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
 
 /* =========================================================
-   LOGO
+   PRESENTACIÓN COMERCIAL
 ========================================================= */
 
+.authBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 7px 12px;
+
+    margin-bottom: 16px;
+
+    border-radius: 999px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+}
+
 .authLogo {
-    width: 92px;
-    height: 92px;
+    width: 88px;
+    height: 88px;
+
     object-fit: contain;
+
     display: block;
-    margin: 0 auto 16px;
+
+    margin: 0 auto 14px;
+
     border-radius: 20px;
+
+    box-shadow:
+        0 8px 25px rgba(37,99,235,0.14);
 }
 
 .authBrand {
     margin: 0;
-    font-size: 34px;
+
+    font-size: 36px;
+
     font-weight: 800;
-    letter-spacing: -1px;
+
+    letter-spacing: -1.2px;
+
     color: #111827;
 }
 
 .authTagline {
-    margin: 9px auto 28px;
-    max-width: 330px;
-    font-size: 16px;
+    margin: 9px auto 8px;
+
+    max-width: 360px;
+
+    font-size: 18px;
+
+    line-height: 1.45;
+
+    font-weight: 600;
+
+    color: #334155;
+}
+
+.authSubtagline {
+    margin: 0 auto 24px;
+
+    max-width: 350px;
+
+    font-size: 13px;
+
     line-height: 1.5;
+
     color: #64748b;
+}
+
+
+/* =========================================================
+   FUNCIONES COMERCIALES
+========================================================= */
+
+.authFeatures {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 9px;
+
+    margin: 0 0 25px;
+}
+
+.authFeature {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    text-align: left;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    color: #334155;
+
+    padding: 11px 12px;
+
+    border-radius: 11px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition:
+        background 0.2s,
+        border 0.2s;
+}
+
+.authFeatureIcon {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    background: #eff6ff;
+
+    font-size: 16px;
+}
+
+.authFeatureText {
+    min-width: 0;
+}
+
+.authFeatureTitle {
+    display: block;
+
+    color: #1e293b;
+
+    font-size: 12px;
+
+    margin-bottom: 2px;
+}
+
+.authFeatureDescription {
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    font-weight: 500;
 }
 
 
@@ -172,20 +372,34 @@ select {
 
 .authBox input {
     width: 100%;
+
     padding: 14px 15px;
+
     margin-bottom: 12px;
+
     border: 1px solid #d1d5db;
+
     border-radius: 10px;
+
     background: #f9fafb;
+
     color: #111827;
+
     font-size: 15px;
+
     outline: none;
-    transition: 0.2s;
+
+    transition:
+        border 0.2s,
+        background 0.2s,
+        box-shadow 0.2s;
 }
 
 .authBox input:focus {
     border-color: #2563eb;
+
     background: white;
+
     box-shadow:
         0 0 0 3px rgba(37,99,235,0.10);
 }
@@ -197,20 +411,31 @@ select {
 
 .authBtn {
     width: 100%;
+
     padding: 14px;
+
     border: 0;
+
     border-radius: 10px;
+
     background: #2563eb;
+
     color: white;
+
     font-weight: bold;
+
     margin-top: 5px;
+
     min-height: 50px;
+
     font-size: 15px;
+
     transition: 0.2s;
 }
 
 .authBtn:hover {
     background: #1d4ed8;
+
     transform: translateY(-1px);
 }
 
@@ -225,20 +450,31 @@ select {
 
 .authSecondary {
     width: 100%;
+
     padding: 14px;
+
     border: 1px solid #d1d5db;
+
     border-radius: 10px;
+
     background: white;
+
     color: #1f2937;
+
     font-weight: bold;
+
     margin-top: 10px;
+
     min-height: 50px;
+
     font-size: 15px;
+
     transition: 0.2s;
 }
 
 .authSecondary:hover {
     background: #f8fafc;
+
     border-color: #9ca3af;
 }
 
@@ -253,18 +489,28 @@ select {
 
 .authDivider {
     display: flex;
+
     align-items: center;
+
     gap: 10px;
-    margin: 24px 0 18px;
+
+    margin: 23px 0 15px;
+
     color: #94a3b8;
-    font-size: 12px;
+
+    font-size: 11px;
+
+    font-weight: 600;
 }
 
 .authDivider::before,
 .authDivider::after {
     content: "";
+
     flex: 1;
+
     height: 1px;
+
     background: #e5e7eb;
 }
 
@@ -275,23 +521,37 @@ select {
 
 .apkDownload {
     display: flex;
+
     width: 100%;
-    min-height: 50px;
+
+    min-height: 52px;
+
     padding: 13px 16px;
+
     border-radius: 10px;
+
     background: #111827;
+
     color: white;
+
     text-decoration: none;
+
     text-align: center;
+
     font-weight: bold;
+
     align-items: center;
+
     justify-content: center;
+
     transition: 0.2s;
+
     cursor: pointer;
 }
 
 .apkDownload:hover {
     background: #1f2937;
+
     transform: translateY(-1px);
 }
 
@@ -301,32 +561,14 @@ select {
 
 .apkDescription {
     text-align: center;
-    font-size: 12px;
-    color: #94a3b8;
-    margin: 9px 0 0;
-    line-height: 1.5;
-}
 
-
-/* =========================================================
-   FUNCIONES
-========================================================= */
-
-.authFeatures {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 7px;
-    margin-top: 23px;
-}
-
-.authFeature {
-    background: #f1f5f9;
-    color: #475569;
-    padding: 7px 10px;
-    border-radius: 999px;
     font-size: 11px;
-    font-weight: 600;
+
+    color: #94a3b8;
+
+    margin: 8px 0 0;
+
+    line-height: 1.5;
 }
 
 
@@ -335,11 +577,16 @@ select {
 ========================================================= */
 
 .authMessage {
-    margin-top: 17px;
+    margin-top: 15px;
+
     text-align: center;
+
     font-size: 14px;
+
     overflow-wrap: anywhere;
+
     color: #475569;
+
     min-height: 20px;
 }
 
@@ -354,31 +601,45 @@ select {
 
 header {
     background: #111827;
+
     color: white;
+
     padding: 16px 20px;
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
+
     gap: 15px;
 }
 
 header h1 {
     margin: 0;
+
     font-size: 22px;
 }
 
 .userPanel {
     display: flex;
+
     align-items: center;
+
     gap: 10px;
+
     font-size: 14px;
 }
 
 .logoutBtn {
     background: #dc2626;
+
     border: 0;
+
     color: white;
+
     padding: 8px 12px;
+
     border-radius: 7px;
 }
 
@@ -389,15 +650,25 @@ header h1 {
 
 .apkHeaderBtn {
     display: inline-flex;
+
     align-items: center;
+
     justify-content: center;
+
     background: #16a34a;
+
     color: white;
+
     text-decoration: none;
+
     padding: 8px 12px;
+
     border-radius: 7px;
+
     font-weight: bold;
+
     white-space: nowrap;
+
     transition: 0.2s;
 }
 
@@ -412,17 +683,25 @@ header h1 {
 
 .container {
     width: 100%;
+
     max-width: 1200px;
+
     margin: auto;
+
     padding: 20px;
 }
 
 .card {
     background: white;
+
     border-radius: 14px;
+
     padding: 20px;
+
     margin-bottom: 20px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+
+    box-shadow:
+        0 3px 15px rgba(0,0,0,0.06);
 }
 
 .card h2 {
@@ -431,31 +710,41 @@ header h1 {
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
     gap: 15px;
 }
 
 .field {
     display: flex;
+
     flex-direction: column;
+
     gap: 6px;
 }
 
 .field label {
     font-weight: bold;
+
     font-size: 14px;
 }
 
 .field input,
 .field textarea {
     width: 100%;
+
     padding: 11px;
+
     border: 1px solid #ccc;
+
     border-radius: 8px;
 }
 
 .field textarea {
     min-height: 80px;
+
     resize: vertical;
 }
 
@@ -466,45 +755,66 @@ header h1 {
 
 .materiales {
     display: flex;
+
     flex-direction: column;
+
     gap: 12px;
 }
 
 .material {
     border: 1px solid #ddd;
+
     border-radius: 10px;
+
     padding: 12px;
+
     background: #fafafa;
 }
 
 .materialGrid {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr auto;
+
+    grid-template-columns:
+        2fr 1fr 1fr auto;
+
     gap: 10px;
+
     align-items: end;
 }
 
 .material input {
     width: 100%;
+
     padding: 10px;
+
     border: 1px solid #ccc;
+
     border-radius: 7px;
 }
 
 .removeMaterial {
     background: #dc2626;
+
     color: white;
+
     border: 0;
+
     border-radius: 7px;
+
     padding: 10px 12px;
 }
 
 .addMaterial {
     background: #16a34a;
+
     color: white;
+
     border: 0;
+
     border-radius: 8px;
+
     padding: 11px 16px;
+
     margin-top: 10px;
 }
 
@@ -515,43 +825,65 @@ header h1 {
 
 .actions {
     display: flex;
+
     flex-wrap: wrap;
+
     gap: 10px;
 }
 
 .primaryBtn {
     background: #2563eb;
+
     color: white;
+
     border: 0;
+
     padding: 12px 18px;
+
     border-radius: 8px;
+
     font-weight: bold;
 }
 
 .successBtn {
     background: #16a34a;
+
     color: white;
+
     border: 0;
+
     padding: 12px 18px;
+
     border-radius: 8px;
+
     font-weight: bold;
 }
 
 .whatsappBtn {
     background: #25D366;
+
     color: white;
+
     border: 0;
+
     padding: 12px 18px;
+
     border-radius: 8px;
+
     font-weight: bold;
 }
 
 .dangerBtn {
     background: #dc2626;
+
     color: white;
+
     border: 0;
+
     padding: 12px 18px;
+
     border-radius: 8px;
+
     font-weight: bold;
 }
 
@@ -562,18 +894,29 @@ header h1 {
 
 #preview {
     background: white;
+
+    color: #222;
+
     padding: 30px;
+
     border-radius: 10px;
+
     min-height: 500px;
+
     overflow: hidden;
 }
 
 .previewHeader {
     display: flex;
+
     justify-content: space-between;
+
     border-bottom: 2px solid #222;
+
     padding-bottom: 15px;
+
     margin-bottom: 20px;
+
     gap: 20px;
 }
 
@@ -587,35 +930,48 @@ header h1 {
 
 .previewClient {
     background: #f8fafc;
+
     padding: 15px;
+
     border-radius: 8px;
+
     margin-bottom: 20px;
+
     overflow-wrap: anywhere;
 }
 
 .previewTable {
     width: 100%;
+
     border-collapse: collapse;
 }
 
 .previewTable th,
 .previewTable td {
     border-bottom: 1px solid #ddd;
+
     padding: 10px;
+
     text-align: left;
 }
 
 .previewTotal {
     text-align: right;
+
     font-size: 22px;
+
     font-weight: bold;
+
     margin-top: 20px;
 }
 
 .previewConditions {
     margin-top: 25px;
+
     padding-top: 15px;
+
     border-top: 1px solid #ddd;
+
     overflow-wrap: anywhere;
 }
 
@@ -626,15 +982,21 @@ header h1 {
 
 .previewActions {
     display: flex;
+
     flex-wrap: wrap;
+
     gap: 10px;
+
     margin-top: 30px;
+
     padding-top: 20px;
+
     border-top: 2px solid #ddd;
 }
 
 .previewActions button {
     flex: 1;
+
     min-width: 180px;
 }
 
@@ -645,29 +1007,41 @@ header h1 {
 
 .historyItem {
     border: 1px solid #ddd;
+
     border-radius: 10px;
+
     padding: 15px;
+
     margin-bottom: 10px;
 }
 
 .historyInfo {
     display: flex;
+
     justify-content: space-between;
+
     gap: 10px;
+
     flex-wrap: wrap;
 }
 
 .historyActions {
     display: flex;
+
     gap: 8px;
+
     flex-wrap: wrap;
+
     margin-top: 10px;
 }
 
 .smallBtn {
     padding: 8px 12px;
+
     border: 0;
+
     border-radius: 7px;
+
     color: white;
 }
 
@@ -690,22 +1064,35 @@ header h1 {
 
 #pdfModal {
     display: none;
+
     position: fixed;
+
     inset: 0;
+
     background: rgba(0,0,0,0.65);
+
     z-index: 5000;
+
     justify-content: center;
+
     align-items: center;
+
     padding: 20px;
+
     overflow-y: auto;
 }
 
 .pdfModalBox {
     background: white;
+
     width: 100%;
+
     max-width: 500px;
+
     border-radius: 15px;
+
     padding: 25px;
+
     text-align: center;
 }
 
@@ -715,8 +1102,185 @@ header h1 {
 
 .pdfModalActions {
     display: flex;
+
     flex-direction: column;
+
     gap: 10px;
+}
+
+
+/* =========================================================
+   MODO OSCURO
+========================================================= */
+
+body.darkMode {
+    background: #0f172a;
+
+    color: #e5e7eb;
+}
+
+body.darkMode #authOverlay {
+    background:
+        radial-gradient(
+            circle at top,
+            #172554 0%,
+            #0f172a 48%,
+            #020617 100%
+        );
+}
+
+body.darkMode .authBox {
+    background: rgba(15,23,42,0.97);
+
+    border-color: rgba(148,163,184,0.12);
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,0.45),
+        0 4px 18px rgba(0,0,0,0.25);
+}
+
+body.darkMode .authBrand {
+    color: #f8fafc;
+}
+
+body.darkMode .authTagline {
+    color: #e2e8f0;
+}
+
+body.darkMode .authSubtagline {
+    color: #94a3b8;
+}
+
+body.darkMode .authBadge {
+    background: rgba(37,99,235,0.18);
+
+    color: #93c5fd;
+}
+
+body.darkMode .authFeature {
+    background: #111827;
+
+    border-color: #1e293b;
+
+    color: #cbd5e1;
+}
+
+body.darkMode .authFeatureIcon {
+    background: #172554;
+}
+
+body.darkMode .authFeatureTitle {
+    color: #e2e8f0;
+}
+
+body.darkMode .authFeatureDescription {
+    color: #64748b;
+}
+
+body.darkMode .authBox input {
+    background: #111827;
+
+    border-color: #334155;
+
+    color: #f8fafc;
+}
+
+body.darkMode .authBox input::placeholder {
+    color: #64748b;
+}
+
+body.darkMode .authBox input:focus {
+    background: #0f172a;
+
+    border-color: #3b82f6;
+}
+
+body.darkMode .authSecondary {
+    background: #111827;
+
+    border-color: #334155;
+
+    color: #e5e7eb;
+}
+
+body.darkMode .authSecondary:hover {
+    background: #1e293b;
+
+    border-color: #475569;
+}
+
+body.darkMode .authDivider::before,
+body.darkMode .authDivider::after {
+    background: #334155;
+}
+
+body.darkMode .authMessage {
+    color: #cbd5e1;
+}
+
+body.darkMode .authSubtagline {
+    color: #94a3b8;
+}
+
+body.darkMode .card {
+    background: #111827;
+
+    color: #e5e7eb;
+
+    box-shadow:
+        0 3px 15px rgba(0,0,0,0.22);
+}
+
+body.darkMode .field input,
+body.darkMode .field textarea {
+    background: #0f172a;
+
+    border-color: #334155;
+
+    color: #f8fafc;
+}
+
+body.darkMode .field input::placeholder,
+body.darkMode .field textarea::placeholder {
+    color: #64748b;
+}
+
+body.darkMode .material {
+    background: #0f172a;
+
+    border-color: #334155;
+}
+
+body.darkMode .material input {
+    background: #111827;
+
+    border-color: #334155;
+
+    color: #f8fafc;
+}
+
+body.darkMode .historyItem {
+    border-color: #334155;
+
+    background: #111827;
+}
+
+body.darkMode .pdfModalBox {
+    background: #111827;
+
+    color: #e5e7eb;
+}
+
+body.darkMode #themeToggle {
+    background: #f8fafc;
+
+    color: #111827;
+
+    border-color: rgba(255,255,255,0.4);
+}
+
+body.darkMode #themeToggle:hover {
+    background: white;
 }
 
 
@@ -726,20 +1290,34 @@ header h1 {
 
 @media (max-width: 700px) {
 
+    #themeToggle {
+        top: 10px;
+        right: 10px;
+
+        min-height: 40px;
+
+        padding: 8px 11px;
+
+        font-size: 12px;
+    }
+
     #authOverlay {
-        padding: 14px;
+        padding: 60px 14px 18px;
     }
 
     .authBox {
         max-width: 430px;
-        padding: 30px 22px 25px;
+
+        padding: 28px 22px 24px;
+
         border-radius: 20px;
     }
 
     .authLogo {
-        width: 78px;
-        height: 78px;
-        margin-bottom: 13px;
+        width: 76px;
+        height: 76px;
+
+        margin-bottom: 12px;
     }
 
     .authBrand {
@@ -747,12 +1325,47 @@ header h1 {
     }
 
     .authTagline {
+        font-size: 15px;
+
+        margin-bottom: 7px;
+    }
+
+    .authSubtagline {
+        font-size: 12px;
+
+        margin-bottom: 20px;
+    }
+
+    .authFeatures {
+        gap: 7px;
+
+        margin-bottom: 20px;
+    }
+
+    .authFeature {
+        padding: 9px;
+
+        gap: 7px;
+    }
+
+    .authFeatureIcon {
+        width: 27px;
+        height: 27px;
+
         font-size: 14px;
-        margin-bottom: 23px;
+    }
+
+    .authFeatureTitle {
+        font-size: 11px;
+    }
+
+    .authFeatureDescription {
+        font-size: 9px;
     }
 
     .authBox input {
         min-height: 48px;
+
         font-size: 16px;
     }
 
@@ -760,12 +1373,10 @@ header h1 {
     .authSecondary,
     .apkDownload {
         min-height: 49px;
+
         font-size: 15px;
     }
 
-    .authFeatures {
-        margin-top: 19px;
-    }
 }
 
 
@@ -781,64 +1392,91 @@ header h1 {
 
     header {
         padding: 14px 16px;
-        padding-top: calc(14px + env(safe-area-inset-top));
+
+        padding-top:
+            calc(
+                14px +
+                env(safe-area-inset-top)
+            );
+
         flex-direction: column;
+
         align-items: stretch;
+
         gap: 10px;
     }
 
     header h1 {
         font-size: 20px;
+
         text-align: center;
     }
 
     .userPanel {
         justify-content: space-between;
+
         width: 100%;
+
         font-size: 13px;
+
         gap: 8px;
+
         flex-wrap: wrap;
     }
 
     #usuarioEmail {
         min-width: 0;
+
         overflow: hidden;
+
         text-overflow: ellipsis;
+
         white-space: nowrap;
+
         flex: 1;
     }
 
     .logoutBtn {
         padding: 10px 14px;
+
         min-height: 42px;
+
         flex-shrink: 0;
     }
 
     .apkHeaderBtn {
         width: 100%;
+
         min-height: 42px;
+
         font-size: 14px;
+
         order: 3;
     }
 
     .container {
         width: 100%;
+
         padding: 10px;
     }
 
     .card {
         padding: 15px;
+
         margin-bottom: 12px;
+
         border-radius: 12px;
     }
 
     .card h2 {
         font-size: 18px;
+
         margin-bottom: 15px;
     }
 
     .grid {
         grid-template-columns: 1fr;
+
         gap: 12px;
     }
 
@@ -854,9 +1492,13 @@ header h1 {
     .field textarea,
     .authBox input {
         width: 100%;
+
         min-height: 46px;
+
         padding: 12px;
+
         font-size: 16px;
+
         border-radius: 9px;
     }
 
@@ -870,24 +1512,31 @@ header h1 {
 
     .materialGrid {
         grid-template-columns: 1fr;
+
         gap: 10px;
     }
 
     .material input {
         min-height: 46px;
+
         font-size: 16px;
     }
 
     .removeMaterial {
         width: 100%;
+
         min-height: 44px;
+
         font-size: 15px;
     }
 
     .addMaterial {
         width: 100%;
+
         min-height: 48px;
+
         font-size: 16px;
+
         margin-top: 12px;
     }
 
@@ -900,19 +1549,25 @@ header h1 {
     .whatsappBtn,
     .dangerBtn {
         width: 100%;
+
         min-height: 48px;
+
         font-size: 15px;
     }
 
     #preview {
         padding: 15px;
+
         min-height: 400px;
+
         overflow: hidden;
     }
 
     .previewHeader {
         flex-direction: column;
+
         gap: 15px;
+
         padding-bottom: 12px;
     }
 
@@ -922,19 +1577,24 @@ header h1 {
 
     .previewClient {
         padding: 12px;
+
         font-size: 14px;
     }
 
     .previewTable {
         width: 100%;
+
         font-size: 12px;
+
         table-layout: fixed;
     }
 
     .previewTable th,
     .previewTable td {
         padding: 7px 4px;
+
         word-break: break-word;
+
         overflow-wrap: anywhere;
     }
 
@@ -946,6 +1606,7 @@ header h1 {
     .previewTable th:nth-child(2),
     .previewTable td:nth-child(2) {
         width: 13%;
+
         text-align: center;
     }
 
@@ -961,6 +1622,7 @@ header h1 {
 
     .previewTotal {
         font-size: 20px;
+
         margin-top: 18px;
     }
 
@@ -970,13 +1632,17 @@ header h1 {
 
     .previewActions {
         flex-direction: column;
+
         gap: 10px;
     }
 
     .previewActions button {
         width: 100%;
+
         min-width: 0;
+
         min-height: 50px;
+
         font-size: 15px;
     }
 
@@ -986,17 +1652,21 @@ header h1 {
 
     .historyInfo {
         flex-direction: column;
+
         gap: 8px;
     }
 
     .historyActions {
         flex-direction: column;
+
         gap: 8px;
     }
 
     .smallBtn {
         width: 100%;
+
         min-height: 44px;
+
         font-size: 14px;
     }
 
@@ -1006,12 +1676,16 @@ header h1 {
 
     .pdfModalBox {
         padding: 20px;
+
         border-radius: 14px;
-        margin-bottom: env(safe-area-inset-bottom);
+
+        margin-bottom:
+            env(safe-area-inset-bottom);
     }
 
     .pdfModalActions button {
         min-height: 50px;
+
         font-size: 15px;
     }
 
@@ -1019,8 +1693,10 @@ header h1 {
     .historyItem,
     .card {
         max-width: 100%;
+
         overflow-wrap: anywhere;
     }
+
 }
 
 
@@ -1069,11 +1745,27 @@ header h1 {
     }
 
     .authTagline {
-        font-size: 13px;
+        font-size: 14px;
+    }
+
+    .authSubtagline {
+        font-size: 11px;
+    }
+
+    .authFeatures {
+        grid-template-columns: 1fr;
     }
 
     .authFeature {
         font-size: 10px;
+    }
+
+    .authFeatureTitle {
+        font-size: 10px;
+    }
+
+    .authFeatureDescription {
+        font-size: 9px;
     }
 
 }
@@ -1087,12 +1779,30 @@ header h1 {
 
 
 <!-- =====================================================
+     BOTÓN LUZ NOCTURNA
+===================================================== -->
+
+<button
+    id="themeToggle"
+    type="button"
+    onclick="alternarTema()"
+>
+    🌙 Activar luz nocturna
+</button>
+
+
+<!-- =====================================================
      PANTALLA DE BIENVENIDA / LOGIN
 ===================================================== -->
 
 <div id="authOverlay">
 
     <div class="authBox">
+
+        <div class="authBadge">
+            ✨ PRESUPUESTOS PROFESIONALES
+        </div>
+
 
         <img
             src="./icon-192.png"
@@ -1110,6 +1820,104 @@ header h1 {
             Creá presupuestos profesionales en segundos.
         </p>
 
+
+        <p class="authSubtagline">
+            Organizá tu trabajo, calculá costos y entregá
+            presupuestos listos para tus clientes.
+        </p>
+
+
+        <!-- FUNCIONES -->
+
+        <div class="authFeatures">
+
+            <div class="authFeature">
+
+                <div class="authFeatureIcon">
+                    🧾
+                </div>
+
+                <div class="authFeatureText">
+
+                    <span class="authFeatureTitle">
+                        Presupuestos
+                    </span>
+
+                    <span class="authFeatureDescription">
+                        Crealos fácilmente
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="authFeature">
+
+                <div class="authFeatureIcon">
+                    📦
+                </div>
+
+                <div class="authFeatureText">
+
+                    <span class="authFeatureTitle">
+                        Materiales
+                    </span>
+
+                    <span class="authFeatureDescription">
+                        Calculá tus costos
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="authFeature">
+
+                <div class="authFeatureIcon">
+                    📄
+                </div>
+
+                <div class="authFeatureText">
+
+                    <span class="authFeatureTitle">
+                        PDF profesional
+                    </span>
+
+                    <span class="authFeatureDescription">
+                        Listo para entregar
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="authFeature">
+
+                <div class="authFeatureIcon">
+                    💬
+                </div>
+
+                <div class="authFeatureText">
+
+                    <span class="authFeatureTitle">
+                        WhatsApp
+                    </span>
+
+                    <span class="authFeatureDescription">
+                        Compartilo al instante
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- INICIO DE SESIÓN -->
 
         <div id="loginForm">
 
@@ -1143,6 +1951,8 @@ header h1 {
 
         </div>
 
+
+        <!-- REGISTRO -->
 
         <div
             id="registerForm"
@@ -1180,10 +1990,18 @@ header h1 {
         </div>
 
 
+        <!-- SEPARADOR -->
+
         <div class="authDivider">
-            <span>También disponible para Android</span>
+
+            <span>
+                También disponible para Android
+            </span>
+
         </div>
 
+
+        <!-- APK -->
 
         <a
             class="apkDownload"
@@ -1199,26 +2017,7 @@ header h1 {
         </p>
 
 
-        <div class="authFeatures">
-
-            <span class="authFeature">
-                🧾 Presupuestos
-            </span>
-
-            <span class="authFeature">
-                📦 Materiales
-            </span>
-
-            <span class="authFeature">
-                📄 PDF
-            </span>
-
-            <span class="authFeature">
-                💬 WhatsApp
-            </span>
-
-        </div>
-
+        <!-- MENSAJES -->
 
         <div
             id="authMessage"
@@ -1508,6 +2307,92 @@ header h1 {
 
 
 <script>
+
+/* =========================================================
+   TEMA CLARO / OSCURO
+========================================================= */
+
+function aplicarTema(tema) {
+
+    const esOscuro =
+        tema === "dark";
+
+
+    document.body.classList.toggle(
+        "darkMode",
+        esOscuro
+    );
+
+
+    const boton =
+        document.getElementById("themeToggle");
+
+
+    if (!boton) {
+        return;
+    }
+
+
+    if (esOscuro) {
+
+        boton.textContent =
+            "☀️ Desactivar luz nocturna";
+
+    } else {
+
+        boton.textContent =
+            "🌙 Activar luz nocturna";
+
+    }
+
+
+    localStorage.setItem(
+        "presufacil_tema",
+        esOscuro
+        ? "dark"
+        : "light"
+    );
+
+}
+
+
+function alternarTema() {
+
+    const esOscuro =
+        document.body.classList.contains(
+            "darkMode"
+        );
+
+
+    aplicarTema(
+        esOscuro
+        ? "light"
+        : "dark"
+    );
+
+}
+
+
+function cargarTemaGuardado() {
+
+    const tema =
+        localStorage.getItem(
+            "presufacil_tema"
+        );
+
+
+    if (tema === "dark") {
+
+        aplicarTema("dark");
+
+    } else {
+
+        aplicarTema("light");
+
+    }
+
+}
+
 
 /* =========================================================
    SUPABASE
@@ -4331,6 +5216,9 @@ if ("serviceWorker" in navigator) {
 /* =========================================================
    INICIO
 ========================================================= */
+
+cargarTemaGuardado();
+
 
 const supabaseConectado =
     conectarSupabase();
