@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -37,6 +36,7 @@ header {
     margin: auto;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .container {
@@ -288,6 +288,130 @@ button:hover {
 
 
 /* =====================================================
+   SISTEMA DE USUARIOS
+   ===================================================== */
+
+.auth-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: #eef1f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 35px rgba(0,0,0,.12);
+}
+
+.auth-logo {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 25px;
+}
+
+.auth-card h2 {
+    margin-bottom: 15px;
+}
+
+.auth-card input {
+    margin-bottom: 5px;
+}
+
+.auth-card button {
+    width: 100%;
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 20px;
+    color: #6b7280;
+}
+
+.auth-switch button {
+    background: none;
+    color: #2563eb;
+    padding: 0;
+    margin: 0;
+    width: auto;
+}
+
+.auth-message {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    display: none;
+    font-size: 14px;
+}
+
+.auth-message.ok {
+    display: block;
+    background: #dcfce7;
+    color: #166534;
+}
+
+.auth-message.error {
+    display: block;
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.user-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-email {
+    font-size: 14px;
+    opacity: .9;
+}
+
+.btn-logout {
+    background: #dc2626;
+    color: white;
+    padding: 8px 12px;
+    margin: 0;
+}
+
+@media(max-width:600px) {
+
+    .auth-card {
+        padding: 22px;
+    }
+
+    .user-panel {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 5px;
+    }
+
+    .user-email {
+        font-size: 12px;
+        max-width: 180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+}
+
+
+/* =====================================================
    VENTANA PDF
    ===================================================== */
 
@@ -499,7 +623,8 @@ button:hover {
     .form-section,
     .saved-section,
     .no-print,
-    .pdf-modal {
+    .pdf-modal,
+    .auth-overlay {
         display: none !important;
     }
 
@@ -537,6 +662,146 @@ button:hover {
 
 <body>
 
+
+<!-- =====================================================
+     AUTENTICACIÓN
+     ===================================================== -->
+
+<div id="authOverlay" class="auth-overlay">
+
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            💼 PresuFácil
+        </div>
+
+        <div class="auth-subtitle">
+            Tu sistema de presupuestos
+        </div>
+
+
+        <!-- LOGIN -->
+
+        <div id="loginForm">
+
+            <h2>🔐 Iniciar sesión</h2>
+
+            <label>Email</label>
+
+            <input
+                id="loginEmail"
+                type="email"
+                placeholder="tu@email.com"
+                autocomplete="email"
+            >
+
+            <label>Contraseña</label>
+
+            <input
+                id="loginPassword"
+                type="password"
+                placeholder="Tu contraseña"
+                autocomplete="current-password"
+            >
+
+            <button
+                type="button"
+                class="btn-primary"
+                onclick="iniciarSesion()"
+            >
+                🔐 Iniciar sesión
+            </button>
+
+            <div
+                id="loginMessage"
+                class="auth-message"
+            ></div>
+
+            <div class="auth-switch">
+
+                ¿No tenés cuenta?
+
+                <button
+                    type="button"
+                    onclick="mostrarRegistro()"
+                >
+                    Crear cuenta
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- REGISTRO -->
+
+        <div
+            id="registerForm"
+            style="display:none;"
+        >
+
+            <h2>📝 Crear cuenta</h2>
+
+            <label>Email</label>
+
+            <input
+                id="registerEmail"
+                type="email"
+                placeholder="tu@email.com"
+                autocomplete="email"
+            >
+
+            <label>Contraseña</label>
+
+            <input
+                id="registerPassword"
+                type="password"
+                placeholder="Mínimo 6 caracteres"
+                autocomplete="new-password"
+            >
+
+            <label>Repetir contraseña</label>
+
+            <input
+                id="registerPassword2"
+                type="password"
+                placeholder="Repetí tu contraseña"
+                autocomplete="new-password"
+            >
+
+            <button
+                type="button"
+                class="btn-success"
+                onclick="registrarUsuario()"
+            >
+                📝 Crear cuenta
+            </button>
+
+            <div
+                id="registerMessage"
+                class="auth-message"
+            ></div>
+
+            <div class="auth-switch">
+
+                ¿Ya tenés cuenta?
+
+                <button
+                    type="button"
+                    onclick="mostrarLogin()"
+                >
+                    Iniciar sesión
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 <header>
 
 <div class="header-content">
@@ -545,8 +810,25 @@ button:hover {
         <strong>💼 PresuFácil</strong>
     </div>
 
-    <div>
-        v0.9
+    <div
+        class="user-panel"
+        id="userPanel"
+    >
+
+        <span
+            class="user-email"
+            id="userEmail"
+        >
+        </span>
+
+        <button
+            type="button"
+            class="btn-logout"
+            onclick="cerrarSesion()"
+        >
+            🚪 Salir
+        </button>
+
     </div>
 
 </div>
@@ -719,7 +1001,7 @@ viewBox="0 0 24 24"
 fill="currentColor"
 aria-hidden="true"
 >
-<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982 1-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.437-9.884 9.89-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.892 6.992c-.002 5.45-4.438 9.886-9.888 9.886m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.89a11.84 11.84 0 001.592 5.945L.057 24l6.304-1.654a11.882 11.882 0 005.684 1.448h.005c6.554 0 11.89-5.335 11.893-11.89a11.821 11.821 0 00-3.479-8.416"/>
+<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.198.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.198-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982 1-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.437-9.884 9.89-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.892 6.992c-.002 5.45-4.438 9.886-9.888 9.886m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.89a11.84 11.84 0 001.592 5.945L.057 24l6.304-1.654a11.882 11.882 0 005.684 1.448h.005c6.554 0 11.89-5.335 11.893-11.89a11.821 11.821 0 00-3.479-8.416"/>
 </svg>
 
 Compartir en WhatsApp
@@ -969,7 +1251,7 @@ viewBox="0 0 24 24"
 fill="currentColor"
 aria-hidden="true"
 >
-<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.198.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982 1-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.437-9.884 9.89-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.892 6.992c-.002 5.45-4.438 9.886-9.888 9.886m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.89a11.84 11.84 0 001.592 5.945L.057 24l6.304-1.654a11.882 11.882 0 005.684 1.448h.005c6.554 0 11.89-5.335 11.893-11.89a11.821 11.821 0 00-3.479-8.416"/>
+<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.198-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982 1-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.437-9.884 9.89-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.892 6.992c-.002 5.45-4.438 9.886-9.888 9.886m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.89a11.84 11.84 0 001.592 5.945L.057 24l6.304-1.654a11.882 11.882 0 005.684 1.448h.005c6.554 0 11.89-5.335 11.893-11.89a11.821 11.821 0 00-3.479-8.416"/>
 </svg>
 
 Compartir en WhatsApp
@@ -1084,7 +1366,597 @@ function conectarSupabase() {
 
 }
 
-conectarSupabase();
+
+/* =====================================================
+   AUTENTICACIÓN DE USUARIOS
+   ===================================================== */
+
+let usuarioActual = null;
+
+let presuFacilInicializado = false;
+
+
+/* =====================================================
+   MOSTRAR LOGIN
+   ===================================================== */
+
+function mostrarLogin() {
+
+    document.getElementById("loginForm").style.display =
+        "block";
+
+    document.getElementById("registerForm").style.display =
+        "none";
+
+    limpiarMensajesAuth();
+
+}
+
+
+/* =====================================================
+   MOSTRAR REGISTRO
+   ===================================================== */
+
+function mostrarRegistro() {
+
+    document.getElementById("loginForm").style.display =
+        "none";
+
+    document.getElementById("registerForm").style.display =
+        "block";
+
+    limpiarMensajesAuth();
+
+}
+
+
+/* =====================================================
+   MENSAJES AUTH
+   ===================================================== */
+
+function mostrarMensajeAuth(
+    elemento,
+    mensaje,
+    tipo
+) {
+
+    elemento.textContent =
+        mensaje;
+
+    elemento.className =
+        "auth-message " + tipo;
+
+}
+
+
+function limpiarMensajesAuth() {
+
+    const loginMessage =
+        document.getElementById("loginMessage");
+
+    const registerMessage =
+        document.getElementById("registerMessage");
+
+
+    loginMessage.textContent = "";
+    loginMessage.className = "auth-message";
+
+    registerMessage.textContent = "";
+    registerMessage.className = "auth-message";
+
+}
+
+
+/* =====================================================
+   MOSTRAR APLICACIÓN
+   ===================================================== */
+
+function mostrarAplicacion(usuario) {
+
+    usuarioActual =
+        usuario;
+
+    document.getElementById(
+        "authOverlay"
+    ).style.display =
+        "none";
+
+
+    const email =
+        usuario?.email || "";
+
+
+    document.getElementById(
+        "userEmail"
+    ).textContent =
+        "👤 " + email;
+
+
+    console.log(
+        "👤 Usuario conectado:",
+        usuario
+    );
+
+}
+
+
+/* =====================================================
+   MOSTRAR PANTALLA AUTH
+   ===================================================== */
+
+function mostrarPantallaAuth() {
+
+    usuarioActual = null;
+
+    document.getElementById(
+        "authOverlay"
+    ).style.display =
+        "flex";
+
+
+    document.getElementById(
+        "userEmail"
+    ).textContent =
+        "";
+
+}
+
+
+/* =====================================================
+   REGISTRAR USUARIO
+   ===================================================== */
+
+async function registrarUsuario() {
+
+    if (!supabaseClient) {
+
+        alert(
+            "Supabase todavía no está conectado."
+        );
+
+        return;
+
+    }
+
+
+    const email =
+        document.getElementById(
+            "registerEmail"
+        ).value.trim();
+
+
+    const password =
+        document.getElementById(
+            "registerPassword"
+        ).value;
+
+
+    const password2 =
+        document.getElementById(
+            "registerPassword2"
+        ).value;
+
+
+    const mensaje =
+        document.getElementById(
+            "registerMessage"
+        );
+
+
+    if (!email) {
+
+        mostrarMensajeAuth(
+            mensaje,
+            "Ingresá un email.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (password.length < 6) {
+
+        mostrarMensajeAuth(
+            mensaje,
+            "La contraseña debe tener al menos 6 caracteres.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (password !== password2) {
+
+        mostrarMensajeAuth(
+            mensaje,
+            "Las contraseñas no coinciden.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        mostrarMensajeAuth(
+            mensaje,
+            "Creando cuenta...",
+            "ok"
+        );
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.signUp({
+
+                email:
+                    email,
+
+                password:
+                    password
+
+            });
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        console.log(
+            "✅ Usuario registrado:",
+            data
+        );
+
+
+        if (
+            data.user &&
+            !data.session
+        ) {
+
+            mostrarMensajeAuth(
+                mensaje,
+                "✅ Cuenta creada. Revisá tu email y confirmá tu cuenta antes de iniciar sesión.",
+                "ok"
+            );
+
+            return;
+
+        }
+
+
+        if (data.session) {
+
+            mostrarAplicacion(
+                data.user
+            );
+
+            await iniciarPresuFacil();
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "❌ Error registrando usuario:",
+            error
+        );
+
+
+        mostrarMensajeAuth(
+            mensaje,
+            "❌ " +
+            (
+                error.message ||
+                "No se pudo crear la cuenta."
+            ),
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   INICIAR SESIÓN
+   ===================================================== */
+
+async function iniciarSesion() {
+
+    if (!supabaseClient) {
+
+        alert(
+            "Supabase todavía no está conectado."
+        );
+
+        return;
+
+    }
+
+
+    const email =
+        document.getElementById(
+            "loginEmail"
+        ).value.trim();
+
+
+    const password =
+        document.getElementById(
+            "loginPassword"
+        ).value;
+
+
+    const mensaje =
+        document.getElementById(
+            "loginMessage"
+        );
+
+
+    if (!email || !password) {
+
+        mostrarMensajeAuth(
+            mensaje,
+            "Ingresá tu email y contraseña.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        mostrarMensajeAuth(
+            mensaje,
+            "Iniciando sesión...",
+            "ok"
+        );
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.signInWithPassword({
+
+                email:
+                    email,
+
+                password:
+                    password
+
+            });
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        console.log(
+            "✅ Sesión iniciada:",
+            data.user
+        );
+
+
+        mostrarAplicacion(
+            data.user
+        );
+
+
+        await iniciarPresuFacil();
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Error iniciando sesión:",
+            error
+        );
+
+
+        mostrarMensajeAuth(
+            mensaje,
+            "❌ " +
+            (
+                error.message ||
+                "Email o contraseña incorrectos."
+            ),
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CERRAR SESIÓN
+   ===================================================== */
+
+async function cerrarSesion() {
+
+    if (!supabaseClient) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient.auth.signOut();
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        console.log(
+            "🚪 Sesión cerrada."
+        );
+
+
+        mostrarPantallaAuth();
+
+        mostrarLogin();
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Error cerrando sesión:",
+            error
+        );
+
+
+        alert(
+            "❌ No se pudo cerrar sesión.\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   VERIFICAR SESIÓN ACTUAL
+   ===================================================== */
+
+async function verificarSesion() {
+
+    if (!supabaseClient) {
+
+        mostrarPantallaAuth();
+
+        return;
+
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        const session =
+            data.session;
+
+
+        if (session?.user) {
+
+            console.log(
+                "✅ Sesión encontrada:",
+                session.user.email
+            );
+
+
+            mostrarAplicacion(
+                session.user
+            );
+
+
+            await iniciarPresuFacil();
+
+        } else {
+
+            console.log(
+                "ℹ️ No hay usuario conectado."
+            );
+
+
+            mostrarPantallaAuth();
+
+            mostrarLogin();
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "❌ Error verificando sesión:",
+            error
+        );
+
+
+        mostrarPantallaAuth();
+
+    }
+
+}
+
+
+/* =====================================================
+   CAMBIOS DE SESIÓN
+   ===================================================== */
+
+function escucharCambiosAuth() {
+
+    supabaseClient.auth.onAuthStateChange(
+        (
+            event,
+            session
+        ) => {
+
+            console.log(
+                "🔐 Auth:",
+                event
+            );
+
+
+            if (
+                session?.user
+            ) {
+
+                usuarioActual =
+                    session.user;
+
+                mostrarAplicacion(
+                    session.user
+                );
+
+            } else {
+
+                mostrarPantallaAuth();
+
+            }
+
+        }
+    );
+
+}
 
 
 /* =====================================================
@@ -1893,7 +2765,7 @@ async function mostrarPresupuestos() {
                     fill="currentColor"
                     aria-hidden="true"
                     >
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.074-.52-.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982 1-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.437-9.884 9.89-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.892 6.992c-.002 5.45-4.438 9.886-9.888 9.886m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.89a11.84 11.84 0 001.592 5.945L.057 24l6.304-1.654a11.882 11.882 0 005.684 1.448h.005c6.554 0 11.89-5.335 11.893-11.89a11.821 11.821 0 00-3.479-8.416"/>
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982 1-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.437-9.884 9.89-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.892 6.992c-.002 5.45-4.438 9.886-9.888 9.886m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.89a11.84 11.84 0 001.592 5.945L.057 24l6.304-1.654a11.882 11.882 0 005.684 1.448h.005c6.554 0 11.89-5.335 11.893-11.89a11.821 11.821 0 00-3.479-8.416"/>
                     </svg>
 
                     Compartir en WhatsApp
@@ -2852,7 +3724,7 @@ document
 
 
 /* =====================================================
-   INICIO
+   INICIO PRESUFÁCIL
    ===================================================== */
 
 async function iniciarPresuFacil() {
@@ -2862,13 +3734,19 @@ async function iniciarPresuFacil() {
     );
 
 
-    cargarDatosNegocio();
+    if (!presuFacilInicializado) {
 
-    agregarMaterial();
+        cargarDatosNegocio();
 
-    calcularTotal();
+        agregarMaterial();
 
-    actualizarPreview();
+        calcularTotal();
+
+        actualizarPreview();
+
+        presuFacilInicializado = true;
+
+    }
 
 
     if (!supabaseClient) {
@@ -2888,11 +3766,42 @@ async function iniciarPresuFacil() {
 
     actualizarPreview();
 
+}
+
+
+/* =====================================================
+   INICIO DEL SISTEMA
+   ===================================================== */
+
+async function iniciarSistema() {
+
+    console.log(
+        "🚀 Sistema de autenticación iniciando..."
+    );
+
+
+    const conectado =
+        conectarSupabase();
+
+
+    if (!conectado) {
+
+        mostrarPantallaAuth();
+
+        return;
+
+    }
+
+
+    escucharCambiosAuth();
+
+
+    await verificarSesion();
 
 }
 
 
-iniciarPresuFacil();
+iniciarSistema();
 
 </script>
 
