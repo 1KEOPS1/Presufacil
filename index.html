@@ -1309,6 +1309,8 @@ let presupuestosActuales = [];
 
 let usuarioMostradoId = null;
 
+let horaPresupuesto = "";
+
 
 /* =========================================================
    CONECTAR SUPABASE
@@ -1599,6 +1601,8 @@ function limpiarFormularioUsuario() {
 
     materiales = [];
 
+    horaPresupuesto = "";
+
 
     const contenedor =
         document.getElementById("materiales");
@@ -1838,7 +1842,7 @@ async function comprobarSesion() {
 
 
 /* =========================================================
-   FECHA ACTUAL
+   FECHA Y HORA ACTUAL
 ========================================================= */
 
 function establecerFechaActual() {
@@ -1852,33 +1856,50 @@ function establecerFechaActual() {
     }
 
 
-    if (campoFecha.value) {
-        return;
+    if (!campoFecha.value) {
+
+        const hoy =
+            new Date();
+
+
+        const año =
+            hoy.getFullYear();
+
+
+        const mes =
+            String(
+                hoy.getMonth() + 1
+            ).padStart(2, "0");
+
+
+        const dia =
+            String(
+                hoy.getDate()
+            ).padStart(2, "0");
+
+
+        campoFecha.value =
+            `${año}-${mes}-${dia}`;
     }
 
 
-    const hoy =
-        new Date();
+    if (!horaPresupuesto) {
+
+        const ahora =
+            new Date();
 
 
-    const año =
-        hoy.getFullYear();
+        horaPresupuesto =
+            String(
+                ahora.getHours()
+            ).padStart(2, "0") +
 
+            ":" +
 
-    const mes =
-        String(
-            hoy.getMonth() + 1
-        ).padStart(2, "0");
-
-
-    const dia =
-        String(
-            hoy.getDate()
-        ).padStart(2, "0");
-
-
-    campoFecha.value =
-        `${año}-${mes}-${dia}`;
+            String(
+                ahora.getMinutes()
+            ).padStart(2, "0");
+    }
 }
 
 
@@ -2430,7 +2451,23 @@ function actualizarPreview() {
 
                 ${
                     fecha
-                    ? `<div>${escapeHTML(formatearFecha(fecha))}</div>`
+                    ? `
+                        <div>
+                            ${escapeHTML(
+                                formatearFecha(fecha)
+                            )}
+                        </div>
+
+                        ${
+                            horaPresupuesto
+                            ? `
+                                <div style="font-size: 13px; color: #666; margin-top: 3px;">
+                                    ${escapeHTML(horaPresupuesto)}
+                                </div>
+                            `
+                            : ""
+                        }
+                    `
                     : ""
                 }
 
@@ -2687,6 +2724,9 @@ async function guardarPresupuesto() {
         fecha:
             document.getElementById("fecha").value,
 
+        hora:
+            horaPresupuesto,
+
         materiales,
 
         manoObra:
@@ -2797,6 +2837,11 @@ async function mostrarPresupuestos() {
 
             .select("*")
 
+            .eq(
+                "user_id",
+                usuarioActual.id
+            )
+
             .order(
                 "id",
                 {
@@ -2863,6 +2908,21 @@ async function mostrarPresupuestos() {
                 "";
 
 
+            const horaHistorial =
+
+                presupuesto.datos &&
+
+                presupuesto.datos.hora
+
+                ?
+
+                presupuesto.datos.hora
+
+                :
+
+                "";
+
+
             div.innerHTML = `
 
                 <div class="historyInfo">
@@ -2901,7 +2961,29 @@ async function mostrarPresupuestos() {
 
                             ?
 
-                            `<br>Fecha: ${escapeHTML(fechaHistorial)}`
+                            `
+                                <br>
+                                Fecha:
+                                ${escapeHTML(fechaHistorial)}
+                            `
+
+                            :
+
+                            ""
+
+                        }
+
+                        ${
+
+                            horaHistorial
+
+                            ?
+
+                            `
+                                <br>
+                                Hora:
+                                ${escapeHTML(horaHistorial)}
+                            `
 
                             :
 
@@ -3117,6 +3199,20 @@ function cargarPresupuestoSupabase(
         datos.fecha ||
 
         "";
+
+
+    horaPresupuesto =
+
+        datos.hora ||
+
+        "";
+
+
+    if (!horaPresupuesto) {
+
+        establecerFechaActual();
+
+    }
 
 
     document.getElementById("manoObra").value =
