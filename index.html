@@ -357,6 +357,10 @@ button:hover {
 
 <div class="container">
 
+<!-- ==========================================
+     DATOS DEL NEGOCIO
+     ========================================== -->
+
 <div class="card form-section">
 
 <h2>🏢 Datos de tu negocio</h2>
@@ -398,9 +402,14 @@ placeholder="Opcional"
 
 </div>
 
+
+<!-- ==========================================
+     CREAR PRESUPUESTO + PREVIEW
+     ========================================== -->
+
 <div class="grid">
 
-<div class="form-section">
+<div class="form-section" id="crearPresupuesto">
 
 <div class="card">
 
@@ -441,6 +450,7 @@ type="date"
 <div id="materiales"></div>
 
 <button
+type="button"
 class="btn-secondary"
 onclick="agregarMaterial()"
 >
@@ -474,6 +484,7 @@ $<span id="total">0.00</span>
 </div>
 
 <button
+type="button"
 class="btn-primary"
 onclick="actualizarPreview()"
 >
@@ -481,6 +492,7 @@ onclick="actualizarPreview()"
 </button>
 
 <button
+type="button"
 class="btn-success"
 onclick="guardarPresupuesto()"
 >
@@ -488,6 +500,7 @@ onclick="guardarPresupuesto()"
 </button>
 
 <button
+type="button"
 class="btn-dark"
 onclick="generarPDF()"
 >
@@ -495,6 +508,7 @@ onclick="generarPDF()"
 </button>
 
 <button
+type="button"
 class="btn-whatsapp"
 onclick="enviarWhatsApp()"
 >
@@ -511,6 +525,11 @@ class="status loading"
 </div>
 
 </div>
+
+
+<!-- ==========================================
+     VISTA PREVIA
+     ========================================== -->
 
 <div>
 
@@ -657,7 +676,10 @@ Firma / sello
 
 </div>
 
-</div>
+
+<!-- ==========================================
+     HISTORIAL
+     ========================================== -->
 
 <div class="card saved-section">
 
@@ -672,6 +694,7 @@ Firma / sello
 </div>
 
 </div>
+
 
 <script>
 
@@ -923,6 +946,7 @@ function mostrarMateriales() {
                 >
 
                 <button
+                    type="button"
                     class="btn-danger"
                     onclick="
                         eliminarMaterial(${index})
@@ -1526,27 +1550,41 @@ async function mostrarPresupuestos() {
 
                 `;
 
+
+                /* ==============================
+                   BOTÓN VER
+                   ============================== */
+
                 const btnVer =
                     document.createElement("button");
 
                 btnVer.className =
                     "btn-primary";
 
-                btnVer.type = "button";
+                btnVer.type =
+                    "button";
 
                 btnVer.textContent =
                     "👁️ Ver";
 
-                btnVer.onclick =
+                btnVer.addEventListener(
+                    "click",
                     function(event) {
 
                         event.preventDefault();
+                        event.stopPropagation();
 
                         cargarPresupuestoSupabase(
                             presupuesto
                         );
 
-                    };
+                    }
+                );
+
+
+                /* ==============================
+                   BOTÓN WHATSAPP
+                   ============================== */
 
                 const btnWhatsApp =
                     document.createElement("button");
@@ -1554,21 +1592,30 @@ async function mostrarPresupuestos() {
                 btnWhatsApp.className =
                     "btn-whatsapp";
 
-                btnWhatsApp.type = "button";
+                btnWhatsApp.type =
+                    "button";
 
                 btnWhatsApp.textContent =
                     "📱 WhatsApp";
 
-                btnWhatsApp.onclick =
+                btnWhatsApp.addEventListener(
+                    "click",
                     function(event) {
 
                         event.preventDefault();
+                        event.stopPropagation();
 
                         enviarPresupuestoGuardadoSupabase(
                             presupuesto
                         );
 
-                    };
+                    }
+                );
+
+
+                /* ==============================
+                   BOTÓN ELIMINAR
+                   ============================== */
 
                 const btnEliminar =
                     document.createElement("button");
@@ -1576,21 +1623,26 @@ async function mostrarPresupuestos() {
                 btnEliminar.className =
                     "btn-danger";
 
-                btnEliminar.type = "button";
+                btnEliminar.type =
+                    "button";
 
                 btnEliminar.textContent =
                     "🗑️ Eliminar";
 
-                btnEliminar.onclick =
+                btnEliminar.addEventListener(
+                    "click",
                     function(event) {
 
                         event.preventDefault();
+                        event.stopPropagation();
 
                         eliminarPresupuestoSupabase(
                             numero
                         );
 
-                    };
+                    }
+                );
+
 
                 div.appendChild(btnVer);
 
@@ -1783,7 +1835,7 @@ function cargarPresupuestoSupabase(presupuesto) {
 
 
     /* ==============================
-       NÚMERO DEL PRESUPUESTO
+       NÚMERO
        ============================== */
 
     numeroPreview =
@@ -1791,7 +1843,7 @@ function cargarPresupuestoSupabase(presupuesto) {
 
 
     /* ==============================
-       ACTUALIZAR FORMULARIO
+       ACTUALIZAR
        ============================== */
 
     mostrarMateriales();
@@ -1802,11 +1854,13 @@ function cargarPresupuestoSupabase(presupuesto) {
 
 
     /* ==============================
-       IR AL FORMULARIO
+       IR DIRECTAMENTE A CREAR
        ============================== */
 
     const formulario =
-        document.querySelector(".form-section");
+        document.getElementById(
+            "crearPresupuesto"
+        );
 
     if (formulario) {
 
