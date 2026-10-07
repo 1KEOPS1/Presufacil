@@ -104,8 +104,14 @@ select {
 
 #themeToggle {
     position: fixed;
+
+    /*
+       En PC lo desplazamos hacia la izquierda
+       para que nunca tape "Cerrar sesión".
+    */
     top: 15px;
-    right: 15px;
+    right: 330px;
+
     z-index: 11000;
 
     display: inline-flex;
@@ -1218,10 +1224,6 @@ body.darkMode .authMessage {
     color: #cbd5e1;
 }
 
-body.darkMode .authSubtagline {
-    color: #94a3b8;
-}
-
 body.darkMode .card {
     background: #111827;
 
@@ -1290,6 +1292,10 @@ body.darkMode #themeToggle:hover {
 
 @media (max-width: 700px) {
 
+    /*
+       En celular vuelve a su posición original,
+       porque ahí ya estaba funcionando perfectamente.
+    */
     #themeToggle {
         top: 10px;
         right: 10px;
