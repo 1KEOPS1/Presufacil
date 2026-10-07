@@ -623,6 +623,7 @@ header h1 {
         </div>
 
         <div class="field">
+
             <label>Fecha</label>
 
             <input
@@ -834,6 +835,8 @@ let presupuestoPDF = null;
 
 let presupuestoSeleccionadoWhatsApp = null;
 
+let presupuestosActuales = [];
+
 
 /* =========================================================
    CONECTAR SUPABASE
@@ -962,20 +965,6 @@ async function registrarUsuario() {
         "Creando cuenta...";
 
 
-    /*
-       IMPORTANTE:
-
-       Se genera automáticamente la dirección
-       exacta de la página desde la que se está
-       registrando el usuario.
-
-       Si PresuFácil está en:
-
-       https://1keops1.github.io/Presufacil/
-
-       redirectURL será exactamente esa dirección.
-    */
-
     const redirectURL =
         window.location.origin +
         window.location.pathname;
@@ -1085,38 +1074,52 @@ async function iniciarSesion() {
         "Iniciando sesión...";
 
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient.auth.signInWithPassword({
+    try {
 
-            email:
-                email,
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.signInWithPassword({
 
-            password:
-                password
+                email:
+                    email,
 
-        });
+                password:
+                    password
+
+            });
 
 
-    if (error) {
+        if (error) {
+
+            console.error(
+                error
+            );
+
+            mensaje.textContent =
+                error.message;
+
+            return;
+        }
+
+
+        usuarioActual =
+            data.user;
+
+        mostrarApp();
+
+
+    } catch (error) {
 
         console.error(
             error
         );
 
         mensaje.textContent =
-            error.message;
+            "Ocurrió un error al iniciar sesión.";
 
-        return;
     }
-
-
-    usuarioActual =
-        data.user;
-
-    mostrarApp();
 
 }
 
@@ -1190,6 +1193,11 @@ function mostrarApp() {
 
 async function comprobarSesion() {
 
+    if (!supabaseClient) {
+        return;
+    }
+
+
     const {
         data
     } =
@@ -1240,6 +1248,12 @@ function cargarDatosNegocio() {
     campos.forEach(
         campo => {
 
+            const elemento =
+                document.getElementById(
+                    campo
+                );
+
+
             const valor =
                 localStorage.getItem(
                     "presufacil_" + campo
@@ -1248,19 +1262,21 @@ function cargarDatosNegocio() {
 
             if (valor !== null) {
 
-                document.getElementById(
-                    campo
-                ).value = valor;
+                elemento.value = valor;
 
             }
 
 
-            document.getElementById(
-                campo
-            ).addEventListener(
-                "input",
-                guardarDatosNegocio
-            );
+            if (!elemento.dataset.listenerAgregado) {
+
+                elemento.addEventListener(
+                    "input",
+                    guardarDatosNegocio
+                );
+
+                elemento.dataset.listenerAgregado = "true";
+
+            }
 
         }
     );
@@ -1942,7 +1958,24 @@ async function guardarPresupuesto() {
     };
 
 
+    /*
+       IMPORTANTE:
+
+       user_id identifica al usuario autenticado.
+
+       Las políticas RLS de Supabase comprueban:
+
+       auth.uid() = user_id
+
+       Por eso cada presupuesto queda
+       asociado exclusivamente a la cuenta
+       que lo creó.
+    */
+
     const registro = {
+
+        user_id:
+            usuarioActual.id,
 
         numero,
         negocio,
@@ -1952,6 +1985,12 @@ async function guardarPresupuesto() {
         datos
 
     };
+
+
+    console.log(
+        "Guardando presupuesto para usuario:",
+        usuarioActual.id
+    );
 
 
     const {
@@ -1965,6 +2004,7 @@ async function guardarPresupuesto() {
     if (error) {
 
         console.error(
+            "Error Supabase:",
             error
         );
 
@@ -2005,6 +2045,15 @@ async function mostrarPresupuestos() {
     }
 
 
+    if (!usuarioActual) {
+
+        contenedor.innerHTML =
+            "<p>Iniciá sesión para ver tus presupuestos.</p>";
+
+        return;
+    }
+
+
     const {
         data,
         error
@@ -2031,6 +2080,10 @@ async function mostrarPresupuestos() {
 
         return;
     }
+
+
+    presupuestosActuales =
+        data || [];
 
 
     if (!data || data.length === 0) {
@@ -2106,7 +2159,7 @@ async function mostrarPresupuestos() {
 
                     <button
                         class="smallBtn viewBtn"
-                        onclick='cargarPresupuestoSupabase(${JSON.stringify(presupuesto)}, true)'
+                        onclick="cargarPresupuestoDesdeHistorial(${presupuesto.id})"
                     >
                         Ver
                     </button>
@@ -2114,7 +2167,7 @@ async function mostrarPresupuestos() {
 
                     <button
                         class="smallBtn historyWhatsapp"
-                        onclick='enviarPresupuestoGuardadoSupabase(${JSON.stringify(presupuesto)})'
+                        onclick="enviarPresupuestoDesdeHistorial(${presupuesto.id})"
                     >
                         WhatsApp
                     </button>
@@ -2137,6 +2190,75 @@ async function mostrarPresupuestos() {
             );
 
         }
+    );
+
+}
+
+
+/* =========================================================
+   OBTENER PRESUPUESTO DEL HISTORIAL
+========================================================= */
+
+function obtenerPresupuestoPorId(id) {
+
+    return presupuestosActuales.find(
+        presupuesto =>
+            String(presupuesto.id) === String(id)
+    );
+
+}
+
+
+/* =========================================================
+   CARGAR DESDE HISTORIAL
+========================================================= */
+
+function cargarPresupuestoDesdeHistorial(id) {
+
+    const presupuesto =
+        obtenerPresupuestoPorId(id);
+
+
+    if (!presupuesto) {
+
+        alert(
+            "No se encontró el presupuesto."
+        );
+
+        return;
+    }
+
+
+    cargarPresupuestoSupabase(
+        presupuesto,
+        true
+    );
+
+}
+
+
+/* =========================================================
+   WHATSAPP DESDE HISTORIAL
+========================================================= */
+
+async function enviarPresupuestoDesdeHistorial(id) {
+
+    const presupuesto =
+        obtenerPresupuestoPorId(id);
+
+
+    if (!presupuesto) {
+
+        alert(
+            "No se encontró el presupuesto."
+        );
+
+        return;
+    }
+
+
+    await enviarPresupuestoGuardadoSupabase(
+        presupuesto
     );
 
 }
@@ -2304,6 +2426,11 @@ async function eliminarPresupuesto(id) {
 
         return;
     }
+
+
+    alert(
+        "Presupuesto eliminado correctamente."
+    );
 
 
     mostrarPresupuestos();
@@ -2683,8 +2810,6 @@ async function compartirPDFWhatsApp() {
 
 conectarSupabase();
 
-comprobarSesion();
-
 
 /* =========================================================
    CAMBIOS EN TIEMPO REAL
@@ -2727,6 +2852,9 @@ if (supabaseClient) {
 
         }
     );
+
+
+    comprobarSesion();
 
 }
 
