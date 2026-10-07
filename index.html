@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PresuFácil v0.7</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #eef1f5;
+    color: #1f2937;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 20px;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 18px rgba(0,0,0,.07);
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 7px;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+button {
+    border: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-success {
+    background: #16a34a;
+    color: white;
+}
+
+.btn-whatsapp {
+    background: #25D366;
+    color: white;
+}
+
+.btn-danger {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-secondary {
+    background: #6b7280;
+    color: white;
+}
+
+.btn-dark {
+    background: #111827;
+    color: white;
+}
+
+.material {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.material button {
+    margin-top: 0;
+}
+
+.total-box {
+    margin-top: 25px;
+    padding: 20px;
+    background: #f3f4f6;
+    border-radius: 10px;
+    text-align: right;
+}
+
+.total {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.preview {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 40px;
+    min-height: 700px;
+}
+
+.preview-business {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #111827;
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+.business-name {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.business-info {
+    margin-top: 8px;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.quote-title {
+    text-align: right;
+}
+
+.client-box {
+    background: #f8fafc;
+    padding: 18px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+.client-box p {
+    margin: 5px 0;
+}
+
+.preview table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.preview th {
+    background: #111827;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+.preview td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.preview td:last-child,
+.preview th:last-child {
+    text-align: right;
+}
+
+.final-total {
+    margin-top: 20px;
+    background: #111827;
+    color: white;
+    padding: 15px;
+    text-align: right;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.conditions {
+    margin-top: 30px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.signature {
+    margin-top: 70px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.signature-box {
+    width: 220px;
+    border-top: 1px solid #111827;
+    text-align: center;
+    padding-top: 8px;
+}
+
+.saved {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 12px;
+}
+
+@media(max-width:800px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .material {
+        grid-template-columns: 1fr;
+    }
+
+    .preview-business {
+        flex-direction: column;
+    }
+
+    .quote-title {
+        text-align: left;
+        margin-top: 20px;
+    }
+}
+
+@media print {
+
+    body {
+        background: white;
+    }
+
+    header,
+    .form-section,
+    .saved-section,
+    .no-print {
+        display: none !important;
+    }
+
+    .container {
+        margin: 0;
+        padding: 0;
+        max-width: none;
+    }
+
+    .grid {
+        display: block;
+    }
+
+    .preview-card {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .preview {
+        border: none;
+        padding: 20px;
+    }
+
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header-content">
+    <div><strong>💼 PresuFácil</strong></div>
+    <div>v0.7</div>
+</div>
+</header>
+
+<div class="container">
+
+<!-- DATOS NEGOCIO -->
+
+<div class="card form-section">
+
+<h2>🏢 Datos de tu negocio</h2>
+
+<label>Nombre del negocio</label>
+<input id="negocio" placeholder="Ej: Electricidad Juan">
+
+<label>Teléfono</label>
+<input id="negocioTelefono" placeholder="Ej: 2945123456">
+
+<label>Email</label>
+<input id="negocioEmail" placeholder="Ej: contacto@email.com">
+
+<label>Dirección</label>
+<input id="negocioDireccion" placeholder="Ej: Av. San Martín 123">
+
+<label>CUIT</label>
+<input id="negocioCuit" placeholder="Opcional">
+
+</div>
+
+
+<div class="grid">
+
+<!-- FORMULARIO -->
+
+<div class="form-section">
+
+<div class="card">
+
+<h2>📋 Crear presupuesto</h2>
+
+<label>Cliente</label>
+<input id="cliente" placeholder="Nombre del cliente">
+
+<label>WhatsApp del cliente</label>
+<input id="telefono" placeholder="Ej: 5492945123456">
+
+<label>Trabajo</label>
+<input id="trabajo" placeholder="Ej: Instalación eléctrica">
+
+<label>Fecha</label>
+<input id="fecha" type="date">
+
+<h3 style="margin-top:25px;">
+📦 Materiales
+</h3>
+
+<div id="materiales"></div>
+
+<button
+class="btn-secondary"
+onclick="agregarMaterial()">
+➕ Agregar material
+</button>
+
+<label>Mano de obra</label>
+<input id="manoObra" type="number" value="0" min="0">
+
+<label>Condiciones / notas</label>
+
+<textarea
+id="condiciones"
+placeholder="Ej: Presupuesto válido por 15 días.">
+</textarea>
+
+<div class="total-box">
+
+<div>TOTAL</div>
+
+<div class="total">
+$<span id="total">0.00</span>
+</div>
+
+</div>
+
+<button
+class="btn-primary"
+onclick="actualizarPreview()">
+🧾 Actualizar presupuesto
+</button>
+
+<button
+class="btn-success"
+onclick="guardarPresupuesto()">
+💾 Guardar presupuesto
+</button>
+
+<button
+class="btn-dark"
+onclick="generarPDF()">
+📄 Generar PDF
+</button>
+
+<button
+class="btn-whatsapp"
+onclick="enviarWhatsApp()">
+📱 WhatsApp
+</button>
+
+</div>
+
+</div>
+
+
+<!-- PREVIEW -->
+
+<div>
+
+<div class="card preview-card">
+
+<h2 class="no-print">
+👁️ Vista previa
+</h2>
+
+<div class="preview" id="preview">
+
+<div class="preview-business">
+
+<div>
+
+<div
+class="business-name"
+id="previewNegocio">
+Mi negocio
+</div>
+
+<div
+class="business-info"
+id="previewNegocioInfo">
+Teléfono: -<br>
+Email: -<br>
+Dirección: -<br>
+CUIT: -
+</div>
+
+</div>
+
+<div class="quote-title">
+
+<h2>PRESUPUESTO</h2>
+
+<div>
+N° <span id="previewNumero">0001</span>
+</div>
+
+<div>
+Fecha:
+<span id="previewFecha">-</span>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="client-box">
+
+<strong>DATOS DEL CLIENTE</strong>
+
+<p>
+<strong>Nombre:</strong>
+<span id="previewCliente">-</span>
+</p>
+
+<p>
+<strong>WhatsApp:</strong>
+<span id="previewTelefono">-</span>
+</p>
+
+<p>
+<strong>Trabajo:</strong>
+<span id="previewTrabajo">-</span>
+</p>
+
+</div>
+
+
+<h3>Detalle del presupuesto</h3>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Descripción</th>
+<th>Cant.</th>
+<th>Precio unit.</th>
+<th>Subtotal</th>
+</tr>
+
+</thead>
+
+<tbody id="previewMateriales"></tbody>
+
+</table>
+
+
+<p style="text-align:right;margin-top:15px;">
+Mano de obra:
+<strong>
+$<span id="previewManoObra">0.00</span>
+</strong>
+</p>
+
+
+<div class="final-total">
+
+TOTAL:
+$<span id="previewTotal">0.00</span>
+
+</div>
+
+
+<div class="conditions">
+
+<h3>Condiciones / notas</h3>
+
+<p id="previewCondiciones">-</p>
+
+</div>
+
+
+<div class="signature">
+
+<div class="signature-box">
+Firma del cliente
+</div>
+
+<div class="signature-box">
+Firma / sello
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- HISTORIAL -->
+
+<div class="card saved-section">
+
+<h2>📋 Presupuestos guardados</h2>
+
+<div id="presupuestosGuardados"></div>
+
+</div>
+
+</div>
+
+
+<script>
+
+let materiales = [];
+
+let numeroPresupuesto =
+parseInt(
+localStorage.getItem("numeroPresupuesto")
+) || 1;
+
+
+/* FECHA */
+
+document.getElementById("fecha").value =
+new Date().toISOString().split("T")[0];
+
+
+/* DATOS DEL NEGOCIO */
+
+function cargarDatosNegocio() {
+
+document.getElementById("negocio").value =
+localStorage.getItem("negocio") || "";
+
+document.getElementById("negocioTelefono").value =
+localStorage.getItem("negocioTelefono") || "";
+
+document.getElementById("negocioEmail").value =
+localStorage.getItem("negocioEmail") || "";
+
+document.getElementById("negocioDireccion").value =
+localStorage.getItem("negocioDireccion") || "";
+
+document.getElementById("negocioCuit").value =
+localStorage.getItem("negocioCuit") || "";
+
+}
+
+
+function guardarDatosNegocio() {
+
+localStorage.setItem(
+"negocio",
+document.getElementById("negocio").value
+);
+
+localStorage.setItem(
+"negocioTelefono",
+document.getElementById("negocioTelefono").value
+);
+
+localStorage.setItem(
+"negocioEmail",
+document.getElementById("negocioEmail").value
+);
+
+localStorage.setItem(
+"negocioDireccion",
+document.getElementById("negocioDireccion").value
+);
+
+localStorage.setItem(
+"negocioCuit",
+document.getElementById("negocioCuit").value
+);
+
+}
+
+
+/* MATERIAL */
+
+function agregarMaterial() {
+
+materiales.push({
+nombre:"",
+cantidad:1,
+precio:0
+});
+
+mostrarMateriales();
+
+}
+
+
+function mostrarMateriales() {
+
+const contenedor =
+document.getElementById("materiales");
+
+contenedor.innerHTML = "";
+
+materiales.forEach(
+(material,index) => {
+
+const div =
+document.createElement("div");
+
+div.className = "material";
+
+div.innerHTML = `
+
+<input
+placeholder="Material"
+value="${material.nombre}"
+oninput="
+actualizarMaterial(
+${index},
+'nombre',
+this.value
+)">
+
+<input
+type="number"
+min="0"
+value="${material.cantidad}"
+oninput="
+actualizarMaterial(
+${index},
+'cantidad',
+this.value
+)">
+
+<input
+type="number"
+min="0"
+value="${material.precio}"
+oninput="
+actualizarMaterial(
+${index},
+'precio',
+this.value
+)">
+
+<button
+class="btn-danger"
+onclick="
+eliminarMaterial(${index})
+">
+✕
+</button>
+
+`;
+
+contenedor.appendChild(div);
+
+});
+
+calcularTotal();
+
+}
+
+
+function actualizarMaterial(
+index,
+campo,
+valor
+) {
+
+if(
+campo === "cantidad" ||
+campo === "precio"
+) {
+valor = parseFloat(valor) || 0;
+}
+
+materiales[index][campo] = valor;
+
+calcularTotal();
+
+}
+
+
+function eliminarMaterial(index) {
+
+materiales.splice(index,1);
+
+mostrarMateriales();
+
+}
+
+
+/* TOTAL */
+
+function calcularTotal() {
+
+let materialesTotal = 0;
+
+materiales.forEach(
+material => {
+
+materialesTotal +=
+material.cantidad *
+material.precio;
+
+});
+
+
+let manoObra =
+parseFloat(
+document.getElementById("manoObra").value
+) || 0;
+
+
+let total =
+materialesTotal + manoObra;
+
+
+document.getElementById("total")
+.textContent =
+total.toFixed(2);
+
+}
+
+
+/* PREVIEW */
+
+function actualizarPreview() {
+
+guardarDatosNegocio();
+
+
+document.getElementById(
+"previewNegocio"
+).textContent =
+document.getElementById(
+"negocio"
+).value ||
+"Mi negocio";
+
+
+document.getElementById(
+"previewNegocioInfo"
+).innerHTML =
+
+"Teléfono: " +
+(document.getElementById(
+"negocioTelefono"
+).value || "-") +
+"<br>" +
+
+"Email: " +
+(document.getElementById(
+"negocioEmail"
+).value || "-") +
+"<br>" +
+
+"Dirección: " +
+(document.getElementById(
+"negocioDireccion"
+).value || "-") +
+"<br>" +
+
+"CUIT: " +
+(document.getElementById(
+"negocioCuit"
+).value || "-");
+
+
+document.getElementById(
+"previewNumero"
+).textContent =
+String(numeroPresupuesto)
+.padStart(4,"0");
+
+
+document.getElementById(
+"previewFecha"
+).textContent =
+document.getElementById(
+"fecha"
+).value || "-";
+
+
+document.getElementById(
+"previewCliente"
+).textContent =
+document.getElementById(
+"cliente"
+).value || "-";
+
+
+document.getElementById(
+"previewTelefono"
+).textContent =
+document.getElementById(
+"telefono"
+).value || "-";
+
+
+document.getElementById(
+"previewTrabajo"
+).textContent =
+document.getElementById(
+"trabajo"
+).value || "-";
+
+
+document.getElementById(
+"previewCondiciones"
+).textContent =
+document.getElementById(
+"condiciones"
+).value || "-";
+
+
+actualizarMaterialesPreview();
+
+
+let manoObra =
+parseFloat(
+document.getElementById(
+"manoObra"
+).value
+) || 0;
+
+
+document.getElementById(
+"previewManoObra"
+).textContent =
+manoObra.toFixed(2);
+
+
+let total =
+parseFloat(
+document.getElementById(
+"total"
+).textContent
+) || 0;
+
+
+document.getElementById(
+"previewTotal"
+).textContent =
+total.toFixed(2);
+
+}
+
+
+function actualizarMaterialesPreview() {
+
+const tbody =
+document.getElementById(
+"previewMateriales"
+);
+
+tbody.innerHTML = "";
+
+
+materiales.forEach(
+material => {
+
+if(!material.nombre) return;
+
+
+let subtotal =
+material.cantidad *
+material.precio;
+
+
+let tr =
+document.createElement("tr");
+
+
+tr.innerHTML = `
+
+<td>${material.nombre}</td>
+
+<td>${material.cantidad}</td>
+
+<td>
+$${material.precio.toFixed(2)}
+</td>
+
+<td>
+$${subtotal.toFixed(2)}
+</td>
+
+`;
+
+
+tbody.appendChild(tr);
+
+});
+
+}
+
+
+/* GUARDAR */
+
+function guardarPresupuesto() {
+
+actualizarPreview();
+
+
+let presupuesto = {
+
+numero: numeroPresupuesto,
+
+negocio:
+document.getElementById("negocio").value,
+
+negocioTelefono:
+document.getElementById("negocioTelefono").value,
+
+negocioEmail:
+document.getElementById("negocioEmail").value,
+
+negocioDireccion:
+document.getElementById("negocioDireccion").value,
+
+negocioCuit:
+document.getElementById("negocioCuit").value,
+
+cliente:
+document.getElementById("cliente").value,
+
+telefono:
+document.getElementById("telefono").value,
+
+trabajo:
+document.getElementById("trabajo").value,
+
+fecha:
+document.getElementById("fecha").value,
+
+materiales:
+materiales,
+
+manoObra:
+parseFloat(
+document.getElementById(
+"manoObra"
+).value
+) || 0,
+
+condiciones:
+document.getElementById(
+"condiciones"
+).value,
+
+total:
+parseFloat(
+document.getElementById(
+"total"
+).textContent
+) || 0
+
+};
+
+
+let presupuestos =
+JSON.parse(
+localStorage.getItem(
+"presupuestos"
+)
+) || [];
+
+
+presupuestos.push(presupuesto);
+
+
+localStorage.setItem(
+"presupuestos",
+JSON.stringify(presupuestos)
+);
+
+
+numeroPresupuesto++;
+
+
+localStorage.setItem(
+"numeroPresupuesto",
+numeroPresupuesto
+);
+
+
+mostrarPresupuestos();
+
+
+alert(
+"Presupuesto guardado correctamente."
+);
+
+}
+
+
+/* HISTORIAL */
+
+function mostrarPresupuestos() {
+
+const contenedor =
+document.getElementById(
+"presupuestosGuardados"
+);
+
+const presupuestos =
+JSON.parse(
+localStorage.getItem(
+"presupuestos"
+)
+) || [];
+
+
+contenedor.innerHTML = "";
+
+
+if(presupuestos.length === 0) {
+
+contenedor.innerHTML =
+"<p>No hay presupuestos guardados.</p>";
+
+return;
+
+}
+
+
+presupuestos
+.slice()
+.reverse()
+.forEach(
+(presupuesto,reverseIndex) => {
+
+let index =
+presupuestos.length -
+1 -
+reverseIndex;
+
+
+let div =
+document.createElement("div");
+
+div.className = "saved";
+
+
+div.innerHTML = `
+
+<strong>
+Presupuesto #${
+String(presupuesto.numero)
+.padStart(4,"0")
+}
+</strong>
+
+<p>
+Cliente:
+${presupuesto.cliente || "Sin nombre"}
+</p>
+
+<p>
+Total:
+<strong>
+$${presupuesto.total.toFixed(2)}
+</strong>
+</p>
+
+<button
+class="btn-primary"
+onclick="
+cargarPresupuesto(${index})
+">
+👁️ Ver
+</button>
+
+<button
+class="btn-dark"
+onclick="
+cargarPresupuestoPDF(${index})
+">
+📄 PDF
+</button>
+
+<button
+class="btn-whatsapp"
+onclick="
+enviarPresupuestoGuardado(${index})
+">
+📱 WhatsApp
+</button>
+
+<button
+class="btn-danger"
+onclick="
+eliminarPresupuesto(${index})
+">
+🗑️ Eliminar
+</button>
+
+`;
+
+
+contenedor.appendChild(div);
+
+});
+
+}
+
+
+/* CARGAR */
+
+function cargarPresupuesto(index) {
+
+const presupuestos =
+JSON.parse(
+localStorage.getItem(
+"presupuestos"
+)
+) || [];
+
+
+const p =
+presupuestos[index];
+
+
+document.getElementById("negocio").value =
+p.negocio || "";
+
+document.getElementById("negocioTelefono").value =
+p.negocioTelefono || "";
+
+document.getElementById("negocioEmail").value =
+p.negocioEmail || "";
+
+document.getElementById("negocioDireccion").value =
+p.negocioDireccion || "";
+
+document.getElementById("negocioCuit").value =
+p.negocioCuit || "";
+
+document.getElementById("cliente").value =
+p.cliente || "";
+
+document.getElementById("telefono").value =
+p.telefono || "";
+
+document.getElementById("trabajo").value =
+p.trabajo || "";
+
+document.getElementById("fecha").value =
+p.fecha || "";
+
+document.getElementById("manoObra").value =
+p.manoObra || 0;
+
+document.getElementById("condiciones").value =
+p.condiciones || "";
+
+materiales =
+p.materiales || [];
+
+numeroPresupuesto =
+p.numero;
+
+mostrarMateriales();
+
+actualizarPreview();
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+
+/* PDF */
+
+function generarPDF() {
+
+actualizarPreview();
+
+setTimeout(
+function() {
+window.print();
+},
+200
+);
+
+}
+
+
+function cargarPresupuestoPDF(index) {
+
+cargarPresupuesto(index);
+
+setTimeout(
+function() {
+generarPDF();
+},
+400
+);
+
+}
+
+
+/* WHATSAPP */
+
+function enviarWhatsApp() {
+
+actualizarPreview();
+
+
+let telefono =
+document.getElementById(
+"telefono"
+).value.replace(
+/\D/g,
+""
+);
+
+
+if(!telefono) {
+
+alert(
+"Ingresá primero el WhatsApp del cliente."
+);
+
+return;
+
+}
+
+
+let cliente =
+document.getElementById(
+"cliente"
+).value ||
+"cliente";
+
+
+let negocio =
+document.getElementById(
+"negocio"
+).value ||
+"nuestro negocio";
+
+
+let trabajo =
+document.getElementById(
+"trabajo"
+).value ||
+"-";
+
+
+let total =
+document.getElementById(
+"total"
+).textContent;
+
+
+let numero =
+String(numeroPresupuesto)
+.padStart(4,"0");
+
+
+let mensaje =
+
+`Hola ${cliente}! 👋
+
+Te envío el presupuesto de ${negocio}.
+
+📋 Presupuesto #${numero}
+
+🔧 Trabajo:
+${trabajo}
+
+💰 Total:
+$${total}
+
+Muchas gracias por confiar en nosotros.`;
+
+
+let url =
+"https://wa.me/" +
+telefono +
+"?text=" +
+encodeURIComponent(mensaje);
+
+
+window.open(
+url,
+"_blank"
+);
+
+}
+
+
+/* WHATSAPP HISTORIAL */
+
+function enviarPresupuestoGuardado(index) {
+
+const presupuestos =
+JSON.parse(
+localStorage.getItem(
+"presupuestos"
+)
+) || [];
+
+
+const p =
+presupuestos[index];
+
+
+let telefono =
+(p.telefono || "")
+.replace(
+/\D/g,
+""
+);
+
+
+if(!telefono) {
+
+alert(
+"Este presupuesto no tiene WhatsApp."
+);
+
+return;
+
+}
+
+
+let mensaje =
+
+`Hola ${
+p.cliente || "cliente"
+}! 👋
+
+Te envío el presupuesto de ${
+p.negocio || "nuestro negocio"
+}.
+
+📋 Presupuesto #${
+String(p.numero)
+.padStart(4,"0")
+}
+
+🔧 Trabajo:
+${p.trabajo || "-"}
+
+💰 Total:
+$${p.total.toFixed(2)}
+
+Muchas gracias por confiar en nosotros.`;
+
+
+let url =
+"https://wa.me/" +
+telefono +
+"?text=" +
+encodeURIComponent(mensaje);
+
+
+window.open(
+url,
+"_blank"
+);
+
+}
+
+
+/* ELIMINAR */
+
+function eliminarPresupuesto(index) {
+
+if(
+!confirm(
+"¿Eliminar este presupuesto?"
+)
+) return;
+
+
+let presupuestos =
+JSON.parse(
+localStorage.getItem(
+"presupuestos"
+)
+) || [];
+
+
+presupuestos.splice(
+index,
+1
+);
+
+
+localStorage.setItem(
+"presupuestos",
+JSON.stringify(
+presupuestos
+)
+);
+
+
+mostrarPresupuestos();
+
+}
+
+
+/* EVENTOS */
+
+document
+.getElementById("manoObra")
+.addEventListener(
+"input",
+function() {
+
+calcularTotal();
+actualizarPreview();
+
+});
+
+
+/* INICIO */
+
+cargarDatosNegocio();
+
+agregarMaterial();
+
+mostrarPresupuestos();
+
+calcularTotal();
+
+actualizarPreview();
+
+</script>
+
+</body>
+</html>
