@@ -243,6 +243,34 @@ header h1 {
     border-radius: 7px;
 }
 
+
+/* =========================================================
+   BOTÓN APK DENTRO DE LA APP
+========================================================= */
+
+.apkHeaderBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #16a34a;
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 7px;
+    font-weight: bold;
+    white-space: nowrap;
+    transition: 0.2s;
+}
+
+.apkHeaderBtn:hover {
+    background: #15803d;
+}
+
+.apkHeaderBtn:active {
+    transform: scale(0.98);
+}
+
+
 .container {
     width: 100%;
     max-width: 1200px;
@@ -581,6 +609,7 @@ header h1 {
         width: 100%;
         font-size: 13px;
         gap: 8px;
+        flex-wrap: wrap;
     }
 
     #usuarioEmail {
@@ -588,12 +617,20 @@ header h1 {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        flex: 1;
     }
 
     .logoutBtn {
         padding: 10px 14px;
         min-height: 42px;
         flex-shrink: 0;
+    }
+
+    .apkHeaderBtn {
+        width: 100%;
+        min-height: 42px;
+        font-size: 14px;
+        order: 3;
     }
 
     .container {
@@ -978,6 +1015,7 @@ header h1 {
         <a
             class="apkDownload"
             href="https://github.com/1KEOPS1/Presufacil/raw/refs/heads/main/PresuF%C3%A1cil.apk"
+            download="PresuFacil.apk"
         >
             📱 Descargar PresuFácil para Android
         </a>
@@ -1011,6 +1049,16 @@ header h1 {
     <div class="userPanel">
 
         <span id="usuarioEmail"></span>
+
+        <!-- BOTÓN APK DENTRO DE LA APP -->
+
+        <a
+            href="https://github.com/1KEOPS1/Presufacil/raw/refs/heads/main/PresuF%C3%A1cil.apk"
+            class="apkHeaderBtn"
+            download="PresuFacil.apk"
+        >
+            📱 Descargar APK
+        </a>
 
         <button
             class="logoutBtn"
