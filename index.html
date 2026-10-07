@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 
 <meta charset="UTF-8">
@@ -46,11 +47,9 @@
 >
 
 <link
-<link
     rel="apple-touch-icon"
     href="./icon-192.png"
 >
-
 
 <!-- =====================================================
      LIBRERÍAS
@@ -69,15 +68,24 @@
     box-sizing: border-box;
 }
 
+html {
+    width: 100%;
+    overflow-x: hidden;
+}
+
 body {
     margin: 0;
+    width: 100%;
+    min-height: 100vh;
     font-family: Arial, Helvetica, sans-serif;
     background: #f3f4f6;
     color: #222;
+    overflow-x: hidden;
 }
 
 button {
     cursor: pointer;
+    font-family: inherit;
 }
 
 input,
@@ -85,6 +93,7 @@ textarea,
 select {
     font-family: inherit;
 }
+
 
 /* =========================================================
    LOGIN
@@ -98,6 +107,8 @@ select {
     justify-content: center;
     align-items: center;
     z-index: 9999;
+    padding: 20px;
+    overflow-y: auto;
 }
 
 .authBox {
@@ -150,6 +161,7 @@ select {
     font-size: 14px;
 }
 
+
 /* =========================================================
    APP
 ========================================================= */
@@ -189,6 +201,7 @@ header h1 {
 }
 
 .container {
+    width: 100%;
     max-width: 1200px;
     margin: auto;
     padding: 20px;
@@ -225,6 +238,7 @@ header h1 {
 
 .field input,
 .field textarea {
+    width: 100%;
     padding: 11px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -234,6 +248,7 @@ header h1 {
     min-height: 80px;
     resize: vertical;
 }
+
 
 /* =========================================================
    MATERIALES
@@ -283,6 +298,7 @@ header h1 {
     margin-top: 10px;
 }
 
+
 /* =========================================================
    BOTONES
 ========================================================= */
@@ -329,6 +345,7 @@ header h1 {
     font-weight: bold;
 }
 
+
 /* =========================================================
    PREVIEW
 ========================================================= */
@@ -338,6 +355,7 @@ header h1 {
     padding: 30px;
     border-radius: 10px;
     min-height: 500px;
+    overflow: hidden;
 }
 
 .previewHeader {
@@ -346,6 +364,11 @@ header h1 {
     border-bottom: 2px solid #222;
     padding-bottom: 15px;
     margin-bottom: 20px;
+    gap: 20px;
+}
+
+.previewBusiness {
+    min-width: 0;
 }
 
 .previewBusiness h2 {
@@ -357,6 +380,7 @@ header h1 {
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
+    overflow-wrap: anywhere;
 }
 
 .previewTable {
@@ -382,7 +406,9 @@ header h1 {
     margin-top: 25px;
     padding-top: 15px;
     border-top: 1px solid #ddd;
+    overflow-wrap: anywhere;
 }
+
 
 /* =========================================================
    BOTONES DENTRO DE VISTA PREVIA
@@ -401,6 +427,7 @@ header h1 {
     flex: 1;
     min-width: 180px;
 }
+
 
 /* =========================================================
    HISTORIAL
@@ -446,6 +473,7 @@ header h1 {
     background: #25D366;
 }
 
+
 /* =========================================================
    MODAL PDF
 ========================================================= */
@@ -459,6 +487,7 @@ header h1 {
     justify-content: center;
     align-items: center;
     padding: 20px;
+    overflow-y: auto;
 }
 
 .pdfModalBox {
@@ -480,52 +509,385 @@ header h1 {
     gap: 10px;
 }
 
+
 /* =========================================================
-   RESPONSIVE
+   EXPERIENCIA TÁCTIL
+========================================================= */
+
+button,
+input,
+textarea,
+select {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    touch-action: manipulation;
+}
+
+
+/* =========================================================
+   RESPONSIVE — CELULAR
 ========================================================= */
 
 @media (max-width: 700px) {
 
+    body {
+        font-size: 15px;
+    }
+
     header {
+        padding: 14px 16px;
+        padding-top: calc(14px + env(safe-area-inset-top));
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    header h1 {
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .userPanel {
+        justify-content: space-between;
+        width: 100%;
+        font-size: 13px;
+        gap: 8px;
+    }
+
+    #usuarioEmail {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .logoutBtn {
+        padding: 10px 14px;
+        min-height: 42px;
+        flex-shrink: 0;
+    }
+
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .card {
+        padding: 15px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+    }
+
+    .card h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
     }
 
     .grid {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .field {
+        gap: 5px;
+    }
+
+    .field label {
+        font-size: 14px;
+    }
+
+    .field input,
+    .field textarea,
+    .authBox input {
+        width: 100%;
+        min-height: 46px;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 9px;
+    }
+
+    .field textarea {
+        min-height: 110px;
+    }
+
+
+    /* =====================================================
+       MATERIALES
+    ===================================================== */
+
+    .material {
+        padding: 12px;
     }
 
     .materialGrid {
         grid-template-columns: 1fr;
+        gap: 10px;
     }
+
+    .material input {
+        min-height: 46px;
+        font-size: 16px;
+    }
+
+    .removeMaterial {
+        width: 100%;
+        min-height: 44px;
+        font-size: 15px;
+    }
+
+    .addMaterial {
+        width: 100%;
+        min-height: 48px;
+        font-size: 16px;
+        margin-top: 12px;
+    }
+
+
+    /* =====================================================
+       BOTONES
+    ===================================================== */
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .primaryBtn,
+    .successBtn,
+    .whatsappBtn,
+    .dangerBtn {
+        width: 100%;
+        min-height: 48px;
+        font-size: 15px;
+    }
+
+
+    /* =====================================================
+       VISTA PREVIA
+    ===================================================== */
 
     #preview {
         padding: 15px;
+        min-height: 400px;
+        overflow: hidden;
     }
 
     .previewHeader {
         flex-direction: column;
         gap: 15px;
+        padding-bottom: 12px;
+    }
+
+    .previewBusiness h2 {
+        font-size: 19px;
+    }
+
+    .previewClient {
+        padding: 12px;
+        font-size: 14px;
     }
 
     .previewTable {
-        font-size: 13px;
+        width: 100%;
+        font-size: 12px;
+        table-layout: fixed;
+    }
+
+    .previewTable th,
+    .previewTable td {
+        padding: 7px 4px;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    .previewTable th:nth-child(1),
+    .previewTable td:nth-child(1) {
+        width: 38%;
+    }
+
+    .previewTable th:nth-child(2),
+    .previewTable td:nth-child(2) {
+        width: 13%;
+        text-align: center;
+    }
+
+    .previewTable th:nth-child(3),
+    .previewTable td:nth-child(3) {
+        width: 24%;
+    }
+
+    .previewTable th:nth-child(4),
+    .previewTable td:nth-child(4) {
+        width: 25%;
+    }
+
+    .previewTotal {
+        font-size: 20px;
+        margin-top: 18px;
+    }
+
+    .previewConditions {
+        font-size: 14px;
     }
 
     .previewActions {
         flex-direction: column;
+        gap: 10px;
     }
 
     .previewActions button {
         width: 100%;
+        min-width: 0;
+        min-height: 50px;
+        font-size: 15px;
+    }
+
+
+    /* =====================================================
+       HISTORIAL
+    ===================================================== */
+
+    .historyItem {
+        padding: 13px;
+    }
+
+    .historyInfo {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .historyActions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .smallBtn {
+        width: 100%;
+        min-height: 44px;
+        font-size: 14px;
+    }
+
+
+    /* =====================================================
+       LOGIN
+    ===================================================== */
+
+    #authOverlay {
+        padding: 15px;
+        align-items: center;
+    }
+
+    .authBox {
+        padding: 22px;
+        border-radius: 15px;
+    }
+
+    .authBox h1 {
+        font-size: 25px;
+    }
+
+    .authBtn,
+    .authSecondary {
+        min-height: 48px;
+        font-size: 15px;
+    }
+
+
+    /* =====================================================
+       MODAL PDF
+    ===================================================== */
+
+    #pdfModal {
+        padding: 12px;
+    }
+
+    .pdfModalBox {
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+    .pdfModalActions button {
+        min-height: 50px;
+        font-size: 15px;
+    }
+
+
+    /* =====================================================
+       SEGURIDAD CONTRA DESBORDE
+    ===================================================== */
+
+    .previewBusiness,
+    .historyItem,
+    .card {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+}
+
+
+/* =========================================================
+   CELULARES MUY PEQUEÑOS
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .container {
+        padding: 7px;
+    }
+
+    .card {
+        padding: 12px;
+    }
+
+    #preview {
+        padding: 10px;
+    }
+
+    .previewTable {
+        font-size: 11px;
+    }
+
+    .previewTable th,
+    .previewTable td {
+        padding: 6px 3px;
+    }
+
+    .previewTotal {
+        font-size: 18px;
+    }
+
+    header h1 {
+        font-size: 18px;
+    }
+
+}
+
+
+/* =========================================================
+   SAFE AREA — IPHONE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    #app {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .pdfModalBox {
+        margin-bottom: env(safe-area-inset-bottom);
     }
 
 }
 
 </style>
+
 </head>
 
+
 <body>
+
 
 <!-- =====================================================
      LOGIN
@@ -567,6 +929,7 @@ header h1 {
 
         </div>
 
+
         <div id="registerForm" style="display:none;">
 
             <input
@@ -596,6 +959,7 @@ header h1 {
             </button>
 
         </div>
+
 
         <div
             id="authMessage"
@@ -635,6 +999,7 @@ header h1 {
 
 <div class="container">
 
+
 <div class="card">
 
     <h2>Datos del negocio</h2>
@@ -642,41 +1007,65 @@ header h1 {
     <div class="grid">
 
         <div class="field">
+
             <label>Nombre del negocio</label>
+
             <input id="negocio">
+
         </div>
 
+
         <div class="field">
+
             <label>Teléfono</label>
+
             <input id="negocioTelefono">
+
         </div>
 
+
         <div class="field">
+
             <label>Email</label>
+
             <input id="negocioEmail">
+
         </div>
 
+
         <div class="field">
+
             <label>Dirección</label>
+
             <input id="negocioDireccion">
+
         </div>
 
+
         <div class="field">
+
             <label>CUIT</label>
+
             <input id="negocioCuit">
+
         </div>
 
+
         <div class="field">
+
             <label>Fecha</label>
+
             <input
                 type="date"
                 id="fecha"
             >
+
         </div>
 
     </div>
 
 </div>
+
 
 
 <div class="card">
@@ -686,23 +1075,35 @@ header h1 {
     <div class="grid">
 
         <div class="field">
+
             <label>Cliente</label>
+
             <input id="cliente">
+
         </div>
 
+
         <div class="field">
+
             <label>Teléfono</label>
+
             <input id="telefono">
+
         </div>
 
+
         <div class="field">
+
             <label>Trabajo</label>
+
             <input id="trabajo">
+
         </div>
 
     </div>
 
 </div>
+
 
 
 <div class="card">
@@ -722,6 +1123,7 @@ header h1 {
     </button>
 
 </div>
+
 
 
 <div class="card">
@@ -746,6 +1148,7 @@ header h1 {
 </div>
 
 
+
 <div class="card">
 
     <h2>Condiciones</h2>
@@ -763,6 +1166,7 @@ header h1 {
 </div>
 
 
+
 <div class="card">
 
     <h2>Vista previa</h2>
@@ -770,6 +1174,7 @@ header h1 {
     <div id="preview"></div>
 
 </div>
+
 
 
 <div class="card">
@@ -786,6 +1191,7 @@ header h1 {
 
 
 </div>
+
 </div>
 
 
@@ -831,6 +1237,7 @@ header h1 {
     </div>
 
 </div>
+
 
 
 <script>
@@ -899,7 +1306,6 @@ function conectarSupabase() {
 
         return false;
     }
-
 }
 
 
@@ -914,7 +1320,6 @@ function mostrarRegistro() {
     document.getElementById("registerForm").style.display = "block";
 
     document.getElementById("authMessage").textContent = "";
-
 }
 
 
@@ -925,7 +1330,6 @@ function mostrarLogin() {
     document.getElementById("loginForm").style.display = "block";
 
     document.getElementById("authMessage").textContent = "";
-
 }
 
 
@@ -981,6 +1385,7 @@ async function registrarUsuario() {
             await supabaseClient.auth.signUp({
 
                 email,
+
                 password,
 
                 options: {
@@ -1026,9 +1431,7 @@ async function registrarUsuario() {
 
         mensaje.textContent =
             "Ocurrió un error al crear la cuenta.";
-
     }
-
 }
 
 
@@ -1099,9 +1502,7 @@ async function iniciarSesion() {
 
         mensaje.textContent =
             "Ocurrió un error al iniciar sesión.";
-
     }
-
 }
 
 
@@ -1124,7 +1525,6 @@ async function cerrarSesion() {
     document.getElementById("app").style.display = "none";
 
     document.getElementById("authOverlay").style.display = "flex";
-
 }
 
 
@@ -1150,7 +1550,6 @@ function mostrarApp() {
 
     cargarDatosNegocio();
 
-
     establecerFechaActual();
 
 
@@ -1164,7 +1563,6 @@ function mostrarApp() {
     mostrarPresupuestos();
 
     actualizarPreview();
-
 }
 
 
@@ -1217,7 +1615,6 @@ async function comprobarSesion() {
         document.getElementById("app").style.display = "none";
 
     }
-
 }
 
 
@@ -1263,7 +1660,6 @@ function establecerFechaActual() {
 
     campoFecha.value =
         `${año}-${mes}-${dia}`;
-
 }
 
 
@@ -1274,11 +1670,17 @@ function establecerFechaActual() {
 function cargarDatosNegocio() {
 
     const campos = [
+
         "negocio",
+
         "negocioTelefono",
+
         "negocioEmail",
+
         "negocioDireccion",
+
         "negocioCuit"
+
     ];
 
 
@@ -1316,18 +1718,23 @@ function cargarDatosNegocio() {
 
         }
     );
-
 }
 
 
 function guardarDatosNegocio() {
 
     const campos = [
+
         "negocio",
+
         "negocioTelefono",
+
         "negocioEmail",
+
         "negocioDireccion",
+
         "negocioCuit"
+
     ];
 
 
@@ -1335,13 +1742,15 @@ function guardarDatosNegocio() {
         campo => {
 
             localStorage.setItem(
+
                 "presufacil_" + campo,
+
                 document.getElementById(campo).value
+
             );
 
         }
     );
-
 }
 
 
@@ -1363,8 +1772,11 @@ function agregarMaterial(
     materiales.push({
 
         id,
+
         nombre,
+
         cantidad,
+
         precio
 
     });
@@ -1373,7 +1785,6 @@ function agregarMaterial(
     renderMateriales();
 
     actualizarPreview();
-
 }
 
 
@@ -1389,7 +1800,6 @@ function eliminarMaterial(id) {
     renderMateriales();
 
     actualizarPreview();
-
 }
 
 
@@ -1428,7 +1838,6 @@ function actualizarMaterial(
 
 
     actualizarPreview();
-
 }
 
 
@@ -1468,6 +1877,7 @@ function renderMateriales() {
 
                     </div>
 
+
                     <div class="field">
 
                         <label>Cantidad</label>
@@ -1482,6 +1892,7 @@ function renderMateriales() {
 
                     </div>
 
+
                     <div class="field">
 
                         <label>Precio</label>
@@ -1495,6 +1906,7 @@ function renderMateriales() {
                         >
 
                     </div>
+
 
                     <button
                         class="removeMaterial"
@@ -1512,7 +1924,6 @@ function renderMateriales() {
 
         }
     );
-
 }
 
 
@@ -1523,12 +1934,16 @@ function renderMateriales() {
 function escapeHTML(text) {
 
     return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
 
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
 }
 
 
@@ -1545,9 +1960,13 @@ function calcularTotal() {
         material => {
 
             totalMateriales +=
+
                 (
                     parseFloat(material.cantidad) || 0
-                ) *
+                )
+
+                *
+
                 (
                     parseFloat(material.precio) || 0
                 );
@@ -1563,7 +1982,6 @@ function calcularTotal() {
 
 
     return totalMateriales + manoObra;
-
 }
 
 
@@ -1611,9 +2029,13 @@ function actualizarPreview() {
         material => {
 
             const subtotal =
+
                 (
                     parseFloat(material.cantidad) || 0
-                ) *
+                )
+
+                *
+
                 (
                     parseFloat(material.precio) || 0
                 );
@@ -1724,6 +2146,7 @@ function actualizarPreview() {
 
             </div>
 
+
             <div>
 
                 <strong>
@@ -1777,16 +2200,24 @@ function actualizarPreview() {
 
             </thead>
 
+
             <tbody>
 
                 ${
                     filas ||
+
                     `
+
                     <tr>
+
                         <td colspan="4">
+
                             No hay materiales cargados.
+
                         </td>
+
                     </tr>
+
                     `
                 }
 
@@ -1805,8 +2236,11 @@ function actualizarPreview() {
 
         ${
             condiciones
+
             ?
+
             `
+
             <div class="previewConditions">
 
                 <strong>
@@ -1818,8 +2252,11 @@ function actualizarPreview() {
                 </p>
 
             </div>
+
             `
+
             :
+
             ""
         }
 
@@ -1833,12 +2270,14 @@ function actualizarPreview() {
                 💾 Guardar presupuesto
             </button>
 
+
             <button
                 class="successBtn"
                 onclick="generarPDF()"
             >
                 📄 Generar PDF
             </button>
+
 
             <button
                 class="whatsappBtn"
@@ -1850,7 +2289,6 @@ function actualizarPreview() {
         </div>
 
     `;
-
 }
 
 
@@ -1875,13 +2313,18 @@ function formatearFecha(fecha) {
 
 
     return (
-        partes[2] +
-        "/" +
-        partes[1] +
-        "/" +
-        partes[0]
-    );
 
+        partes[2] +
+
+        "/" +
+
+        partes[1] +
+
+        "/" +
+
+        partes[0]
+
+    );
 }
 
 
@@ -1892,13 +2335,18 @@ function formatearFecha(fecha) {
 function formatearNumero(numero) {
 
     return Number(numero || 0).toLocaleString(
-        "es-AR",
-        {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }
-    );
 
+        "es-AR",
+
+        {
+
+            minimumFractionDigits: 2,
+
+            maximumFractionDigits: 2
+
+        }
+
+    );
 }
 
 
@@ -1983,6 +2431,7 @@ async function guardarPresupuesto() {
             usuarioActual.id,
 
         numero:
+
             numero,
 
         negocio,
@@ -2008,7 +2457,9 @@ async function guardarPresupuesto() {
         error
     } =
         await supabaseClient
+
             .from("presupuestos")
+
             .insert([registro]);
 
 
@@ -2034,7 +2485,6 @@ async function guardarPresupuesto() {
 
 
     await mostrarPresupuestos();
-
 }
 
 
@@ -2067,8 +2517,11 @@ async function mostrarPresupuestos() {
         error
     } =
         await supabaseClient
+
             .from("presupuestos")
+
             .select("*")
+
             .order(
                 "id",
                 {
@@ -2119,13 +2572,19 @@ async function mostrarPresupuestos() {
 
 
             const fechaHistorial =
+
                 presupuesto.datos &&
+
                 presupuesto.datos.fecha
+
                 ?
+
                 formatearFecha(
                     presupuesto.datos.fecha
                 )
+
                 :
+
                 "";
 
 
@@ -2136,16 +2595,19 @@ async function mostrarPresupuestos() {
                     <div>
 
                         <strong>
+
                             ${escapeHTML(
                                 String(
                                     presupuesto.numero || ""
                                 )
                             )}
+
                         </strong>
 
                         <br>
 
                         Cliente:
+
                         ${escapeHTML(
                             presupuesto.cliente || "-"
                         )}
@@ -2153,26 +2615,36 @@ async function mostrarPresupuestos() {
                         <br>
 
                         Trabajo:
+
                         ${escapeHTML(
                             presupuesto.trabajo || "-"
                         )}
 
                         ${
+
                             fechaHistorial
+
                             ?
+
                             `<br>Fecha: ${escapeHTML(fechaHistorial)}`
+
                             :
+
                             ""
+
                         }
 
                     </div>
 
+
                     <div>
 
                         <strong>
+
                             $ ${formatearNumero(
                                 presupuesto.total
                             )}
+
                         </strong>
 
                     </div>
@@ -2214,7 +2686,6 @@ async function mostrarPresupuestos() {
 
         }
     );
-
 }
 
 
@@ -2225,8 +2696,11 @@ async function mostrarPresupuestos() {
 function obtenerPresupuestoPorId(id) {
 
     return presupuestosActuales.find(
+
         presupuesto =>
+
             String(presupuesto.id) === String(id)
+
     );
 
 }
@@ -2256,7 +2730,6 @@ function cargarPresupuestoDesdeHistorial(id) {
         presupuesto,
         true
     );
-
 }
 
 
@@ -2283,7 +2756,6 @@ async function enviarPresupuestoDesdeHistorial(id) {
     await enviarPresupuestoGuardadoSupabase(
         presupuesto
     );
-
 }
 
 
@@ -2292,8 +2764,11 @@ async function enviarPresupuestoDesdeHistorial(id) {
 ========================================================= */
 
 function cargarPresupuestoSupabase(
+
     presupuesto,
+
     desplazar = true
+
 ) {
 
     const datos =
@@ -2301,67 +2776,96 @@ function cargarPresupuestoSupabase(
 
 
     document.getElementById("negocio").value =
+
         datos.negocio ||
+
         presupuesto.negocio ||
+
         "";
 
 
     document.getElementById("negocioTelefono").value =
+
         datos.negocioTelefono ||
+
         "";
 
 
     document.getElementById("negocioEmail").value =
+
         datos.negocioEmail ||
+
         "";
 
 
     document.getElementById("negocioDireccion").value =
+
         datos.negocioDireccion ||
+
         "";
 
 
     document.getElementById("negocioCuit").value =
+
         datos.negocioCuit ||
+
         "";
 
 
     document.getElementById("cliente").value =
+
         datos.cliente ||
+
         presupuesto.cliente ||
+
         "";
 
 
     document.getElementById("telefono").value =
+
         datos.telefono ||
+
         "";
 
 
     document.getElementById("trabajo").value =
+
         datos.trabajo ||
+
         presupuesto.trabajo ||
+
         "";
 
 
     document.getElementById("fecha").value =
+
         datos.fecha ||
+
         "";
 
 
     document.getElementById("manoObra").value =
+
         datos.manoObra || 0;
 
 
     document.getElementById("condiciones").value =
+
         datos.condiciones ||
+
         "";
 
 
     materiales =
+
         Array.isArray(datos.materiales)
+
         ?
+
         datos.materiales
+
         :
+
         [];
 
 
@@ -2373,7 +2877,9 @@ function cargarPresupuestoSupabase(
     if (desplazar) {
 
         document.getElementById("preview").scrollIntoView({
+
             behavior: "smooth"
+
         });
 
     }
@@ -2388,9 +2894,13 @@ function cargarPresupuestoSupabase(
 async function eliminarPresupuesto(id) {
 
     if (
+
         !confirm(
+
             "¿Eliminar este presupuesto?"
+
         )
+
     ) {
 
         return;
@@ -2401,8 +2911,11 @@ async function eliminarPresupuesto(id) {
         error
     } =
         await supabaseClient
+
             .from("presupuestos")
+
             .delete()
+
             .eq(
                 "id",
                 id
@@ -2431,7 +2944,6 @@ async function eliminarPresupuesto(id) {
 
 
     await mostrarPresupuestos();
-
 }
 
 
@@ -2464,7 +2976,9 @@ async function generarPDF() {
 
         const canvas =
             await html2canvas(
+
                 elemento,
+
                 {
 
                     scale: 1.5,
@@ -2478,13 +2992,17 @@ async function generarPDF() {
                         false
 
                 }
+
             );
 
 
         const imgData =
             canvas.toDataURL(
+
                 "image/jpeg",
+
                 0.75
+
             );
 
 
@@ -2515,14 +3033,18 @@ async function generarPDF() {
         const pageWidth =
             pdf.internal.pageSize.getWidth();
 
+
         const pageHeight =
             pdf.internal.pageSize.getHeight();
 
 
         const ratio =
             Math.min(
+
                 pageWidth / canvas.width,
+
                 pageHeight / canvas.height
+
             );
 
 
@@ -2536,8 +3058,11 @@ async function generarPDF() {
 
         const x =
             (
+
                 pageWidth -
+
                 imgWidth
+
             ) / 2;
 
 
@@ -2545,12 +3070,19 @@ async function generarPDF() {
 
 
         pdf.addImage(
+
             imgData,
+
             "JPEG",
+
             x,
+
             y,
+
             imgWidth,
+
             imgHeight
+
         );
 
 
@@ -2559,11 +3091,17 @@ async function generarPDF() {
 
 
         console.log(
+
             "PDF generado:",
+
             Math.round(
+
                 pdf.output("blob").size / 1024
+
             ),
+
             "KB"
+
         );
 
 
@@ -2581,7 +3119,6 @@ async function generarPDF() {
 
     document.getElementById("pdfModal").style.display =
         "flex";
-
 }
 
 
@@ -2604,7 +3141,6 @@ function descargarPDF() {
     presupuestoPDF.save(
         "presupuesto.pdf"
     );
-
 }
 
 
@@ -2659,27 +3195,43 @@ function normalizarTelefonoWhatsApp(telefono) {
     if (numero.length === 12) {
 
         if (
+
             numero.substring(2, 4) === "15"
+
         ) {
 
             numero =
+
                 numero.substring(0, 2) +
+
                 numero.substring(4);
 
-        } else if (
+        }
+
+        else if (
+
             numero.substring(3, 5) === "15"
+
         ) {
 
             numero =
+
                 numero.substring(0, 3) +
+
                 numero.substring(5);
 
-        } else if (
+        }
+
+        else if (
+
             numero.substring(4, 6) === "15"
+
         ) {
 
             numero =
+
                 numero.substring(0, 4) +
+
                 numero.substring(6);
 
         }
@@ -2695,7 +3247,6 @@ function normalizarTelefonoWhatsApp(telefono) {
 
 
     return "54" + numero;
-
 }
 
 
@@ -2716,18 +3267,23 @@ function obtenerMensajeWhatsApp() {
     if (cliente) {
 
         return (
+
             `Hola ${cliente}, te envío el presupuesto. ` +
+
             `Total: $ ${formatearNumero(total)}`
+
         );
 
     }
 
 
     return (
-        `Hola, te envío el presupuesto. ` +
-        `Total: $ ${formatearNumero(total)}`
-    );
 
+        `Hola, te envío el presupuesto. ` +
+
+        `Total: $ ${formatearNumero(total)}`
+
+    );
 }
 
 
@@ -2775,7 +3331,6 @@ async function enviarWhatsApp() {
 
 
     await generarPDF();
-
 }
 
 
@@ -2784,7 +3339,9 @@ async function enviarWhatsApp() {
 ========================================================= */
 
 async function enviarPresupuestoGuardadoSupabase(
+
     presupuesto
+
 ) {
 
     const datos =
@@ -2823,8 +3380,11 @@ async function enviarPresupuestoGuardadoSupabase(
 
 
     cargarPresupuestoSupabase(
+
         presupuesto,
+
         false
+
     );
 
 
@@ -2836,7 +3396,6 @@ async function enviarPresupuestoGuardadoSupabase(
 
 
     await generarPDF();
-
 }
 
 
@@ -2857,11 +3416,17 @@ async function compartirPDFWhatsApp() {
 
 
     const telefono =
+
         presupuestoSeleccionadoWhatsApp &&
+
         presupuestoSeleccionadoWhatsApp.telefono
+
         ?
+
         presupuestoSeleccionadoWhatsApp.telefono
+
         :
+
         document.getElementById("telefono").value.trim();
 
 
@@ -2901,20 +3466,32 @@ async function compartirPDFWhatsApp() {
 
     const archivo =
         new File(
+
             [blob],
+
             "presupuesto.pdf",
+
             {
+
                 type: "application/pdf"
+
             }
+
         );
 
 
     if (
+
         navigator.share &&
+
         navigator.canShare &&
+
         navigator.canShare({
+
             files: [archivo]
+
         })
+
     ) {
 
         try {
@@ -2934,11 +3511,15 @@ async function compartirPDFWhatsApp() {
 
             return;
 
+
         } catch (error) {
 
             if (
+
                 error &&
+
                 error.name === "AbortError"
+
             ) {
 
                 return;
@@ -2947,8 +3528,11 @@ async function compartirPDFWhatsApp() {
 
 
             console.log(
+
                 "No se pudo compartir el archivo:",
+
                 error
+
             );
 
         }
@@ -2962,20 +3546,26 @@ async function compartirPDFWhatsApp() {
 
 
     const urlWhatsApp =
+
         "https://wa.me/" +
+
         numeroWhatsApp +
+
         "?text=" +
+
         encodeURIComponent(mensaje);
 
 
     window.open(
+
         urlWhatsApp,
+
         "_blank"
+
     );
 
 
     cerrarPDFModal();
-
 }
 
 
@@ -2986,33 +3576,49 @@ async function compartirPDFWhatsApp() {
 if ("serviceWorker" in navigator) {
 
     window.addEventListener(
+
         "load",
+
         function() {
 
             navigator.serviceWorker
+
                 .register("./service-worker.js")
+
                 .then(
+
                     function(registration) {
 
                         console.log(
+
                             "PresuFácil: Service Worker registrado.",
+
                             registration.scope
+
                         );
 
                     }
+
                 )
+
                 .catch(
+
                     function(error) {
 
                         console.error(
+
                             "PresuFácil: error registrando Service Worker:",
+
                             error
+
                         );
 
                     }
+
                 );
 
         }
+
     );
 
 }
@@ -3029,14 +3635,21 @@ const supabaseConectado =
 if (supabaseConectado) {
 
     supabaseClient.auth.onAuthStateChange(
+
         (
+
             event,
+
             session
+
         ) => {
 
             if (
+
                 session &&
+
                 session.user
+
             ) {
 
                 usuarioActual =
@@ -3044,7 +3657,9 @@ if (supabaseConectado) {
 
                 mostrarApp();
 
-            } else {
+            }
+
+            else {
 
                 usuarioActual =
                     null;
@@ -3058,6 +3673,7 @@ if (supabaseConectado) {
             }
 
         }
+
     );
 
 
@@ -3068,4 +3684,5 @@ if (supabaseConectado) {
 </script>
 
 </body>
+
 </html>
