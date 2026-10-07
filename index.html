@@ -587,6 +587,14 @@ header h1 {
             <input id="negocioCuit">
         </div>
 
+        <div class="field">
+            <label>Fecha</label>
+            <input
+                type="date"
+                id="fecha"
+            >
+        </div>
+
     </div>
 
 </div>
@@ -611,17 +619,6 @@ header h1 {
         <div class="field">
             <label>Trabajo</label>
             <input id="trabajo">
-        </div>
-
-        <div class="field">
-
-            <label>Fecha</label>
-
-            <input
-                type="date"
-                id="fecha"
-            >
-
         </div>
 
     </div>
@@ -1093,6 +1090,13 @@ function mostrarApp() {
     cargarDatosNegocio();
 
 
+    /*
+       Si la fecha está vacía, colocamos
+       automáticamente la fecha actual.
+    */
+    establecerFechaActual();
+
+
     if (materiales.length === 0) {
 
         agregarMaterial();
@@ -1156,6 +1160,57 @@ async function comprobarSesion() {
         document.getElementById("app").style.display = "none";
 
     }
+
+}
+
+
+/* =========================================================
+   FECHA ACTUAL
+========================================================= */
+
+function establecerFechaActual() {
+
+    const campoFecha =
+        document.getElementById("fecha");
+
+
+    if (!campoFecha) {
+        return;
+    }
+
+
+    /*
+       No reemplazamos una fecha existente.
+       Esto permite conservar la fecha de un
+       presupuesto cargado desde el historial.
+    */
+    if (campoFecha.value) {
+        return;
+    }
+
+
+    const hoy =
+        new Date();
+
+
+    const año =
+        hoy.getFullYear();
+
+
+    const mes =
+        String(
+            hoy.getMonth() + 1
+        ).padStart(2, "0");
+
+
+    const dia =
+        String(
+            hoy.getDate()
+        ).padStart(2, "0");
+
+
+    campoFecha.value =
+        `${año}-${mes}-${dia}`;
 
 }
 
@@ -1625,7 +1680,7 @@ function actualizarPreview() {
 
                 ${
                     fecha
-                    ? `<div>${escapeHTML(fecha)}</div>`
+                    ? `<div>${escapeHTML(formatearFecha(fecha))}</div>`
                     : ""
                 }
 
@@ -1722,6 +1777,37 @@ function actualizarPreview() {
 
 
 /* =========================================================
+   FORMATEAR FECHA
+========================================================= */
+
+function formatearFecha(fecha) {
+
+    if (!fecha) {
+        return "";
+    }
+
+
+    const partes =
+        fecha.split("-");
+
+
+    if (partes.length !== 3) {
+        return fecha;
+    }
+
+
+    return (
+        partes[2] +
+        "/" +
+        partes[1] +
+        "/" +
+        partes[0]
+    );
+
+}
+
+
+/* =========================================================
    FORMATO NÚMEROS
 ========================================================= */
 
@@ -1754,6 +1840,14 @@ async function guardarPresupuesto() {
     }
 
 
+    /*
+       Si por algún motivo la fecha está vacía,
+       colocamos la fecha actual antes de guardar.
+    */
+
+    establecerFechaActual();
+
+
     const negocio =
         document.getElementById("negocio").value.trim();
 
@@ -1766,14 +1860,6 @@ async function guardarPresupuesto() {
     const total =
         calcularTotal();
 
-
-    /*
-       IMPORTANTE:
-
-       El número PF-... es TEXTO.
-       La columna "numero" en Supabase
-       debe ser de tipo text/varchar.
-    */
 
     const numero =
         "PF-" + Date.now();
@@ -1959,6 +2045,17 @@ async function mostrarPresupuestos() {
                 "historyItem";
 
 
+            const fechaHistorial =
+                presupuesto.datos &&
+                presupuesto.datos.fecha
+                ?
+                formatearFecha(
+                    presupuesto.datos.fecha
+                )
+                :
+                "";
+
+
             div.innerHTML = `
 
                 <div class="historyInfo">
@@ -1986,6 +2083,14 @@ async function mostrarPresupuestos() {
                         ${escapeHTML(
                             presupuesto.trabajo || "-"
                         )}
+
+                        ${
+                            fechaHistorial
+                            ?
+                            `<br>Fecha: ${escapeHTML(fechaHistorial)}`
+                            :
+                            ""
+                        }
 
                     </div>
 
@@ -2164,6 +2269,10 @@ function cargarPresupuestoSupabase(
         presupuesto.trabajo ||
         "";
 
+
+    /*
+       Recuperamos la fecha original del presupuesto.
+    */
 
     document.getElementById("fecha").value =
         datos.fecha ||
