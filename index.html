@@ -657,6 +657,8 @@ Firma / sello
 
 </div>
 
+</div>
+
 <div class="card saved-section">
 
 <h2>
@@ -1298,12 +1300,6 @@ async function guardarEnSupabase(presupuesto) {
         registro
     );
 
-    /*
-       IMPORTANTE:
-       No usamos .select().single() después del INSERT.
-       Primero insertamos solamente.
-    */
-
     const {
         error
     } =
@@ -1536,11 +1532,15 @@ async function mostrarPresupuestos() {
                 btnVer.className =
                     "btn-primary";
 
+                btnVer.type = "button";
+
                 btnVer.textContent =
                     "👁️ Ver";
 
                 btnVer.onclick =
-                    function() {
+                    function(event) {
+
+                        event.preventDefault();
 
                         cargarPresupuestoSupabase(
                             presupuesto
@@ -1554,11 +1554,15 @@ async function mostrarPresupuestos() {
                 btnWhatsApp.className =
                     "btn-whatsapp";
 
+                btnWhatsApp.type = "button";
+
                 btnWhatsApp.textContent =
                     "📱 WhatsApp";
 
                 btnWhatsApp.onclick =
-                    function() {
+                    function(event) {
+
+                        event.preventDefault();
 
                         enviarPresupuestoGuardadoSupabase(
                             presupuesto
@@ -1572,11 +1576,15 @@ async function mostrarPresupuestos() {
                 btnEliminar.className =
                     "btn-danger";
 
+                btnEliminar.type = "button";
+
                 btnEliminar.textContent =
                     "🗑️ Eliminar";
 
                 btnEliminar.onclick =
-                    function() {
+                    function(event) {
+
+                        event.preventDefault();
 
                         eliminarPresupuestoSupabase(
                             numero
@@ -1660,12 +1668,6 @@ async function guardarPresupuesto() {
         supabaseStatus.className =
             "status ok";
 
-        /*
-           El historial se intenta cargar después.
-           Si falta la política SELECT, el guardado
-           igualmente ya se realizó.
-        */
-
         try {
 
             await mostrarPresupuestos();
@@ -1719,6 +1721,11 @@ function cargarPresupuestoSupabase(presupuesto) {
     const datos =
         presupuesto.datos || {};
 
+
+    /* ==============================
+       DATOS DEL NEGOCIO
+       ============================== */
+
     document.getElementById("negocio").value =
         presupuesto.negocio || "";
 
@@ -1734,6 +1741,11 @@ function cargarPresupuestoSupabase(presupuesto) {
     document.getElementById("negocioCuit").value =
         datos.negocioCuit || "";
 
+
+    /* ==============================
+       DATOS DEL CLIENTE
+       ============================== */
+
     document.getElementById("cliente").value =
         presupuesto.cliente || "";
 
@@ -1746,31 +1758,64 @@ function cargarPresupuestoSupabase(presupuesto) {
     document.getElementById("fecha").value =
         datos.fecha || "";
 
+
+    /* ==============================
+       OTROS DATOS
+       ============================== */
+
     document.getElementById("manoObra").value =
         datos.manoObra || 0;
 
     document.getElementById("condiciones").value =
         datos.condiciones || "";
 
+
+    /* ==============================
+       MATERIALES
+       ============================== */
+
     materiales =
         Array.isArray(datos.materiales)
-            ? datos.materiales
+            ? JSON.parse(
+                JSON.stringify(datos.materiales)
+              )
             : [];
+
+
+    /* ==============================
+       NÚMERO DEL PRESUPUESTO
+       ============================== */
 
     numeroPreview =
         Number(presupuesto.numero) || 1;
 
+
+    /* ==============================
+       ACTUALIZAR FORMULARIO
+       ============================== */
+
     mostrarMateriales();
+
+    calcularTotal();
 
     actualizarPreview();
 
-    window.scrollTo({
 
-        top: 0,
+    /* ==============================
+       IR AL FORMULARIO
+       ============================== */
 
-        behavior: "smooth"
+    const formulario =
+        document.querySelector(".form-section");
 
-    });
+    if (formulario) {
+
+        formulario.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
 
 }
 
