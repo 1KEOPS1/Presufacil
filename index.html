@@ -163,6 +163,36 @@ select {
 
 
 /* =========================================================
+   DESCARGA APK
+========================================================= */
+
+.apkDownload {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    margin-top: 18px;
+    border-radius: 8px;
+    background: #111827;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.apkDownload:hover {
+    background: #1f2937;
+}
+
+.apkDescription {
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+    margin: 8px 0 0 0;
+}
+
+
+/* =========================================================
    APP
 ========================================================= */
 
@@ -788,7 +818,8 @@ button {
     }
 
     .authBtn,
-    .authSecondary {
+    .authSecondary,
+    .apkDownload {
         min-height: 48px;
         font-size: 15px;
     }
@@ -959,6 +990,23 @@ button {
             </button>
 
         </div>
+
+
+        <!-- =================================================
+             DESCARGAR APP ANDROID
+        ================================================= -->
+
+        <a
+            class="apkDownload"
+            href="https://github.com/1KEOPS1/Presufacil/raw/refs/heads/main/PresuF%C3%A1cil.apk"
+            download="PresuFacil.apk"
+        >
+            📱 Descargar PresuFácil para Android
+        </a>
+
+        <p class="apkDescription">
+            Versión Android · APK · 4 MB
+        </p>
 
 
         <div
